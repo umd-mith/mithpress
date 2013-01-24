@@ -40,3 +40,10 @@ Thumbs.db
 # Other #
 ######################
 *_notes
+option-tree/
+
+*.md
+
+LICENSE
+
+README
