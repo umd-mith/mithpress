@@ -1,16 +1,16 @@
-$(window).load(function(){
-	$(".item img").animate({opacity:1},100);
+jQuery(window).load(function(){
+	jQuery(".item img").animate({opacity:1},100);
 	
 	// clone image
-	$('.item img').each(function(){
-		var el = $(this);
+	jQuery('.item img').each(function(){
+		var el = jQuery(this);
 		el.css({"position":"absolute"}).wrap("<span class='img_wrapper' style='display: inline-block'>").clone().addClass('img_grayscale').css({"position":"absolute","z-index":"998","opacity":"0"}).insertBefore(el).queue(function(){
-			var el = $(this);
+			var el = jQuery(this);
 			el.parent().css({"width":this.width,"height":this.height});
 			el.dequeue();
 		});
 		
-		if($.browser.msie){
+		if(jQuery.browser.msie){
 			this.style.filter = 'progid:DXImageTransform.Microsoft.BasicImage(grayScale=1)';
 		} else {
 			this.src = grayscale(this.src);
@@ -18,11 +18,11 @@ $(window).load(function(){
 	});
 	
 	// Fade image 
-	$('.item img').mouseover(function(){
-		$(this).parent().find('img:first').stop().animate({opacity:1}, 600);
+	jQuery('.item img').mouseover(function(){
+		jQuery(this).parent().find('img:first').stop().animate({opacity:1}, 600);
 	})
-	$('.img_grayscale').mouseout(function(){
-		$(this).stop().animate({opacity:0}, 600);
+	jQuery('.img_grayscale').mouseout(function(){
+		jQuery(this).stop().animate({opacity:0}, 600);
 	});		
 });
 	

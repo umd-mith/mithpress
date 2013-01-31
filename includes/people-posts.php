@@ -65,7 +65,7 @@ function register_cpt_people() {
         'labels' => $peoplelabels,
         'hierarchical' => false,
         
-        'supports' => array( 'featured image', 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes' ),
+        'supports' => array( 'featured image', 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields'),
         'taxonomies' => array( 'tags', 'staffgroup' ),
         'public' => true,
         'show_ui' => true,

@@ -1,12 +1,10 @@
 <?php
 /*
 Template Name: Podcasts
-* display list of most recent dialogues
+* display list of most recent podcasts
 */
 ?>
-
 <?php get_header(); ?>
-
 <div id="page-container">
 
 	<div id="primary" class="width-limit">
@@ -19,20 +17,20 @@ Template Name: Podcasts
             
         	<div id="articles">
             
-            <?php 
-			$args = array(
-				post_type => 'podcast',
-				paged => get_query_var('paged'),
-				posts_per_page => '10'
-			);
+			<?php global $wp_query;
 			
-			$posts = new WP_Query( $args ); 
+				query_posts( 
+					array(
+						'post_type' => array('podcast' ),
+						'posts_per_page' => '10',
+						'paged' => get_query_var('paged')
+						)
+					);
+            ?>            
 			
-			?>
+			<?php if ( have_posts() ) : ?>
 
-  			<?php if ( $posts->have_posts() ) : ?>
-
-				<?php while ( $posts->have_posts() ) : $posts->the_post(); ?>
+				<?php while ( have_posts() ) : the_post(); ?>
 
 					<?php get_template_part( 'content', 'podcasts'); ?>
 
@@ -48,20 +46,17 @@ Template Name: Podcasts
                         <span class="nav-previous"><span class="meta-nav"></span><?php next_posts_link(__('Older'), 0); ?></span>
                         <span class="nav-next"><span class="meta-nav"></span><?php previous_posts_link(__('Newer'), 0); ?></span>
                     
-                    </nav>
-                    <!-- /nav -->
-                    
+                    </nav>                    
 					<?php else : ?>
                     
                         <span class="nav-next"><span class="meta-nav"></span><?php next_posts_link(__('LOAD MORE')); ?></span>
                     
                     </nav>
-                    <!-- /nav -->
 
 					<?php endif; ?>	
+                    <!-- /nav -->
                 			
 			<?php endif; ?>
-            
         	</div>
             <!-- /articles -->
 		

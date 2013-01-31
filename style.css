@@ -52,6 +52,7 @@ body strong {font-weight: 700; }
 	#content ul + p, #content ol + p { margin-top: 0.25em; }
 	
 	#content article.project p, #content article.people p, #content article.podcast p, #content article.event p { text-align: justify; }
+	#content .article-row { clear: both; }
 	
 	#footer ul, #footer ul li { list-style: none outside none; padding:0; margin:0; }
 	
@@ -589,7 +590,7 @@ body strong {font-weight: 700; }
 	/*===  Blog Sidebar     ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	.widget_recentposts_thumbnail h3 a.rss { background: url(images/icon_rss.png) no-repeat 0px 0px; display:block; height:16px; float: left; width: 3px; }
-	.widget_recentposts_thumbnail h3 a.rss:hover { background: url(images/icon_rss2.png) no-repeat 0px 0px; }
+	.widget_recentposts_thumbnail h3 a.rss:hover { background: url(images/icon_rss_gry.png) no-repeat 0px 0px; }
 	
 	.twtr-hd, .twtr-ft { display:none }
 	.twtr-tweet-wrap { padding: 6px 0 8px 0 !important}

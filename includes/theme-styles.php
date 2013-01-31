@@ -30,8 +30,8 @@ function mp_enqueue_scripts() {
 	
 	// scripts
 	wp_deregister_script('jquery');
-	wp_register_script('jquery', ('http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'), array(), '1.7.1', false);
-	wp_register_script('jquery-ui', ('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js'), array(), '1.8.2', false);
+	wp_register_script('jquery', ('http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'), array(), '1.8.3', false);
+	wp_register_script('jquery-ui', ('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'), array(), '1.9.2', false);
 			
 	wp_register_script('custom', get_template_directory_uri() . '/js/custom.js', array('jquery'), false, false);
 	wp_register_script('superfish', get_template_directory_uri() .'/js/superfish.js', array('jquery'), '1.4.8', false);
@@ -71,12 +71,12 @@ add_action( 'admin_enqueue_scripts', 'mp_admin_enqueue_scripts' );
 function mp_admin_enqueue_scripts() {
 	// admin scripts
 	wp_register_script('jquery-ui', ('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js'), array(), '1.8.2', false);
-	wp_register_script('timepicker', get_template_directory_uri() .'/js/jquery-ui-timepicker-addon.js', array('jquery-ui'), false, false);
-	wp_register_script('admin-scripts', get_template_directory_uri() . '/js/admin.js', array('jquery'), false, false);
+	wp_register_script('timepicker', get_template_directory_uri() .'/admin/jquery-ui-timepicker-addon.js', array('jquery-ui'), false, false);
+	wp_register_script('admin-scripts', get_template_directory_uri() . '/admin/admin.js', array('jquery'), false, false);
 	
 	// admin styles
-	wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css', array(), '1.8.5', 'screen'); 
-	wp_register_style('admin-styles', get_template_directory_uri() .'/css/admin.css', array(), false, 'screen');
+	wp_register_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css', array(), '1.9.2', 'screen'); 
+	wp_register_style('admin-styles', get_template_directory_uri() .'/admin/admin.css', array(), false, 'screen');
 
 	// enqueue admin scripts and styles
 	wp_enqueue_style('jquery-ui');

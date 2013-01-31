@@ -15,7 +15,23 @@ jQuery(document).ready(function(){
  *  Image hover effect
  * ----------------------------------------------------------------  
  */
- 		
+ 	
+	// Over field
+	
+	/*
+	jQuery('.over').stop().animate({ "opacity": 0 }, 0);
+ 	function over() {
+		jQuery('.over').hover(function() {
+			jQuery(this).stop().animate({ "opacity": .9 }, 250);
+		}, function() {
+			jQuery(this).stop().animate({ "opacity": 0 }, 250);
+		});	
+	}
+	
+	over();
+	
+	*/
+	
 	// Firefox fix
 	
 	if (window.addEventListener) { 

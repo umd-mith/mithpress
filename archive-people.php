@@ -2,8 +2,6 @@
 /**
  * The template for displaying People page.
 */
-global $people_mb; 
-$people_mb->the_meta(); 
 
 get_header(); ?>
 
@@ -42,7 +40,7 @@ get_header(); ?>
 					'post_type' => 'people',
 					'posts_per_page' => '-1',
 				    'meta_key' => $people_mb->get_the_name('lname'),
-					'orderby' => 'menu_order meta_value',
+					'orderby' => 'custmo_sort menu_order meta_value',
 					'order' => 'ASC',
 				);
 				
@@ -59,6 +57,8 @@ get_header(); ?>
 				
 				<?php while ( $new_query->have_posts() ) : $new_query->the_post(); ?>
                 <?php 
+				global $people_mb; 
+				$people_mb->the_meta(); 
 				
 				if ($i % 3 != 0 ) { 
 					$endclass = ''; 
@@ -74,7 +74,7 @@ get_header(); ?>
 
 						<a href="<?php the_permalink(); ?>" rel="alternate" title="Permanent Link to <?php the_title_attribute(); ?>">
 			
-							<?php the_post_thumbnail( 'mini-thumbnail' ); ?>
+							<?php //the_post_thumbnail( 'mini-thumbnail' ); ?>
 				
 							<div class="person-info">
 								<span class="info-name"><?php the_title(); ?></span>                            
