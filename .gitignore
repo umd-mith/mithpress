@@ -35,13 +35,13 @@
 .Trashes
 Icon?
 ehthumbs.db
-Thumbs.db
+*[Tt]humbs.db
+*.Trashes
 
 # Other #
 ######################
 *_notes
 option-tree/
-
 *.md
 
 LICENSE
