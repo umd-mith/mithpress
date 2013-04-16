@@ -9,7 +9,7 @@
 
 jQuery(document).ready(function(){	
 		
-
+    
 /*
  * ---------------------------------------------------------------- 
  *  Date Picker
@@ -18,7 +18,7 @@ jQuery(document).ready(function(){
  	function pickDate() {
         var dates = jQuery( "#from, #to" ).datepicker({
             defaultDate: "+1w",
-			dateFormat: "DD, MM d, yy",
+			dateFormat: "yy-mm-dd",
             changeMonth: true,
             numberOfMonths: 2,
             onSelect: function( selectedDate ) {
@@ -61,9 +61,9 @@ jQuery(document).ready(function(){
  */
 
  	function pickDateCond() {
-        var dates = jQuery( "#job-expire" ).datepicker({
+        var dates = jQuery( "#date-expire" ).datepicker({
             defaultDate: "+1w",
-			dateFormat: "Ymd",
+			dateFormat: "yy-mm-dd",
             changeMonth: true,
             numberOfMonths: 2,
             onSelect: function( selectedDate ) {
@@ -81,8 +81,9 @@ jQuery(document).ready(function(){
 
 /*
  * ---------------------------------------------------------------- 
- *  Clear input field
+ *  Update Event Meta
  * ----------------------------------------------------------------  
  */
+
 
 });

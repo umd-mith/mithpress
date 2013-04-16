@@ -70,7 +70,7 @@ add_action( 'admin_enqueue_scripts', 'mp_admin_enqueue_scripts' );
 
 function mp_admin_enqueue_scripts() {
 	// admin scripts
-	wp_register_script('jquery-ui', ('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js'), array(), '1.8.2', false);
+	wp_register_script('jquery-ui', ('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js'), array(), '1.9.2', false);
 	wp_register_script('timepicker', get_template_directory_uri() .'/admin/jquery-ui-timepicker-addon.js', array('jquery-ui'), false, false);
 	wp_register_script('admin-scripts', get_template_directory_uri() . '/admin/admin.js', array('jquery'), false, false);
 	

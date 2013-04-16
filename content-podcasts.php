@@ -10,6 +10,9 @@
 global $podcast_mb;
 $podcast_mb->the_meta();
 $stitle = $podcast_mb->get_the_value('speakertitle');
+$date = $podcast_mb->get_the_value('talk-date');
+$time = $podcast_mb->get_the_value('talk-time');
+global $showdata; 
 
 ?>
 
@@ -39,7 +42,6 @@ $stitle = $podcast_mb->get_the_value('speakertitle');
                 <?php } ?>
         
                 <?php echo do_shortcode('[gigpress_related_shows]'); ?>
-
             </div>
             <!-- /podcast-info -->
 

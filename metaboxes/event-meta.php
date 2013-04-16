@@ -1,5 +1,5 @@
+
 <div class="my_meta_control">
-<!-- PROJECT INFO -->
 	<label>Date</label>
     <p>            
         <label for="from" class="inline">From</label>
@@ -9,6 +9,7 @@
         <label for="to" class="inline">to</label>
         <?php $mb->the_field('date-end');?>
         <input type="text" id="to" name="<?php $mb->the_name(); ?>" value="<?php $mb->the_value(); ?>" />
+    
     </p>
 
 	<label>Time <span>(for single-day events, include start/end times here)</span></label>
@@ -18,6 +19,7 @@
     	<?php $mb->the_field('time-end');?>
         <input class="timepicker" type="text" name="<?php $mb->the_name(); ?>" value="<?php $mb->the_value(); ?>" />
     </p> 
+    
 
 	<label>Location</label>
 	<p>
@@ -63,7 +65,7 @@
     <br clear="all" /> 
 </div>
 
-<!-- CURRENT PROJECT STAFF -->
+<!-- CURRENT EVENT STAFF -->
 <div class="my_meta_control">
  
 	<a style="float:right; margin:0 10px;" href="#" class="dodelete-event_staff button remove-all">Remove All</a>

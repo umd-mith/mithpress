@@ -25,7 +25,7 @@ function register_cpt_podcast() {
         'labels' => $labels,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions' ),
+        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
         'taxonomies' => array( 'podcast_categories', 'podcast_tags' ),
         'public' => true,
         'show_ui' => true,

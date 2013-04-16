@@ -5,6 +5,7 @@ TABLE OF CONTENTS
 
 - Basic Sidebar Widgets
 - Recent Posts Widget
+- Search
 
 -----------------------------------------------------------------------------------*/
 
@@ -578,4 +579,14 @@ function ucc_get_calendar_filter( $content ) {
   return $output;
 }
 add_filter( 'get_calendar' , 'ucc_get_calendar_filter' , 10 , 2 );
+
+
+/*-----------------------------------------------------------------------------------*/
+/* Search */
+/*-----------------------------------------------------------------------------------*/
+
+
+
+
+
 ?>

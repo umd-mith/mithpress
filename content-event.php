@@ -8,8 +8,10 @@ global $event_mb;
 $event_mb->the_meta();
 $twitter = $event_mb->get_the_value('twitter'); 
 $hashtag = $event_mb->get_the_value('hashtag');
-$date_start = $event_mb->get_the_value('date-start');
-$date_end = $event_mb->get_the_value('date-end');
+
+$date_start_string = $event_mb->get_the_value('date-start');
+$date_end_string = $event_mb->get_the_value('date-end');
+
 $time_start = $event_mb->get_the_value('time-start');
 $time_end = $event_mb->get_the_value('time-end');
 ?>
@@ -42,16 +44,19 @@ $time_end = $event_mb->get_the_value('time-end');
             
                 </span>
 				
-				<?php } if ( $date_start != null ) { // check if there's a start date ?>
+				<?php } 
+				if (!is_null($date_start_string)) { // check if there's a start date 
+				$date_start = date('l, F j, Y', strtotime($date_start_string)); ?>                
                 <span class="info-dates">
                 	<strong>When: </strong>
 					<?php echo $date_start; ?>
                 
 					<?php // check if there's an ending date
-                    if ( $date_end != null ) { ?> &ndash; <?php echo $date_end; ?>
+					if (!is_null($date_end_string)) { 
+						$date_end = date('l, F j, Y', strtotime($date_end_string));
+					 ?> &ndash; <?php echo $date_end; ?>
                     
                 </span>
-                
                 <?php } else {?>
                 </span>
                 <?php } 

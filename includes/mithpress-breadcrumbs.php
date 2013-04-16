@@ -21,8 +21,10 @@ function mithpress_breadcrumbs() {
 		$thisCat = $cat_obj->term_id;
 		$thisCat = get_category($thisCat);
 		$parentCat = get_category($thisCat->parent);
-		if ($thisCat->parent != 0) echo(get_category_parents($parentCat, TRUE, ' ' . $delimiter . ' '));
-		echo $before . '<a href="' . $blogLink . '">Blog</a> ' . $delimiter . single_cat_title('', false) . ' Category Archive' . $after;
+		echo $before . '<a href="' . $blogLink . '">Blog</a> ' . $delimiter;
+			if ($thisCat->parent != 0) 
+			echo ( get_category_parents( $parentCat, TRUE, ' ' . $delimiter . ' ') );
+		echo single_cat_title('', false) . ' Category Archive' . $after;
 
  // BLOG PAGED
 	} elseif ( is_paged() && is_home()) { 
@@ -65,24 +67,25 @@ function mithpress_breadcrumbs() {
     } elseif ( is_single() && !is_attachment() ) {
 		
 		// Project Posts
-		if ( get_post_type() == 'project' ) {
+		if ( 'project' == get_post_type() ) {
 			$post_type = get_post_type_object(get_post_type());
 			echo '<a href="' . $homeLink . '/research/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			echo $before . get_the_title() . $after;
 		} // People Posts
-		elseif ('people' == get_post_type()) {
-			$post_type = get_post_type_object(get_post_type() );
+		elseif ( 'people' == get_post_type() ) {
+			$post_type = get_post_type_object( get_post_type() );
 			echo '<a href="' . $homeLink . '/people/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			echo $before . get_the_title() . $after;
 		} // Podcasts
-		elseif ('podcast' == get_post_type()) {
-			$post_type = get_post_type_object(get_post_type() );
+		elseif ( 'podcast' == get_post_type() ) {
+			$post_type = get_post_type_object( get_post_type() );
 			echo '<a href="' . $homelink . '/digitaldialogues/">Digital Dialogues</a> ' . $delimiter . ' ';
 			echo '<a href="' . $homeLink . '/podcasts/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
-			echo $before . get_the_title() . $after;
+			$ptitle = get_the_title();
+			echo $before . truncateWords($ptitle, 14, " . . .") . $after;
 		} // Events
-		elseif ('event' == get_post_type()) {
-			$post_type = get_post_type_object(get_post_type() ); ?>
+		elseif ( 'event' == get_post_type() ) {
+			$post_type = get_post_type_object( get_post_type() ); ?>
             <a href="<?php echo $homeLink; ?>/community/">Community</a>
             <?php echo $delimiter; ?> 
             <a href="<?php $homeLink; ?>/community/dh-events/">DH Events</a>
@@ -91,7 +94,7 @@ function mithpress_breadcrumbs() {
 			
 		} // Non-blog Posts 
 		elseif ( get_post_type() != 'post' ) {
-			$post_type = get_post_type_object(get_post_type() );
+			$post_type = get_post_type_object( get_post_type() );
 			$slug = $post_type->rewrite;
 			echo '<a href="' . $homeLink . '/' . $slug['slug'] . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			$nbtitle = get_the_title();
@@ -147,9 +150,7 @@ function mithpress_breadcrumbs() {
     }
  
     if ( get_query_var('paged') ) {
-      if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ' (';
       echo __(' (Page') . ' ' . get_query_var('paged') . ')';
-      if ( is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) echo ')';
     }
  
     echo '</div>';

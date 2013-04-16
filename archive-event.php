@@ -16,12 +16,9 @@ get_header(); ?>
 			<?php if (function_exists('mithpress_breadcrumbs')) mithpress_breadcrumbs(); ?>
 
 			<div id="events">
-
-			<?php remove_all_filters('posts_orderby');
 			
+            <?php 
 			$args = array(
-				'orderby' => 'date',
-				'order' => 'ASC',
 				'posts_per_page' => -1,
 				'post_type' => 'event',
 				'tax_query' => array(
@@ -31,7 +28,10 @@ get_header(); ?>
 						'terms' => array( 'past-event', 'dd-event'),
 						'operator' => 'NOT IN'
 					)
-				)
+				),
+				'meta_key' => 'date-sort',
+				'order' => 'ASC',
+                'orderby' => 'meta_value_num',	
 			);
 			$new_query = null;
 			$new_query = new WP_Query( $args ); ?>
@@ -46,9 +46,14 @@ get_header(); ?>
                 $counter_class = '';
 			} else {
                 $counter_class = 'last'; }
+				
+				$event_start_date = get_post_meta($post->ID, 'date-start', true);
+				//$sorting = get_post_meta($post->ID, 'date-sort', true); 
+				$date_sort = date('Ymd', strtotime( $event_start_date ) ); 
+				update_post_meta($post->ID, 'date-sort', $date_sort);
             ?>
 
-                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class); ?>>
+                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class . ' ' . $date_sort); ?>>
                 
                     <div class="entry-content">
                         <div id="event-info" class="append-bottom">

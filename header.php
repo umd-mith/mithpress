@@ -88,7 +88,9 @@
 <div id="top-container">
     <header id="branding" role="banner">
         <hgroup>
-        	<div class="width-limit"><a href="<?php echo get_option('home'); ?>/" ><img src="<?php bloginfo('template_directory'); ?>/images/logo_mith_skinny.png" alt="MITH :: University of Maryland" /></a>
+        	<div class="width-limit">
+            <a href="<?php echo get_option('home'); ?>/" class="logo-wrap left"><img src="<?php bloginfo('template_directory'); ?>/images/logo_mith_skinny.png" alt="MITH :: University of Maryland" /></a>
+            <div class="search-wrap right"><?php get_search_form(); ?></div>
             </div>
         </hgroup>
     </header>

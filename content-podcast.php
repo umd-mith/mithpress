@@ -7,6 +7,9 @@
 	$podcast_mb->the_meta();
 	$twitter = $podcast_mb->get_the_value('twitter');
 	$stitle = $podcast_mb->get_the_value('speakertitle');
+	$date = $podcast_mb->get_the_value('talk-date');
+	$time = $podcast_mb->get_the_value('talk-time');
+	global $showdata; 
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
@@ -28,14 +31,18 @@
             </span> 
         	
             <span class="pods-affiliation"><?php $podcast_mb->the_value('affiliation'); ?></span>
-            
-            <!--<span class="pods-date"><?php $podcast_mb->the_value('talk-date'); ?></span>-->
-
+           
 			<?php if ( $twitter != '') { ?>
             <span class="pods-twitter"><a href="http://www.twitter.com/#!/<?php echo $twitter ?>" rel="nofollow" target="_blank">@<?php echo $twitter ?></a></span>
             <?php } ?>
-    
+                        
+			<?php $related = do_shortcode('[gigpress_related_shows]'); if( $related != null) : ?>
 	        <?php echo do_shortcode('[gigpress_related_shows]'); ?>
+            <?php else : ?><p>
+            <span class="info-dates"><?php if ($date != '') { echo $date; } else { echo the_date( 'F j, Y' ); } ?></span>
+			<?php if ($time != '') { echo '<span class="info-times">' . $time . '</span>'; } ?>
+			</p>
+            <?php endif; ?>
     
         </div>
         <!-- /podcast-info -->

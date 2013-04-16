@@ -13,9 +13,9 @@
             <?php echo get_avatar( $author_email, 55, get_bloginfo('template_url').'/images/no-avatar.png' ); ?>
         </div>
         
-        <div class="meta-line post-author"><a href="<?php bloginfo('url'); ?>/people/person/<?php the_author_meta( 'user_nicename'); ?>"><?php the_author(); ?></a></div>
+        <div class="meta-line post-author"><?php the_author(); ?></div>
 
-        <div class="meta-line post-date"><?php the_time('F j, Y') ?></div>
+        <div class="meta-line post_date"><?php the_time('F j, Y') ?></div>
 
         <div class="meta-line post-categories"><?php the_category(' <span>, </span> '); ?></div>
 		

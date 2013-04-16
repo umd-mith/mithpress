@@ -28,8 +28,6 @@ Template Name: Upcoming Events
                     'relation' => 'AND',
                     array(
                         'taxonomy' => 'event_type',
-                        'field' => 'slug',
-                        'terms' => array( 'upcoming-conference, upcoming-institute, upcoming-workshop, general-event' )
                     ),
                     array(
                         'taxonomy' => 'event_type',
@@ -37,8 +35,8 @@ Template Name: Upcoming Events
                         'terms' => array( 'past-event'),
                         'operator' => 'NOT IN'
                     ),
-				'order' => 'DESC',
-                'orderby' => 'meta_value',	
+                'orderby' => 'date',	
+				'order' => 'ASC',
                 )
             );
         
@@ -82,7 +80,7 @@ Template Name: Upcoming Events
                 <article id="post-0" <?php post_class(); ?>>
                     
                     <div class="entry-content">
-                    <p>We are not currently featuring any events in this category; however please peruse the other categories to the left and check back here regularly.</p>
+                    <p>We are not currently featuring any events, however please check back here regularly.</p>
                     </div>
                 
                 </article>

@@ -20,6 +20,8 @@ tr.gigpress-info td { font-size: 0.8em; }
 
 .past .gigpress-row td.gigpress-artist { width: 65% } 
 
+.gigpress-table.upcoming .related-post a { display: none; }
+
 /*------------------------------------*/
 /* :: Sidebar :: */
 /*------------------------------------*/

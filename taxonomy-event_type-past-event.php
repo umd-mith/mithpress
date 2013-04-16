@@ -7,26 +7,28 @@ Template Name: Past Events
 <?php get_header(); ?>
 <div id="page-container">
 		<div id="primary" class="width-limit">
-<!--start subnav -->
+
 		  <?php get_sidebar('left'); ?>
-<!--end sidebar / start research page content-->
+
 			<div id="content" role="main" class="span-16 last">
 
 			<?php if (function_exists('mithpress_breadcrumbs')) mithpress_breadcrumbs(); ?>
 			<div id="events">
+
 			<?php 
 			$args = array(
 				'post_type' => 'event',
 				'posts_per_page' => -1,
-				'order' => 'ASC',
-				'orderby' => 'title',
 				'tax_query' => array(
 					array(
 						'taxonomy' => 'event_type',
 						'field' => 'slug',
 						'terms' => array( 'past-event'),
 					)
-				)
+				),
+				'meta_key' => 'date-sort',
+				'order' => 'DESC',
+                'orderby' => 'meta_value_num',	
 			);
 
 			$posts = new WP_Query( $args ); ?>
@@ -43,9 +45,13 @@ Template Name: Past Events
                 $counter_class = ''; // we're on an odd post
                 } else {
                 $counter_class = 'last'; }
+				$event_start_date = get_post_meta($post->ID, 'date-start', true);
+				//$sorting = get_post_meta($post->ID, 'date-sort', true); 
+				$date_sort = date('Ymd', strtotime( $event_start_date ) ); 
+				update_post_meta($post->ID, 'date-sort', $date_sort);
             ?>
             
-                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class); ?>>
+                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class . ' ' . $date_sort); ?>>
                 
                     <div class="entry-content">
                         <div id="event-info" class="append-bottom">

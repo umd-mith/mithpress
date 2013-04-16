@@ -68,7 +68,7 @@ function register_cpt_event() {
         'labels' => $labels,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'editor', 'featured image', 'thumbnail', 'revisions' ),
+        'supports' => array( 'title', 'editor', 'featured image', 'thumbnail', 'revisions', 'custom-fields'),
         'taxonomies' => array( 'event_type', 'post_tag'),
         'public' => true,
         'show_ui' => true,
@@ -200,6 +200,37 @@ function add_event_taxonomy_filters() {
 	}
 }
 add_action( 'restrict_manage_posts', 'add_event_taxonomy_filters' );
+
+// DATE SORTING
+
+add_action("admin_init", "admin_event_init");
+add_action('save_post', 'save_event_meta');
+
+function admin_event_init(){
+	add_meta_box("event-sort", "Event Sort", "event_meta_options", "event", "side", "low");
+}
+
+
+function event_meta_options() {
+	global $post;
+	//$event_start_date = get_post_meta($post->ID, 'date-start', true);
+	$custom = get_post_custom($post->ID);
+	$event_start_date = $custom["date-start"][0];
+	$date_sort = date('Ymd', strtotime( $event_start_date ) );	
+	$event_sort = date('Ymd', strtotime( $event_start_date ) ); ?>
+    
+	<label>Sort:</label><input name="event-sort" value="<?php echo $event_sort; ?>" />
+<?php 
+}
+
+add_action( 'wp_ajax_update_meta', 'save_event_meta' );
+
+function save_event_meta(){
+	global $post;
+	update_post_meta($post->ID, "event-sort", $_POST["event-sort"]);
+	echo 'Meta Updated';
+	die();
+}
 
 
 ?>

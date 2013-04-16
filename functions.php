@@ -12,6 +12,7 @@ $functions_path = TEMPLATEPATH . '/functions/';
 $includes_path = TEMPLATEPATH . '/includes/';
 $scripts_path = TEMPLATEPATH . '/js/';
 $metabox_path = TEMPLATEPATH . '/metaboxes/';
+//$admin_path = TEMPLATEPATH . '/admin/';
 
 /*-----------------------------------------------------------------------------------*/
 // Function & Metabox & Custom Post Type Files
@@ -23,6 +24,7 @@ require_once ($includes_path . 'theme-widgets.php');		// Theme widgets
 require_once ($includes_path . 'theme-comments.php');		// Comments & Pingbacks, etc
 require_once ($includes_path . 'theme-posts.php');		
 require_once ($includes_path . 'mithpress-breadcrumbs.php');// Breadcrumbs function
+//require_once ($admin_path . 'taxonomy-class.php'); // taxonomy meta
 
 require_once ($includes_path . 'project-posts.php');
 require_once ($includes_path . 'podcast-posts.php');

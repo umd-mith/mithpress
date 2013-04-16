@@ -32,22 +32,20 @@ get_header(); ?>
 
 				<?php endwhile; ?>
                 
-                    <nav id="nav-page" class="span-wide">    
+                
+                    <nav id="nav-page" class="span-wide">
                     <h3 class="assistive-text"><?php _e( 'Page navigation', 'mithpress' ); ?></h3>
-				
 				<?php if (function_exists('wp_pagenavi')) : wp_pagenavi(); ?>
-				
 				<?php elseif (get_option('paging_mode') == 'default') : ?>
                         <span class="nav-previous"><span class="meta-nav"></span><?php next_posts_link(__('Older'), 0); ?></span>
                         <span class="nav-next"><span class="meta-nav"></span><?php previous_posts_link(__('Newer'), 0); ?></span>
                     </nav>
-                
                     <?php else : ?>
                         <span class="nav-next"><span class="meta-nav"></span><?php next_posts_link(__('LOAD MORE')); ?></span>
                     </nav>
-                
-				<?php endif; ?>	
+                <?php endif; ?>	
                 <!-- /page navigation -->			
+
 
 			<?php else : ?>
 
