@@ -12,6 +12,7 @@ $podcast_mb->the_meta();
 $stitle = $podcast_mb->get_the_value('speakertitle');
 $date = $podcast_mb->get_the_value('talk-date');
 $time = $podcast_mb->get_the_value('talk-time');
+$ttitle = $podcast_mb->get_the_value('talk-title');
 global $showdata; 
 
 ?>
@@ -20,7 +21,7 @@ global $showdata;
 
         <header class="entry-header">
 
-            <h1 class="entry-title append-bottom prepend-top"><a href="<?php the_permalink(); ?>" ><?php the_title(); ?></a></h1>
+            <h1 class="entry-title append-bottom prepend-top"><a href="<?php the_permalink(); ?>" ><?php if ($ttitle) { echo $ttitle; } else { the_title(); } ?></a></h1>
 
         </header>
         <!-- /entry-header-->

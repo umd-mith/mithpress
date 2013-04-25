@@ -9,13 +9,14 @@
 	$stitle = $podcast_mb->get_the_value('speakertitle');
 	$date = $podcast_mb->get_the_value('talk-date');
 	$time = $podcast_mb->get_the_value('talk-time');
+	$ttitle = $podcast_mb->get_the_value('talk-title');
 	global $showdata; 
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<header class="entry-header">
     
-		<h1 class="entry-title append-bottom"><?php the_title(); ?></h1>
+		<h1 class="entry-title append-bottom"><?php if ($ttitle) { echo $ttitle; } else { the_title(); } ?></h1>
 	
     </header>
     <!-- /entry-header-->

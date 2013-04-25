@@ -74,7 +74,7 @@ get_header(); ?>
 
 						<a href="<?php the_permalink(); ?>" rel="alternate" title="Permanent Link to <?php the_title_attribute(); ?>">
 			
-							<?php //the_post_thumbnail( 'mini-thumbnail' ); ?>
+							<?php the_post_thumbnail( 'mini-thumbnail' ); ?>
 				
 							<div class="person-info">
 								<span class="info-name"><?php the_title(); ?></span>                            
