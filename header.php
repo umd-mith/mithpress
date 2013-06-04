@@ -54,22 +54,32 @@
 	<?php } ?>
 
 	<?php if (is_front_page() ) { ?> 
-    	<script>jQuery.noConflict();</script>
-        <script type="text/javascript" src="<?php echo bloginfo('template_directory'); ?>/js/jquery.nivo.slider.pack.js"></script>
+	<script>jQuery.noConflict();</script>
+    <script type="text/javascript" src="<?php echo bloginfo('template_directory'); ?>/js/jquery.nivo.slider.pack.js"></script>
 
-        <script type="text/javascript">
-        jQuery(window).load(function() {
-            jQuery('#slider').nivoSlider({
-             effect: 'fade',
-             animSpeed: 700,
-             pauseTime: 5000,
-             controlNav: false,
-             captionOpacity: 0.9,
-             randomStart: true
-            });
+    <script type="text/javascript">
+    jQuery(window).load(function() {
+        jQuery('#slider').nivoSlider({
+         effect: 'fade',
+         animSpeed: 700,
+         pauseTime: 5000,
+         controlNav: false,
+         captionOpacity: 0.9,
+         randomStart: true
         });
-        </script>
+    });
+    </script>
     <?php } ?> 
+	<?php if (is_search()) { ?>
+	<script type="text/javascript">
+    jQuery(document).ready(function() { 
+        <?php $searchkeys = implode('|', explode(' ', get_search_query())); ?>
+		<?php foreach(explode(" ",$searchkeys) as $searchTerm ) : ?>
+		jQuery('#posts').highlight('<?php echo $searchTerm ?>');
+		<?php endforeach;?>
+	});
+	</script>
+	<?php } ?>
     
 </head>
 

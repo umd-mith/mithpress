@@ -113,7 +113,9 @@ body strong {font-weight: 700; }
 	#search-text { color: #FFF; border-width: 0; background: transparent; }
 	#search-box input[type="text"] { width: 90%; padding: 7px 0 3px 9px; color: #F9F9F9; outline: none; margin: 0 0 0 0; }
 	#search-button { position: absolute; top: 1px; right: 1px; height: 27px; width: 34px; color: #CCC; text-align: center; border-width: 0; background-color: #333; -webkit-border-radius: 0px 3px 3px 0px; -moz-border-radius: 0px 3px 3px 0px; border-radius: 0px 3px 3px 0px; cursor: pointer; }
-	.search-results .entry-title span { text-transform:uppercase; color: #424242 !important; }
+	.search-results .entry-title .content-type-title { text-transform:uppercase; color: #424242 !important; }
+	.search-highlight, .search-query-term, .highlight { font-weight: inherit; background: #FDE872; }
+	
 
 /*-------------------------------------------------------------------------------------------*/
 /*===  Navigation      ===*/
@@ -582,6 +584,9 @@ body strong {font-weight: 700; }
 	#sidebar.people .twtr-avatar { display:none; }
 	#sidebar.people .twtr-tweet-text { margin-left: 0px !important; }
 	.widget_twitter a { color: #2E7CC6; } 
+	.widget a.twitter-link { color: #2E7BC6; }
+	.widget span.twitter-timestamp { display: block; font-size: 8px; }
+	.widget .rstw_comma { display: none; }
 	
 	/*===  Podcast Sidebar     ===*/
 	/*-------------------------------------------------------------------------------------------*/

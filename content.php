@@ -2,12 +2,17 @@
 /**
  * The default template for displaying content
  */
+global $podcast_mb;
+$podcast_mb->the_meta();
+$twitter = $podcast_mb->get_the_value('twitter');
+$stitle = $podcast_mb->get_the_value('speakertitle');
+$ttitle = $podcast_mb->get_the_value('talk-title');
 ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class('search-result'); ?>>
 	
         <div class="entry-meta span-5 append-1">
         
-            <?php if ( is_page() || 'event' == get_post_type() ) : 
+            <?php if ( is_page() || 'event' == get_post_type() || 'people' == get_post_type() || 'job' == get_post_type()) : 
 			// do nothing 
 			else : ?>        	
             
@@ -39,20 +44,16 @@
             
                 <h1 class="entry-title append-bottom"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'mithpress' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark">
 				<?php $post_type = get_post_type(); 
-					if ( 'event' == get_post_type() || 'podcast' == get_post_type() ) : $post_type = get_post_type_object(get_post_type() ); echo '<span>' . $post_type->labels->singular_name . ':</span> '; endif; ?>
-				<?php the_title(); ?></a></h1>
+					if ( 'event' == get_post_type() || 'podcast' == get_post_type() || 'job' == get_post_type()) : $post_type = get_post_type_object(get_post_type() ); echo '<span class="content-type-title">' . $post_type->labels->singular_name . ':</span> '; 
+					elseif ( 'people' == get_post_type() ) : echo '<span class="content-type-title">STAFF:</span> ';
+					endif; ?>
+				<?php if ($ttitle) { echo $ttitle; } else { the_title(); } ?></a></h1>
             
             </header>
             <!-- /entry-header -->
     
     		
-			<?php if ( 'podcast' == get_post_type() ) : 
-
-				global $podcast_mb;
-				$podcast_mb->the_meta();
-				$twitter = $podcast_mb->get_the_value('twitter');
-				$stitle = $podcast_mb->get_the_value('speakertitle');
-			?>
+			<?php if ( 'podcast' == get_post_type() ) : // PODCAST DISPLAY ?>
             <div class="entry-summary entry-content podcast-excerpt excerpt">
             
                 <div id="podcast-info" class="append-bottom prepend-top clear">
@@ -73,18 +74,18 @@
 
                 </div>
                                     
-				<?php the_excerpt(); // regular post excerpt ?>
+				<?php the_excerpt(); ?>
                 
             </div>
             <!-- /podcast excerpt -->
             
-            <?php elseif (is_page() || 'event' == get_post_type() ) : ?>
+            <?php elseif (is_page() || 'event' == get_post_type() ) : // PAGE OR EVENT DISPLAY ?>
             
             <div class="entry-summary page-excerpt excerpt">
             	
                 <?php the_post_thumbnail( 'horiz-thumbnail', array('class'=>'alignleft entrythumb') ); ?>
 
-                <?php the_excerpt(); // regular post excerpt ?>
+                <?php the_excerpt();  ?>
             
             </div>
             <!-- /page or event excerpt -->

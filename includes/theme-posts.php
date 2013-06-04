@@ -10,6 +10,7 @@ TABLE OF CONTENTS
 - Preserve Post formatting in Excerpt 
 - Conditional Tags for Custom Taxonomy Pages
 - Sidebar Posts for specific Tag
+- Search Functions
 
 -----------------------------------------------------------------------------------*/
 
@@ -149,7 +150,6 @@ function admin_custom_rewrites($translation, $text, $domain) {
 
 /* Remove empty paragraph tags from the_content */
 /*-----------------------------------------------------------------------------------*/
-
 function removeEmptyParagraphs($content) {
 
     /*$pattern = "/<p[^>]*><\\/p[^>]*>/";   
@@ -178,7 +178,7 @@ function mithpress_variable_length_excerpt($text, $length, $finish_sentence){
 	global $post;
 	//Word length of the excerpt. This is exact or NOT depending on your '$finish_sentence' variable.
 	if (is_home() && !is_page_template('content-home-right') ) : $length = 180;
-	elseif (is_page_template('content-home-right') ) : $length = 75;
+	elseif (is_page_template('content-home-right') || is_search()) : $length = 75;
 	elseif (is_page_template('content-podcasts') ) : $length = 30;
 	else : $length = 55; /* Change the Length of the excerpt as you wish. The Length is in words. */
 	endif;
@@ -232,14 +232,14 @@ function mithpress_excerpt_filter($text){
     $text = get_the_content('');
     $text = strip_shortcodes( $text );
     $text = apply_filters('the_content', $text);
- 
+
     $text = str_replace(']]>', ']]&gt;', $text);
  
     /**By default the code allows all HTML tags in the excerpt**/
     //Control what HTML tags to allow: If you want to allow ALL HTML tags in the excerpt, then do NOT touch.
  
     //If you want to Allow SOME tags: THEN Uncomment the next line + Line 80.
-    $allowed_tags = '<p>,<em>,<i>,<b>,<strong>,<a>,<ul>,<li>,<ol>,<blockquote>,<code>'; /* Separate tags by comma. */
+    $allowed_tags = '<p>,<em>,<i>,<b>,<strong>,<a>,<ul>,<li>,<ol>,<blockquote>,<code>,<span>'; /* Separate tags by comma. */
  
     //If you want to Disallow ALL HTML tags: THEN Uncomment the next line + Line 80,
     //$allowed_tags = ''; /* To disallow all HTML tags, keep it empty. The Excerpt will be unformated but newlines are preserved. */
@@ -272,28 +272,6 @@ function truncateWords($input, $numwords, $padding="")
 	if($output != $input) $output .= $padding;
 	return $output;
 }
-
-
-/*-----------------------------------------------------------------------------------*/
-/* Change Posts Per Page for Blog & Home Page */
-/*-----------------------------------------------------------------------------------*/
-/* @author Bill Erickson
- * @param object $query data
- *
- */
-/*
-add_action( 'pre_get_posts', 'mithpress_podcasts_query_posts' );
-
-function mithpress_podcasts_query_posts( $query ) {
-
-	if( $query->is_main_query() && !is_admin() && is_page('podcasts') ) {
-		$query->set( 'post_type', 'podcast' );
-		$query->set( 'posts_per_page', '10' );
-		$query->set( 'paged', get_query_var('paged') );
-	}
-
-}
-*/
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -347,27 +325,31 @@ function mithpress_display_tagged_posts() {
 /* RSS FEEDS */
 /*-----------------------------------------------------------------------------------
 
-/* WordPress snippet to add to your functions.php file to display custom fields in your RSS feed. 
-
-function fields_in_feed($content) {
-    if(is_feed()) {
-        $post_id = get_the_ID();
-        $output .= get_post_meta($post_id, 'talk-date', true);
-		$output .= get_post_meta($post_id, 'talk-time', true);
-		$content = $content.$output;
-    }
-    return $content;
-}
-
-add_filter('the_content','fields_in_feed');
-
-function myfeed_request($qv) {
-	if (isset($qv['feed']) && !isset($qv['post_type']))
-		$qv['post_type'] = array('post', 'podcast');
-	return $qv;
-}
-add_filter('request', 'myfeed_request');
-
-
 */
+/*-----------------------------------------------------------------------------------*/
+/* Search */
+/*-----------------------------------------------------------------------------------*/
+
+function search_content_highlight() {
+	$content = get_the_content();
+	$keys = implode('|', explode(' ', get_search_query()));
+	$content = preg_replace('/(' . $keys .')/iu', '<strong class="search-highlight">\0</strong>', $content);
+
+	echo '<p>' . $content . '</p>';
+}
+
+function search_title_highlight() {
+    $title = get_the_title();
+    $keys = implode('|', explode(' ', get_search_query()));
+    $title = preg_replace('/(' . $keys .')/iu', '<strong class="search-highlight">\0</strong>', $title);
+
+    echo $title;
+}
+function search_excerpt_highlight() {
+    $excerpt = get_the_excerpt();
+    $keys = implode('|', explode(' ', get_search_query()));
+    $excerpt = preg_replace('/(' . $keys .')/iu', '<strong class="search-highlight">\0</strong>', $excerpt);
+
+    echo '<p>' . $excerpt . '</p>';
+}
 ?>

@@ -108,7 +108,7 @@ function mithpress_breadcrumbs() {
 			echo $before . truncateWords($btitle, 15, " . . .") . $after;
 }
  
-    } elseif ( !is_single() && !is_page() && get_post_type() != 'post' && !is_404() ) {
+    } elseif ( !is_single() && !is_page() && get_post_type() != 'post' && !is_404() && !is_search()) {
       $post_type = get_post_type_object(get_post_type());
       echo $before . $post_type->labels->name . $after;
  

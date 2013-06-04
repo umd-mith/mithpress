@@ -7,7 +7,6 @@ $website = $project_mb->get_the_value('website');
 $contact = $project_mb->get_the_value('contactname');
 $twit = $project_mb->get_the_value('twitter');
 $hash = $project_mb->get_the_value('hashtag');
-
 ?>
 	
     <!-- Project Website -->

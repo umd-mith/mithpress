@@ -13,7 +13,10 @@ get_header(); ?>
             <?php if (function_exists('mithpress_breadcrumbs')) mithpress_breadcrumbs(); ?>
             
 			<header class="page-header">
-				<h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'mithpress' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+            <?php global $wp_query;
+			$total_results = $wp_query->found_posts; ?>
+				<h1 class="page-title"><?php printf( __( 'Search Results for: "%s"', 'mithpress' ), '<span class="search-terms"> ' . get_search_query() . '</span> &mdash; ' . $total_results . ' Articles ' ); ?></h1>
+
 			</header>
 
             <div id="posts">

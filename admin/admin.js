@@ -85,5 +85,31 @@ jQuery(document).ready(function(){
  * ----------------------------------------------------------------  
  */
 
+/*
+ * ---------------------------------------------------------------- 
+ *  Update Event Meta
+ * ----------------------------------------------------------------  
+ */
+/* 
+	jQuery("form").submit(function() {
 
+		var post_meta = jQuery("input name=[event-sort]").val();
+		var ID = jQuery(this).attr("name");
+
+		jQuery.ajax({
+			   type: "POST",
+			   url: ajaxurl,
+			   data: {
+				   action: "update_meta",
+				   post_id: ID,
+				   meta: post_meta,
+			   },
+			success: function( data ) {
+			  //do something
+			}
+	   });
+   
+ 	return false;
+	});
+*/
 });

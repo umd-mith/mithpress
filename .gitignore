@@ -43,7 +43,9 @@ ehthumbs.db
 *_notes
 option-tree/
 *.md
+*bak.php
 
 LICENSE
 
 README
+

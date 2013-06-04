@@ -46,42 +46,13 @@ if ( $twit != '') { ?>
 <div id="recent_tweets" class="widget widget_recent_tweets">
     <h3><!--<a href="http://www.twitter.com/#!/<?php echo $twit ?>" rel="nofollow" target="_blank" class="follow">&nbsp;</a>-->Recent Tweets</h3>
     <aside class="widget-body clear">
-
-			<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-            new TWTR.Widget({
-              version: 2,
-              type: 'search',
-              search: 'mithdd OR mithleaks OR digdialog OR UMD_MITH from:<?php echo $twit ?>',
-              interval: 10000,
-              title: '',
-              subject: '',
-              width: 190,
-              height: 300,
-              theme: {
-                shell: {
-				  background: '#ffffff',
-                  color: '#ffffff'
-                },
-                tweets: {
-				  background: '#ffffff',
-				  color: '#242424',
-				  links: '#2e7cc6'
-                }
-              },
-              features: {
-                scrollbar: false,
-                loop: false,
-                live: true,
-                behavior: 'default'
-              }
-            }).render().start();
-            </script>
-            
+    
+    <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=mithdd+OR+mithleaks+OR+digdialog+OR+UMD_MITH+from%3A<?php echo $twit ?>" data-widget-id="341965325891411968" data-chrome="transparent" data-link-color="#2e7cc6">Tweets by @<?php echo $twit ?></a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </aside>
-	<a href="https://twitter.com/<?php echo $twit ?>" class="twitter-follow-button" data-show-count="true">Follow @<?php echo $twit ?></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>                
-
+    
+	<a href="https://twitter.com/<?php echo $twit ?>" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @<?php echo $twit ?></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </div>
 <!-- /recent_tweets -->
 
