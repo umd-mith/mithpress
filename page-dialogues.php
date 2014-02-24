@@ -37,18 +37,25 @@ Template Name: Dialogues
                 
                 </article>
                 <!-- /post-<?php the_ID(); ?> -->
-    
-				<?php global $wp_query;
+            
+ 				<?php global $wp_query;
+				
+					$current_date = date('Ymd');
                 
 					query_posts( array(
 						'post_type' => 'podcast',
 						'posts_per_page' => '3',
+						'meta_query' => array(
+						   array(
+							   'key' => 'podcast_date',
+							   'value' => $current_date,
+							   'compare' => '<=',
+						   )
+					   ),
 					));
                 
                 ?>
-            
                 <?php if ( have_posts() ) : ?>
-        
                 <header class="entry-header prepend-top">
         
                     <h1 class="entry-title append-bottom prepend-top">Recent Dialogues</a></h1>
@@ -57,41 +64,29 @@ Template Name: Dialogues
                 <!-- /entry-header-->
         
                 <article id="post-<?php the_ID(); ?>" <?php post_class('span-narrow'); ?>>
+
+                    <div class="dialogues-wrap widget widget_recent_cpt">
                 
                     <ul id="recent-dialogues" class="no-bullets">
         
                     <?php while ( have_posts() ) : the_post(); ?>
-                    
-                    <?php 
-					
-                    global $podcast_mb; 
-                    $podcast_mb->the_meta(); 
-                    $stitle = $podcast_mb->get_the_value('speakertitle'); 
-					$talk_date = $podcast_mb->get_the_value('talk-date');
-					$talk_title = $podcast_mb->get_the_value('talk-title');
-					?>
-        
-                        <li><a href="<?php the_permalink(); ?>" >
-                            <span class="pods-date"><?php if ($talk_date != '') { 
-								echo $talk_date;
-								} else { the_date( 'F j, Y' ); 
-							} ?></span>
-                            <span class="pods-speaker"><?php $podcast_mb->the_value('speaker'); if ( $stitle != '') { ?>, <span class="pods-stitle"><?php echo $stitle ?></span><?php } ?></span> 
-                            <span class="pods-title"><?php if ( $talk_title != '') { 
-								echo $talk_title; 
-								} else { the_title(); 
-							} ?></span>
-                        </a></li>    
-        
+                		<li>
+						<?php $talk_title = get_post_meta( get_the_ID(), 'podcast_title', TRUE ); ?>
+                        <span class="post-title"><a href="<?php the_permalink(); ?>" title="<?php echo $talk_title; ?>"><?php if ($talk_title) { echo $talk_title; } else { the_title(); } ?></a></span>
+                        <?php echo podcast_info_snippet(); ?>
+        				</li>
                     <?php endwhile; //while_posts ?>
                     
                     </ul>
-        
+                    
+                    </div>
+
                 </article>
                 <!-- /post-<?php the_ID(); ?> -->
         
                 <?php endif; //have_posts ?>
     
+        
             </div>
             <!-- /articles -->
     

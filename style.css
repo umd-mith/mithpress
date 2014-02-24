@@ -2,7 +2,7 @@
 Theme Name: MITH Theme
 Theme URI: http://mith.umd.edu
 Description: A WordPress theme designed specifically for MITH. 
-Version: 1.5
+Version: 1.6
 Author: Kirsten Keister
 Tags: clean, grid, white, fonts, 3-column, 2-column
 Author URI: www.lamppostcreative.com
@@ -59,7 +59,6 @@ body strong {font-weight: 700; }
 	#content ul.no-bullets { list-style:none; padding-left:0; margin: 0 0 0 0; }
 	#content ul.no-bullets li { padding-left: 0; margin: 0; list-style-image: none; list-style-type: none; padding-right:0px; }
 
-	
 	/*===  Headers      ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	
@@ -99,7 +98,6 @@ body strong {font-weight: 700; }
 	/*-------------------------------------------------------------------------------------------*/
 	#umd-wrapper { margin: 0; padding: 0; background: #000 url(http://www.umd.edu/images/site/body-bg.gif) repeat-x top left; text-align: center; }
 	#umd-frame { width: 870px; }
-	
 	
 	/*===  Assistive text      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -193,13 +191,13 @@ body strong {font-weight: 700; }
 	#primary-links ul.links li.current_page_item a:hover span.icon { background-image: url(images/icon_grid_hvr.png); }
 
 #primary-links ul.links li.current-menu-item a span.icon,
-	#primary-links ul.links li.current-menu-ancestor a span.icon { background-image: url(images/icon_grid_hvr.png); }
+	#primary-links ul.links li.current-menu-ancestor a span.icon,
+	#primary-links ul.links li.current-page-ancestor a span.icon { background-image: url(images/icon_grid_hvr.png); }
 
 #primary-links ul.links ul li a span.icon { background: none !important; display: none; }
 
 	/*===  Left Side Subnav      ===*/
-	/*-------------------------------------------------------------------------------------------*/
-	
+	/*-------------------------------------------------------------------------------------------*/	
 	#subnav { text-align:left; }
 		#subnav h1 {  margin: 0; padding: 0; height:17px; padding-bottom:16px; margin-bottom: 2px; border-bottom: 1px dashed #b1b1b1; font-weight: 700; color:#424242; }
 		#subnav ul { margin:0px; padding:0px; list-style-type: none; border-top: 1px dashed #b1b1b1; font-size: .8125em; }
@@ -208,18 +206,25 @@ body strong {font-weight: 700; }
 		#subnav li a:hover, #subnav li.current-menu-item a, #subnav li.current_page_item a,
 		.post-type-archive-people #subnav .current-staff a { color:#424242 !important; background: url(images/stripe-menu-hover.png) repeat; }
 	
-	
 	/*===  Taxonomy Navigation Highlighting      ===*/
 	/*-------------------------------------------------------------------------------------------*/
-	.tax-staffgroup #primary-links ul.links li.people a { color: #2E7BC6; }
-	.tax-staffgroup #primary-links ul.links li.people a:hover{ color: #a3a3a3 }
-	.tax-staffgroup #primary-links ul.links li.people a span.icon { background-image: url(images/icon_grid_hvr.png); }
+	.tax-staffgroup #primary-links ul.links li.people a, 
+	.tax-podcast_series #primary-links ul.links li.ddialogues > a, 
+	.page-past-dialogue-schedules #primary-links ul.links li.ddialogues > a { color: #2E7BC6; }
+	
+	.tax-staffgroup #primary-links ul.links li.people a:hover, 
+	.tax-podcast_series #primary-links ul.links li.ddialogues > a:hover,
+	.page-past-dialogue-schedules #primary-links ul.links li.ddialogues > a:hover { color: #a3a3a3 }
+
+	.tax-staffgroup #primary-links ul.links li.people a span.icon, 
+	.tax-podcast_series #primary-links ul.links li.ddialogues > a span.icon,
+	.page-past-dialogue-schedules #primary-links ul.links li.ddialogues > a span.icon { background-image: url(images/icon_grid_hvr.png); }
 	
 	.term-archive-project #primary-links .archived-projects a { color: #A1D0ED !important; }
 	
 	.term-people-past #sub-links .past-staff,
-	.term-archive-project #sub-links .archived-projects { color:#424242 !important; background: url(images/stripe-menu-hover.png) repeat;  }
-	
+	.term-archive-project #sub-links .archived-projects,
+	.tax-podcast_series #sub-links .dialogues-archive { color:#424242 !important; background: url(images/stripe-menu-hover.png) repeat;  }
 	
 	/*===  People Navigation      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -232,7 +237,7 @@ body strong {font-weight: 700; }
 /*===  Breadcrumbs */
 /*-------------------------------------------------------------------------------------------*/
 
-#crumbs { font-size: 0.7em; margin: 0; padding: 0; margin-bottom: 16px; line-height: normal; height:16px; }
+#crumbs { font-size: 0.7em; margin: 0; padding: 0; margin-bottom: 16px; line-height: normal; height:16px; width: 640px;}
 	#curmbs a { color: #20558A; padding-bottom: 1px; }
 	#crumbs a:hover { border-bottom: 1px solid #3C5F8A; }
 	#crumbs .bc_home { background: url(images/icon_home.png) no-repeat left center; display:block; float:left; padding: 0 5px 0 0; width: 12px; height:12px;}
@@ -290,7 +295,7 @@ body strong {font-weight: 700; }
 	.entry-meta .meta-line a:hover { text-decoration:none; }
 	.podcast .entry-meta .post-date { display: none !important; }
 
-.blog #podcast-info .pods-twitter { display: none; }
+.blog #podcast-info .post-twitter { display: none; }
 .post .nocomments { color: #999; }
 
 	/*===  Single Posts      ===*/
@@ -403,20 +408,17 @@ body strong {font-weight: 700; }
 /*===  Home Page */
 /*-------------------------------------------------------------------------------------------*/
 
-	/*===  Twitter Wrap		===*/
+	/*===  Twitter			===*/
 	/*-------------------------------------------------------------------------------------------*/
-	#twitter_wrap { margin: 14px 0; width:600px; clear: both; }
-		#twitter_wrap .twtr-widget { padding-left: 25px; }
-		#twitter_wrap .twtr-widget .twtr-timeline { height: 20px !important; }
-		#twitter_wrap .follow { float:none; display:block; width:25px; text-align:left; background: url(images/icon_info-twitter.png) no-repeat left center;  float:left; cursor:pointer; }
-		#content .twtr-bd p { font-size: 10px; }
-		#twitter_wrap .twtr-widget em { float:left; color:#FFF; }
-		#twitter_wrap .twtr-widget em .twtr-reply, #twitter_wrap .twtr-widget em .twtr-rt, #twitter_wrap .twtr-widget em .twtr-fav { display:none; }
-		#twitter_wrap .twtr-widget em, #witter_wrap .twtr-widget .twtr-new-results { margin-top: 0; }
-
+	#content .rotatingtweets, #content .norotatingtweets { border-bottom: 0 !important; margin-bottom: 0 !important; margin-top: 2%; }
+	
+	.widget_twitter_timeline h3 { display: none; }
+	.var-narrow .timeline-header .summary, 
+	.timeline-header h1.summary,
+	.timeline-header .custom-timeline-summary { font-size: 14px !important; font-weight: 600; font-family: Vegur, 'Open Sans', Verdana, Tahoma, Geneva, sans-serif; }
+	
 	/*===  Columns			===*/
 	/*-------------------------------------------------------------------------------------------*/
-	
 	#column-wrap { border-top: 1px solid #949494; padding-top:30px; }
 	#left-column { float:left; width:415px; }
 	#right-column { float:right; width:415px; }
@@ -460,9 +462,9 @@ body strong {font-weight: 700; }
 
 #personal-blog-feed ul li a { color: #000000; text-decoration:none; }
 #personal-blog-feed ul li a:hover { text-decoration: none; color:#20558A; }
-#personal-blog-feed .rpost { border-bottom: 1px dotted #D9D9D9; display: block; margin-top: 15px; padding-bottom: 15px; line-height: normal;  }
-#personal-blog-feed .rpost-title { display: block; font-size:11px; margin-bottom: 3px; line-height: 125%; }
-#personal-blog-feed .rpost-date { color: #AAA9A9; display: block; font-size: 11px; font-family:Georgia,Geneva,"Times New Roman",times;}
+#personal-blog-feed .post { border-bottom: 1px dotted #D9D9D9; display: block; margin-top: 15px; padding-bottom: 15px; line-height: normal;  }
+#personal-blog-feed .post-title { display: block; font-size:11px; margin-bottom: 3px; line-height: 125%; }
+#personal-blog-feed .post-date { color: #AAA9A9; display: block; font-size: 11px; font-family:Georgia,Geneva,"Times New Roman",times;}
 #content #personal-blog-feed li { padding: 0 0; border-bottom-width: 0; }
 
 
@@ -491,24 +493,32 @@ body strong {font-weight: 700; }
 /*===  Podcasts */
 /*-------------------------------------------------------------------------------------------*/
 #podcast-info { overflow: auto; height:auto; }
-	#podcast-info .attachment-med-thumbnail { float: left; margin-right:20px; border:1px solid #5c5c5c; }
-	#podcast-info .entry-title { margin-bottom:5px; display:block; padding-bottom:0px; border-bottom: 0;}
-	#podcast-info .info-title { font-size: 1em; font-weight: 400; display:block; margin-bottom: 5px;  }
+	#podcast-info .attachment-med-thumbnail { float: left; margin-right:20px; border:1px solid #5c5c5c; margin-bottom: 15px; }
+	#podcast-info .entry-title, .home .podcast .entry-title { margin-bottom:5px; display:block; padding-bottom:0px; border-bottom: 0;}
+	#podcast-info .info-title, .home .podcast .info-title { font-size: 1em; font-weight: 400; display:block; margin-bottom: 5px;  }
+	#podcast-info .podcast-details, .home .podcast .podcast-details { font-size: 0.875em; line-height: 1; }
+	.home .podcast .podcast-details { margin-bottom: 1em; }
 
-#podcast-info span { display:block; margin: 0 0 5px 0 ; font-weight: 500; width:auto; line-height: normal }
-	#podcast-info span span { float:none; display:inline; width:auto; font-style:italic }
-	#podcast-info .pods-affiliation { color: #656565; font-weight: 500; font-size: 0.875em; margin-bottom: 2px; }
-	#podcast-info .pods-date { text-transform:uppercase; font-size: 0.8em; color: #555555; display: block; padding:5px 0 0 0; }
-	#podcast-info .pods-twitter { font-size: 0.725em; color: #555555; background-image: url("images/icon_info-twitter.png"); background-position: left center; background-repeat: no-repeat; padding-left: 22px; width:230px; float:left; }
-	#podcast-info.no-thumb .pods-twitter { display: block; float:none; width: auto; } 
-	#podcast-info span a { color: #333333; text-decoration:none; }
-	#podcast-info span a:hover { text-decoration:none; color:#20558A }
-	#podcast-info span.pods-speaker { margin-bottom: 3px; }
+#podcast-info span, .home .podcast span { display:block; margin: 0 0 2px 0 ; font-weight: 500; line-height: normal }
+	#podcast-info span a, .home .podcast span a { color: #333333; text-decoration:none; }
+	#podcast-info span a:hover, .home .podcast span a:hover { text-decoration:none; color:#20558A }
+	.post-twitter { font-size: 0.725em; color: #555555; background-image: url("images/icon_info-twitter.png"); background-position: left center; background-repeat: no-repeat; padding-left: 22px; width:230px; float:left; }
+	#podcast-info.no-thumb .post-twitter { display: block; float:none; width: auto; } 
+	.home .podcast .post-twitter { display: none; }
+	#podcast-info .post-affiliation, .home .podcast .post-affiliation { color: #656565; font-weight: 500; font-size: 0.875em; margin-bottom: 2px; }
+	#podcast-info .post-date, .home .podcast .post-date { font-size: 0.8em; color: #555555; display: block; padding:5px 0 0 0; }
+	#podcast-info .post-speaker, .home .podcast .post-speaker { margin-bottom: 3px; }
+	#podcast-info span.post-speaker span { float:none; display:inline; width:auto; font-style:italic }
 
 #abstract { text-align:justify; clear:both; }
-	#abstract p.pod-bio { color: #666666; border-top: 1px dashed #d4d4d4; padding-top: 1em;}
-	#abstract p.pod-bio + .pod-bio { border-top-width: 0px; padding-top: 0em; }
-	#abstract p.pod-bio:last { border-bottom: 1px dashed #d4d4d4; padding-bottom: 1em; }
+	#abstract .pod-bio { display: block; border-top: 1px dashed #d4d4d4; padding-top: 1em; margin-top: 1.25em;}
+	#abstract .pod-bio p { color: #666666; }
+	#abstract .pod-bio + .pod-bio { border-top-width: 0px; padding-top: 0em; }
+	#abstract .pod-bio:last-child { border-bottom: 1px dashed #d4d4d4; padding-bottom: 1em; }
+	#abstract iframe { padding-bottom: 0.25em; }
+
+#dd-info { padding-top: 1em; }
+#content #dd-info p { color: #888888; font-size: 0.7em; }
 	
 #content article.podcast { width:410px; margin-right:0px; float:none;  }
 .blog #content article.podcast, .category #content article.podcast, .search #content article { width: 100%; }
@@ -522,13 +532,37 @@ body strong {font-weight: 700; }
 
 	/*===  Digital Dialogues Page      ===*/
 	/*-------------------------------------------------------------------------------------------*/
-	ul.no-bullets a { margin-top: 1em; padding-bottom: 1em; border-bottom: 1px dotted #D9D9D9; color: #444444; display:block; } 
+	#content ul#recent-dialogues li { margin-top: 1em; padding-bottom: 1em; border-bottom: 1px dotted #D9D9D9; display:block; } 
 	#recent-dialogues span { display:block; clear:right; }
-	#recent-dialogues .pods-date { text-transform:uppercase; font-size: 0.8em; color: #AAA9A9;}
-	#recent-dialogues .pods-title { font-family: Georgia,Geneva,"Times New Roman",times; }
-	#recent-dialogues span.pods-stitle { display: inline; }
-
-
+	#recent-dialogues .post-date { text-transform:uppercase; font-size: 0.8em; color: #AAA9A9;}
+	#recent-dialogues .post-title { font-family: Georgia,Geneva,"Times New Roman",times; font-size: 1.1em; }
+	#recent-dialogues .post-title a { color: #444; }
+	#recent-dialogues .post-title a:hover { color: #2E7BC6; }
+	#recent-dialogues span.post-stitle { display: inline; }
+	.widget_recent_cpt #recent-dialogues li span { line-height: 150%; }
+	#recent-dialogues .info-location, #recent-dialogues .post-twitter, #recent-dialogues .info-times { display: none; }
+	
+	/*===  DD Archive Lists      ===*/
+	/*-------------------------------------------------------------------------------------------*/
+	#content .podcasts-list p { font-size: inherit; margin: inherit; line-height: inherit; }
+	#content .podcasts-list, #content .podcasts-list li { list-style:none; padding: 0; margin: 0; }
+	#content .podcasts-list li { overflow: auto; border-top: 1px solid #bbb; padding: 15px 0 10px 0; }
+	.podcasts-list #podcast-info { float:right; width: 82%; }
+	.podcasts-list #podcast-info span { display: block; }
+	.podcasts-list #podcast-info span span { display: inline; }
+	.podcasts-list #podcast-info .info-dates { display: table-cell; width: 100px; }
+	.podcasts-list #podcast-info .podcast-details .info-dates { display: none; }
+	.podcasts-list #podcast-info .post-affiliation { font-style: normal; font-size: inherit; }
+	.podcasts-list #podcast-info h3.talk-title { font-size: 1.1em; padding: 4px 0 8px 0; }
+	.podcasts-list #podcast-info .talk-link { padding-top: 8px; margin-top: 3px; border-top: 1px dotted #d9d9d9; }
+	.podcast_series select { -webkit-appearance: none; border: 1px solid #d9d9d9; padding: 5px 20px 5px 5px; margin: 0; border-radius: 2px; background-color: #f9f9f9; background-image: url(images/arrow-up-down.png); background-repeat: no-repeat; background-position: right center; }
+	.podcast_series input { -webkit-appearance: none; padding: 5px 6px; border: 1px solid #bbb; color: #FFF; text-transform: uppercase; border-radius: 2px; background-color: #666; }
+	.podcast_series input:hover, .podcast_series input:active { background-color: #BBBBBB; }
+	.podcasts-header { line-height: 2.5; }
+	.podcasts-header span { display: inline; }
+	.podcasts-header form { float: right; }
+	
+	
 /*-------------------------------------------------------------------------------------------*/
 /*===  Post/Page Navigation */
 /*-------------------------------------------------------------------------------------------*/
@@ -576,15 +610,16 @@ body strong {font-weight: 700; }
 #sidebar p { font-size: inherit; }
 #sidebar .widget + .widget { margin-top: 16px; }
 
-.widget a, .widget-small a { color: #000000; text-decoration: none; }
+.widget a, .widget-small a { color: #444444; text-decoration: none; }
+.widget a:hover, .widget-small a:hover { color: #2E7BC6; }
 	
 	/*===  Twitter Widget     ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	#sidebar .twitter-follow-button { background: #FFF; padding-top: 10px; }
 	#sidebar.people .twtr-avatar { display:none; }
 	#sidebar.people .twtr-tweet-text { margin-left: 0px !important; }
-	.widget_twitter a { color: #2E7CC6; } 
-	.widget a.twitter-link { color: #2E7BC6; }
+	/*.widget_twitter a { color: #2E7CC6; } 
+	.widget a.twitter-link { color: #2E7BC6; } */
 	.widget span.twitter-timestamp { display: block; font-size: 8px; }
 	.widget .rstw_comma { display: none; }
 	
@@ -596,17 +631,16 @@ body strong {font-weight: 700; }
 	#sidebar .podcast-files li { padding: 6px 0; border-bottom: 1px dotted #E4E4E4; font-size:0.7825em; }
 	#sidebar .podcast-files li:last-child { padding-bottom: 0px; border-bottom: 0px; }
 	#sidebar .podcast-files li a { padding-left: 25px; height: 20px; display: block; }
-	#sidebar .pod-vid { background: url(images/icon-pod-vid.png) no-repeat left top }
-	#sidebar .pod-ppt { background: url(images/icon-pod-ppt.png) no-repeat left top }
-	#sidebar .pod-sld { background: url(images/icon-pod-slides.png) no-repeat left top }
-	#sidebar .pod-key { background: url(images/icon-pod-key.png) no-repeat left top }
-	#sidebar .pod-aud { background: url(images/icon-pod-aud.png) no-repeat left top }
-	
+	#sidebar .podcast_vid { background: url(images/icon-pod-vid.png) no-repeat left top }
+	#sidebar .podcast_ppt { background: url(images/icon-pod-ppt.png) no-repeat left top }
+	#sidebar .podcast_slides { background: url(images/icon-pod-slides.png) no-repeat left top }
+	#sidebar .podcast_key { background: url(images/icon-pod-key.png) no-repeat left top }
+	#sidebar .podcast_aud { background: url(images/icon-pod-aud.png) no-repeat left top }
 	
 	/*===  Blog Sidebar     ===*/
 	/*-------------------------------------------------------------------------------------------*/
-	.widget_recentposts_thumbnail h3 a.rss { background: url(images/icon_rss.png) no-repeat 0px 0px; display:block; height:16px; float: left; width: 3px; }
-	.widget_recentposts_thumbnail h3 a.rss:hover { background: url(images/icon_rss2.png) no-repeat 0px 0px; }
+	.widget_recent_entries_pp h3 a.rss { background: url(images/icon_rss.png) no-repeat 0px 0px; display:block; height:16px; float: left; width: 3px; }
+	.widget_recent_entries_pp h3 a.rss:hover { background: url(images/icon_rss2.png) no-repeat 0px 0px; }
 	
 	.twtr-hd, .twtr-ft { display:none }
 	.twtr-tweet-wrap { padding: 6px 0 8px 0 !important}
@@ -617,12 +651,29 @@ body strong {font-weight: 700; }
 	
 	/*===  Recent Posts Widget      ===*/
 	/*-------------------------------------------------------------------------------------------*/
-	.widget .rpost { display: block; margin-top: 15px; padding-bottom: 15px; line-height: normal;  }
-		.widget .rpost-title { display: block; /*font-size:11px;*/ margin-bottom: 3px; line-height: 125%; }
-		.widget .rpost-date { color: #AAA9A9; display: block; font-size: 11px; font-family:Georgia,Geneva,"Times New Roman",times;}
-		.widget a:hover { text-decoration: none; color:#20558A; }
-	#blog-feed li { border-bottom: 1px dotted #D9D9D9; }
-	#blog-feed li:last-child { border-bottom: 0px; }
+	.widget_recent_entries_pp li { display: block; margin-top: 5px !important; padding-bottom: 15px; border-bottom: 1px dotted #D9D9D9; line-height: 125%; }
+	.widget_recent_entries_pp li:last-child { border-bottom: 0px; }
+
+	.widget .post-title { display: block; margin-bottom: 2px; margin-top: 3px; }
+	.widget .post-date { color: #AAA9A9; display: block; font-size: 11px; font-family:Georgia,Geneva,"Times New Roman",times; text-transform:none; margin-bottom: 3px; }
+	.widget .post-speaker { color: #777777; }
+
+	#content .widget_recent_cpt ul { padding-left: 0; margin-left: 0; }
+	#content .widget_recent_cpt ul li, #footer .widget_recent_cpt ul li  { list-style: none; display: block; margin: 1em 0; padding-left: 0; padding-right: 0; padding-bottom: 1em; line-height: normal;  border-bottom: 1px dotted #D9D9D9; }
+	#content .widget_recent_cpt ul li:last-child, #footer .widget_recent_cpt ul li:last-child { border-bottom: 0; }
+	.widget_recent_cpt li span { line-height: 125%; }
+	#sidebar .upcoming-dialogues .speaker-title { display: none; }	
+
+	#content .dialogues-wrap ul.no-bullets li { margin-top: 1em; } 
+	
+	#footer .widget_recent_entries_pp ul li:last-child { border-bottom: 0px; }
+	#footer .widget_recent_entries_pp ul li { display: block; margin: 1em 0; padding-bottom: 1em; border-bottom: 1px dotted #D9D9D9; line-height: 125%; }
+	
+	/*===  Project Blog Posts      ===*/
+	/*-------------------------------------------------------------------------------------------*/
+	#content .widget_recent_posts ul { padding-left: 0; margin-left; }
+	#content .widget_recent_posts ul li { list-style: none; display: block; margin: 1em 0; padding-left: 0; padding-right: 0; padding-bottom: 15px; line-height: normal;  border-bottom: 1px dotted #D9D9D9; }
+	#content .widget_recent_posts ul li:last-child { border-bottom: 0; }
 
 	/*===  Calendar Widget      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -632,7 +683,7 @@ body strong {font-weight: 700; }
 		.widget_calendar th, .widget_calendar td { font-size: 9px; padding: 4px 0; text-align:center !important; }
 		.widget_calendar tbody a { text-decoration: underline; }
 		.widget_calendar tbody a:hover { text-decoration: none; }
-		.widget_calendar tfoot {font-size:9px; }
+		.widget_calendar tfoot {font-size:9px; }	
 	
 
 /*-------------------------------------------------------------------------------------------*/
@@ -645,7 +696,9 @@ body strong {font-weight: 700; }
 
 .rss { float:left; display:block; font-size:9px; text-transform:uppercase; text-align:left; font-family:Arial, Helvetica, sans-serif; padding-left: 20px; background: url(images/icon_rss16.png) no-repeat left center; }
 
-#personal-blog-feed .readmore, #personal-blog-feed .rss, .twitter-more .twitter { margin-top: 10px; }
+#personal-blog-feed .readmore, 
+#personal-blog-feed .rss, 
+.twitter-more .twitter { margin-top: 10px; }
 #personal-blog-feed .readmore { float:right; }
 
 #recent_tweets h3 a.follow { background: url(images/icon_twitter16.png) no-repeat left center; display:block; height:16px; float: left; width: 20px; }
@@ -733,17 +786,13 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 	/*-------------------------------------------------------------------------------------------*/
 	#footer-top { background: #343434; color: #F1F1F1; text-align:left; padding: 23px 20px 40px 20px; overflow: auto; }
 		#footer-top .widget-body { font-size: 0.7em; }
-		#footer-top .widget { float:left; display: block; margin: 0 20px; }
+		#footer-top .widget { float:left; display: block; margin: 0 20px; max-width: 170px; }
 		#footer-top ul li a { line-height: 2em; display: block; text-decoration: none; }
 		#footer-top .widget i { font-weight: 600; color: #54B1FF; display:inline-block; margin-right:3px; font-style:normal; }
 		#footer-top ul.blogroll li img { vertical-align:text-bottom; margin-right:3px; }
-		#footer-top .widget .rpost-title i { font-weight: normal; color: #f8f8f8; margin-right:0px; font-style: italic; }	
 		#footer-top #text-3 { float: right; }
 		
 	#footer h3 a.rss { width:3px; display:none; }
-	#footer .widget #blog-feed li, #footer .widget  #latest_cpt_list li { border-bottom: 1px dotted #888888; margin-top: 1em; margin-bottom: 1em; }
-	#footer .widget .rpost { padding-bottom: 1.0em; }
-	#footer .widget-body #blog-feed, #footer .widget-body #latest_cpt_list { width: 195px; }
 
 	/*===  Footer Bottom ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -826,7 +875,6 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 /*-------------------------------------------------------------------------------------------*/
 /*===  Columns      ===*/
 /*-------------------------------------------------------------------------------------------*/
-
 .one_half, .one_third, .one_fourth, .three_fourth, .two_third, .one_fifth, .two_fifth, .three_fifth, .four_fifth { margin-bottom: 20px; float:left; margin-right: 4%; position:relative; }
 
 .one_half { width:48%; }
@@ -860,7 +908,6 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 	
 	.one_third .icon-text { width:233px; }
 	.one_fifth .icon-text { width:109px; }
-	
 	
 	/*===  2. Buttons    ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -908,36 +955,26 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 	
 	.ui-tabs-hide { display: none; }
 	
-	
 	/*===  4. Toggles    ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	
-	.toggle-container { width:100%; }
-	
-	.toggle-container { margin-bottom:4px; position:relative; cursor:pointer; overflow:hidden; }
+	.toggle-container { width:100%; margin-bottom:4px; position:relative; cursor:pointer; overflow:hidden; }
 	p + .toggle-container { margin-top: 10px; }
-
 	.toggle-container h6 { text-decoration: none; text-transform: uppercase; padding:7px 8px 7px 33px; font-size:12px; line-height:20px; margin:0; border: 1px solid #e1e1e1; }
 	.toggle-container .toggle { background:url(images/elements/toggle.png) no-repeat 10px 2px; }
-	.toggle-container .active { background:url(images/elements/toggle.png) no-repeat 10px -48px;}
-	
-	
+	.toggle-container .active { background:url(images/elements/toggle.png) no-repeat 10px -48px;}		
 	.toggle-container p, .toggle-container div { padding:10px 10px 10px 32px; margin:0px; } 
 	.toggle-content { display:none; font-size: 0.7825em; }
 	
-	
 	/*===  5. Lists      ===*/
 	/*-------------------------------------------------------------------------------------------*/
-
 		.square { list-style-type:square; }
 		.circle { list-style-type:circle; }
 		.check li { background:transparent url(images/elements/checklist.png) no-repeat 0px 2px; padding-left:22px; }
 		.checkgrey li { background:transparent url(images/elements/checkgrey.png) no-repeat 0px 2px; padding-left:22px; }
 		
-	
 	/*===  6. Pricing Boxes ===*/
-	/*-------------------------------------------------------------------------------------------*/
-	
+	/*-------------------------------------------------------------------------------------------*/	
 	.pricing-box { border:5px solid #f1f1f1; }
 		.pricing-box p { margin-bottom:0; }
 		.pricing-title { text-align:center; padding:20px 30px 0 30px;}
@@ -995,3 +1032,4 @@ address { margin:0 0 1.5em; font-style:italic; }
 del { color:#666; }
 pre { margin:1.5em 0; white-space:pre; }
 pre, code, tt { font:1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

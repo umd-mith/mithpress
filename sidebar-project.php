@@ -1,12 +1,14 @@
 <div id="sidebar" class="project widget-area span-5 prepend-1 append-bottom last" role="complementary">
 
 <?php
-global $project_mb;
-$project_mb->the_meta();
-$website = $project_mb->get_the_value('website');
-$contact = $project_mb->get_the_value('contactname');
-$twit = $project_mb->get_the_value('twitter');
-$hash = $project_mb->get_the_value('hashtag');
+
+$website = get_field('project_website_url', $post->ID);
+$contact = get_field('project_contact_name', $post->ID);
+$email = get_field('project_contact_email', $post->ID); 
+$twit = get_field('project_twitter_account', $post->ID);
+$hash = get_field('project_twitter_hashtag', $post->ID);
+$twitcode = get_field('project_twitter_code', $post->ID); 
+
 ?>
 	
     <!-- Project Website -->
@@ -26,7 +28,7 @@ $hash = $project_mb->get_the_value('hashtag');
     <?php } ?>
     
     <!-- Project Contact -->
-    <?php if ( $contact != '') { ?>
+    <?php if ( $contact != '' && $email != '') { ?>
 	
     <div id="project-contact" class="widget widget_pcontact">
     
@@ -34,7 +36,7 @@ $hash = $project_mb->get_the_value('hashtag');
     
         <aside class="widget-body clear">
             <p>
-            <a href="mailto:<?php $project_mb->the_value('contactemail'); ?>" rel="nofollow" target="_blank" class="proj-contact"><?php echo $contact ?></a>
+            <a href="mailto:<?php echo $email; ?>" rel="nofollow" target="_blank" class="proj-contact"><?php echo $contact ?></a>
             </p>
         </aside>
     
@@ -47,85 +49,27 @@ $hash = $project_mb->get_the_value('hashtag');
 
 
 	<!-- Project Tweets -->
-	<?php if ( $twit != '') { ?>
+	<?php if ( $twitcode != '') { ?>
     
     <div id="recent_tweets" class="widget widget_recent_tweets">
         <h3>Recent Tweets</h3>
         <aside class="widget-body clear">
-            <script src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-            new TWTR.Widget({
-              version: 2,
-              type: 'profile',
-              rpp: 10,
-              interval: 8000,
-              width: 190,
-              height: 300,
-              theme: {
-                shell: {
-                  background: '#ffffff',
-                  color: '#ffffff'
-                },
-                tweets: {
-                  background: '#ffffff',
-                  color: '#242424',
-                  links: '#2e7cc6'
-                }
-              },
-              features: {
-                scrollbar: false,
-                loop: true,
-                live: true,
-                behavior: 'default'
-              }
-            }).render().setUser('<?php echo $twit; ?>').start();
-            </script>
+            <?php echo $twitcode; ?>
+            
+            <?php if ($twit != '' || $hash != '') { ?> 
             <div class="twitter-more">
-                <a href="http://www.twitter.com/#!/<?php echo $twit ?>" rel="nofollow" target="_blank" class="follow">Follow</a>
+            	<?php if ($twit != '') { ?>
+                <a href="http://www.twitter.com/<?php echo $twit ?>" rel="nofollow" target="_blank" class="follow">Follow @<?php echo $twit; ?></a>
+                <?php } elseif ($hash != '') { ?>
+                <a href="http://www.twitter.com/search?q=%23<?php echo $hash ?>" rel="nofollow" target="_blank" class="follow">Follow #<?php echo $hash; ?></a>
+                <?php } ?>
             </div>
+            <?php } ?>
         </aside>
     </div>
-    <?php }
-	
-	if ($hash != '') {?>
-    <div id="recent_tweets" class="widget widget_recent_tweets">
-        <h3>Recent Tweets</h3>
-        <aside class="widget-body clear">
-			<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-            new TWTR.Widget({
-              version: 2,
-              type: 'search',
-              search: '<?php echo $hash ?>',
-              interval: 8000,
-              title: '',
-              subject: '',
-              width: 190,
-              height: 300,
-              theme: {
-                shell: {
-				  background: '#ffffff',
-                  color: '#ffffff'
-                },
-                tweets: {
-				  background: '#ffffff',
-				  color: '#242424',
-				  links: '#2e7cc6'
-                }
-              },
-              features: {
-                scrollbar: false,
-                loop: true,
-                live: true,
-                behavior: 'default'
-              }
-            }).render().start();
-            </script>
-		</aside>
-    </div>
-    <!-- /recent_tweets -->
     
     <?php } ?>
+    <!-- /recent_tweets -->
 
 </div>
 <!-- #secondary .widget-area -->

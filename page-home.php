@@ -12,42 +12,9 @@ Template Name: Home
 
         <?php get_template_part( 'slider', 'home' ); ?>
         <!-- /slideshow -->
-
-            <div id="twitter_wrap">
-				<a href="http://www.twitter.com/#!/UMD_MITH" rel="nofollow" target="_blank" class="follow">&nbsp;</a>
-
-                <script src="http://widgets.twimg.com/j/2/widget.js"></script>
-                <script>
-                new TWTR.Widget({
-                  version: 2,
-                  type: 'profile',
-                  rpp: 20,
-                  interval: 10000,
-                  width: '800',
-                  height: 15,
-                  theme: {
-                    shell: {
-                      background: '#ffffff',
-                      color: '#ffffff'
-                    },
-                    tweets: {
-                      background: '#ffffff',
-                      color: '#242424',
-                      links: '#2e7cc6'
-                    }
-                  },
-                  features: {
-                    scrollbar: false,
-                    loop: true,
-                    live: true,
-					hashtags: true,
-					timestamp: true,
-                    behavior: 'default'
-                  }
-                }).render().setUser('umd_mith').start();
-                </script>                     
-            </div>
-            <!-- /twitter feed -->
+        
+        <?php dynamic_sidebar( 'home-center-widgets' ); ?>
+        <!-- /twitter feed -->
 
             <div id="column-wrap">
             

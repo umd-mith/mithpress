@@ -3,8 +3,6 @@
  * The template for displaying content in the single-project.php template ONLY (not page-research.php) 
  *
 **/
-    global $project_mb;
-	$project_mb->the_meta();
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -30,165 +28,160 @@
         </div>
 		<!-- /project-desc -->
             
-		<?php 
-		global $projectfiles_mb;
-		$projectfiles_mb->the_meta();
+        <?php 
+			$project_people_int = get_field('project_people_int', $post->ID);
+			$project_people_ext = get_field('project_people_ext', $post->ID);
+			if ($project_people_int > '0' || $project_people_ext > '0' ) :
+			$i = 0;
+			$count = 0;
+			
+			while(has_sub_field('project_people_int')):
+				$internal_person = get_sub_field('project_person');
+				$status = $internal_person->post_status; 
+				if ( $status == "publish") : 
+				$count++;
+				endif;
+			endwhile;
+
+			while(has_sub_field('project_people_ext')):
+				$external_person = get_sub_field('project_person_name');
+				if ( $external_person != "") : 
+				$count++;
+				endif;
+			endwhile;
 		
-        $i = 0;
-		
-		while ($projectfiles_mb->have_fields('images')) { 
-		
-			if ($i == 0) { ?>
-        
-            <div class="project-gallery prepend-top">
-            
-            <h2 class="column-title">Gallery</h2>
-            
-                <ul id="project-images">
-            
-            <?php } // endif ?>
-            
-				<?php  // loop a set of field groups
+			if ( $count != 0 ) { // have one or more staff ?>
+			<div id="info-staff" class="column left prepend-top">
+					
+				<h2 class="column-title">Participating People</h2>
+			
+				<ul>				
+			<?php } ?>
+
+			<?php while(has_sub_field('project_people_int')):
+				$internal_person = get_sub_field('project_person'); 
+				$id = $internal_person->ID; 
+				$status = $internal_person->post_status; 
+				$meta_values = wp_get_object_terms($id, 'staffgroup');;
+				$terms = array('people-past','people-past-directors','people-past-finance-administration','people-past-staff','people-past-research-associates','people-past-resident-fellows');
 				
-                $img = $projectfiles_mb->get_the_value('imgurl'); 
-                $alt = $projectfiles_mb->get_the_value('imgalt'); 
-                $img_id = get_attachment_id_from_src($img);
-                $img_thumb = wp_get_attachment_image_src( $img_id, "medium");
-        
-                $i++; 
+			    if ( $status == "publish") { // display person ?>
+                <li>
+                <?php if ( !has_term( $terms, 'staffgroup', $id) ) : ?>
+                <a href="<?php echo get_permalink($id); ?>"><?php echo get_the_title($id); ?></a>
+                <?php else : ?>
+                <?php echo get_the_title($id); ?>
+                <?php endif; ?>
+                </li>
+                            
+				<?php 
+                $i++; } // end published person display
+            endwhile; // end linked internal person 
+			?>
+
+			<?php while(has_sub_field('project_people_ext')):
+				$ext_name = get_sub_field('project_person_name'); 
+				$ext_title = get_sub_field('project_person_title'); 
+				$ext_dept = get_sub_field('project_person_department'); 
+				$ext_aff = get_sub_field('project_person_affiliation'); ?>
+                <li>
+				<?php echo $ext_name; 
+                if ( $ext_title ) { echo ', <span class="ext-person-title">' . $ext_title . '</span>'; } 
+                if ( $ext_dept ) { echo ', <span class="ext-person-dept">' . $ext_dept. '</span>'; } 
+                if ( $ext_aff ) { echo ', <span class="ext-person-aff">' . $ext_aff. '</span>'; } 
+                ?>
+                </li>
 				
-				?>
-                
-                    <li <?php if( $i%4 == 0 ) { ?> class="last" <?php } ?>>
-                    
-                        <a href="<?php echo $img ?>" rel="lightbox" class="thickbox"><img class="project-image <?php echo $img_id; ?>" src="<?php echo $img_thumb[0] ?>" alt="<?php echo $alt ?>" /></a>
-                        
-                    </li>
-            
-		<?php } // End while loop
-    
-            if ($i > 0) { ?>
-    
-                </ul>
-    
+			<?php $i++;
+			endwhile; // end linked external person 	
+        
+            if ( $count > 0 ) { // have one or more staff ?>
+            	</ul>
             </div>
+            <?php } ?>
+        
+        <?php endif; // end linked posts 
+		//wp_reset_postdata(); ?>
+        <!-- /project people -->
+
+        <?php 
+		$project_file_links = get_field('project_file_links');
+
+			if( get_field('project_file_links') ) :
+			
+			$i = 0;
+			$count = $project_file_links;
+					
+			if ( $count != 0 ) { // have one or more ?>
+            <div id="info-files" class="column right prepend-top">
+                
+                <h2 class="column-title">Files</h2>
     
-            <?php } // endif ?>
-            <!-- /project-gallery -->
+                    <ul>
+			<?php } ?>
+
+			<?php while(has_sub_field('project_file_links')) :
+				$file_id = get_sub_field('project_file_link'); 
+				$file_url = wp_get_attachment_url( $file_id );
+				$file_name = get_sub_field('project_file_display_name'); 
+				$file_img = get_sub_field('project_file_display_image');  ?>
+                <li>
+				<?php 
+                if ( $file_img != '') { 		
+					$img_size = 'horiz-thumbnail';	
+					$image = wp_get_attachment_image_src( $file_img, $img_size);
+				}
+				?>
+                <a href="<?php echo $file_url; ?>" target="_blank">
+				<?php if ( $file_img ) : ?>
+					<img src="<?php echo $image[0]; ?>" alt="<?php echo $file_name; ?>" />
+                <?php else : echo $file_name; endif; ?>
+                </a>
+                </li>
+				
+			<?php $i++;
+			endwhile; // end linked file	
+            if ( $count > 0 ) { // have one or more files, so close the list ?>
+            	</ul>
+            </div>
+            <?php } ?>
+        
+        <!-- /info-files -->          
+        <?php endif; // end files ?>
 		
         <?php 
-        global $project_mb;
-        $project_mb->the_meta(); 
-		
-		$i = 0;
-		
-		while($project_mb->have_fields('people') ) {  
-		
-		if ($i == 0) { ?>
-        
-        <div id="info-staff" class="column left prepend-top">
-        
-        <h2 class="column-title">Participating People</h2>
-        
-            <ul>
-		
-		<?php } // endif ?>
-            
-			<?php // loop through current staff
-            $staffname = $project_mb->get_the_value('project_people'); 
-            
-            if ($project_mb->get_the_value('checkbox_past') ) { ?>
-
-                <li><?php echo get_the_title($staffname); ?></li>
-                    
-			<?php } else { ?>
-
-                <li><a href="<?php echo get_permalink($staffname); ?>"><?php echo get_the_title($staffname); ?></a></li>
+		$project_links = get_field('project_links_ext', $post->ID);
+			if( get_field('project_links_ext') ) :
+			
+			$i = 0;
+			$count = $project_links;
+					
+			if ( $count != 0 ) { // have one or more staff ?>
+            <div id="info-links" class="column right prepend-top">
                 
-            <?php } 
-		
-		$i++; } // end while loop 
-                
-		if ($i > 0) { // if posts, loop through nonstaff too ?>
-        
-			<?php while($project_mb->have_fields('nonstaff') ) { ?>
-                <li><?php $project_mb->the_value('project_people'); ?></li>            
-	        <?php } // endwhile ?>        
-
-            </ul>
-
-        </div>
-        
-		<?php } // endif 
-		
-		else { // else loop through nonstaff only
-		
-		$n = 0;
-
-		while($project_mb->have_fields('nonstaff') ) { 
-		
-			if ($n == 0 ) { ?>
-			
-			<div id="info-staff" class="column left prepend-top">
-			
-			<h2 class="column-title">Participating People</h2>
-			
-				<ul>
-			<?php 
-			
-			} // endif ?>
-	
-					<li><?php $project_mb->the_value('project_people'); ?></li>
-			
-			<?php 
-		
-		$n++; } // end while loop 
-
-    if ($n > 0) { // if posts, close div ?>		
-        
-                </ul>
-            
-            </div>
-        
-		<?php } //endif 
-		
-		} // end "else" ?>
-        <!-- /project-staff -->
-
-
-		
-	<?php 
-	global $projectlinks_mb;
-	$projectlinks_mb->the_meta();
+                <h2 class="column-title">Links</h2>
     
-	$i = 0;
-	
-	while($projectlinks_mb->have_fields('links')) {
-	
-	if ($i == 0) { ?>
-		<div id="info-links" class="column right prepend-top">
-            
-            <h2 class="column-title">Links</h2>
+                    <ul>
+			<?php } ?>
 
-                <ul>
-        	<?php } // endif ?>
-            
-                <?php  // loop a set of field groups
-                
-				$url = $projectlinks_mb->get_the_value('url');
-                $title = $projectlinks_mb->get_the_value('title');
-                    echo '<li><a href="' . $url . '" target="_blank" rel="nofollow">';
-                    echo $title . '</a></li>';
-            
-			$i++; } // end while loop 
-            
-			if ($i > 0) { ?>
-                
-                </ul>
-            
+			<?php while(has_sub_field('project_links_ext')):
+				$linky = get_sub_field('project_link_url'); 
+				$linky_title = get_sub_field('project_link_title');
+				?>
+                <li>
+                <a href="<?php echo $linky; ?>"><?php if ($linky_title != '') { echo $linky_title; } else { echo $linky; } ?></a>
+                </li>
+				
+			<?php $i++;
+			endwhile; // end link
+        
+            if ( $count > 0 ) { // have one or more links, so close the list ?>
+            	</ul>
             </div>
-        <?php } ?>
+            <?php } ?>
+        
         <!-- /info-links -->          
+        <?php endif; // end links ?>
     	
     	<?php get_template_part('sharing', 'column'); ?>            
 	

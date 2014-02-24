@@ -1,6 +1,6 @@
 <?php 
 function mithpress_breadcrumbs() {
- 
+  
   $delimiter = '<span class="bc_delimiter">&gt;</span>';
   $home = '<span class="bc_home"><i>Home</i></span>'; // text for the 'Home' link
   $before = '<span class="current">'; // tag before the current crumb
@@ -8,9 +8,9 @@ function mithpress_breadcrumbs() {
   
 // HOME LINK
 	if ( !is_home() && !is_front_page() || is_paged() ) {
-		echo '<div id="crumbs">'; 
+		echo '<div id="crumbs" class="ellipsis">'; 
 		global $post;
-		$homeLink = get_bloginfo('url');
+		$homeLink = home_url();
 		$blogLink = home_url('/blog/');
 		echo '<a href="' . $homeLink . '">' . $home . '</a> ' . $delimiter . ' ';
  
@@ -48,6 +48,13 @@ function mithpress_breadcrumbs() {
 		$title = $term->name;
 		echo '<a href="' . $homeLink . '/research">Research</a>' . $delimiter . ' ';
 		echo $before . $title . $after;
+		
+	} elseif (is_tax('podcast_series') ) { 
+		global $wp_query;
+		$term = $wp_query->get_queried_object();
+		$title = $term->name;
+		echo '<a href="' . home_url() . '/digitaldialogues/">Digital Dialogues</a> ' . $delimiter . ' ';
+		echo $before . $title . ' Digital Dialogues' . $after;
 
 /* 
     } elseif ( is_day() ) {
@@ -69,37 +76,43 @@ function mithpress_breadcrumbs() {
 		// Project Posts
 		if ( 'project' == get_post_type() ) {
 			$post_type = get_post_type_object(get_post_type());
-			echo '<a href="' . $homeLink . '/research/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+			echo '<a href="' . home_url() . '/research/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			echo $before . get_the_title() . $after;
-		} // People Posts
+		} 
+		// People Posts
 		elseif ( 'people' == get_post_type() ) {
 			$post_type = get_post_type_object( get_post_type() );
-			echo '<a href="' . $homeLink . '/people/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+			echo '<a href="' . home_url() . '/people/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			echo $before . get_the_title() . $after;
-		} // Podcasts
+		} 
+		// Podcasts
 		elseif ( 'podcast' == get_post_type() ) {
 			$post_type = get_post_type_object( get_post_type() );
-			echo '<a href="' . $homelink . '/digitaldialogues/">Digital Dialogues</a> ' . $delimiter . ' ';
-			echo '<a href="' . $homeLink . '/podcasts/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
-			$ptitle = get_the_title();
-			echo $before . truncateWords($ptitle, 14, " . . .") . $after;
-		} // Events
+			echo '<a href="' . home_url() . '/digitaldialogues/">Digital Dialogues</a> ' . $delimiter . ' ';
+			echo '<a href="' . home_url() . '/podcasts/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+			echo $before . get_the_title() . $after;
+			//$ptitle = get_the_title();
+			//echo $before . truncateWords($ptitle, 14, " . . .") . $after;
+		} 
+		// Events
 		elseif ( 'event' == get_post_type() ) {
 			$post_type = get_post_type_object( get_post_type() ); ?>
-            <a href="<?php echo $homeLink; ?>/community/">Community</a>
+            <a href="<?php echo home_url() ?>/community/">Community</a>
             <?php echo $delimiter; ?> 
-            <a href="<?php $homeLink; ?>/community/dh-events/">DH Events</a>
+            <a href="<?php home_url() ?>/community/dh-events/">DH Events</a>
             <?php echo $delimiter . ' ';
 			echo $before . get_the_title() . $after;
 			
-		} // Non-blog Posts 
+		} 
+		// Non-blog Posts 
 		elseif ( get_post_type() != 'post' ) {
 			$post_type = get_post_type_object( get_post_type() );
 			$slug = $post_type->rewrite;
-			echo '<a href="' . $homeLink . '/' . $slug['slug'] . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+			echo '<a href="' . home_url() . '/' . $slug['slug'] . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 			$nbtitle = get_the_title();
 			echo $before . truncateWords($nbtitle, 13, " . . .") . $after;
-		} // Blog Posts 
+		} 
+		// Blog Posts 
 		else {
 			echo '<a href="' . $blogLink . '">Blog</a> ' . $delimiter . ' ';
 			/*$cat = get_the_category(); $cat = $cat[0];

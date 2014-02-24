@@ -19,8 +19,8 @@ get_header(); ?>
 			
             <?php 
 			$args = array(
-				'posts_per_page' => -1,
 				'post_type' => 'event',
+				'posts_per_page' => -1,
 				'tax_query' => array(
 					array(
 						'taxonomy' => 'event_type',
@@ -29,31 +29,31 @@ get_header(); ?>
 						'operator' => 'NOT IN'
 					)
 				),
-				'meta_key' => 'date-sort',
-				'order' => 'ASC',
+				'meta_key' => 'date_start',
+				'order' => 'DESC',
                 'orderby' => 'meta_value_num',	
 			);
-			$new_query = null;
-			$new_query = new WP_Query( $args ); ?>
+			//$events = null;
+			$events = new WP_Query( $args ); ?>
 
 			<?php 
 			$i = 0; // set up a counter so we know which post we're currently showing
 			$counter_class = ''; // set up a variable to hold an extra CSS class
 
-			if ( $new_query -> have_posts() ) : while ( $new_query -> have_posts() ) : $new_query->the_post(); 
+			if ( $events -> have_posts() ) : while ( $events -> have_posts() ) : $events->the_post(); 
 			$i++; // increment the counter
                 if( $i % 2 != 0) { 
                 $counter_class = '';
 			} else {
                 $counter_class = 'last'; }
-				
-				$event_start_date = get_post_meta($post->ID, 'date-start', true);
+
+				$event_start_date = get_post_meta($post->ID, 'date_start', true);
 				//$sorting = get_post_meta($post->ID, 'date-sort', true); 
-				$date_sort = date('Ymd', strtotime( $event_start_date ) ); 
-				update_post_meta($post->ID, 'date-sort', $date_sort);
+				$date_start = date('Ymd', strtotime( $event_start_date ) ); 
+				update_post_meta($post->ID, 'date_start', $date_start);
             ?>
 
-                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class . ' ' . $date_sort); ?>>
+                <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class); ?>>
                 
                     <div class="entry-content">
                         <div id="event-info" class="append-bottom">

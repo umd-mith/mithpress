@@ -103,21 +103,23 @@
 		echo '<ul id="sub-links"></ul>';
 		
 	} else  {
-		
-	// default sidebar 
+		?>
+	<!-- default sidebar -->
+	<?php // default sidebar 
 	global $post; $thispage = $post->ID; // grabs the current post id from global and then assigns it to thispage ?>
 		<?php $pagekids = get_pages("depth=1&child_of=".$thispage."&sort_column=menu_order"); 
 		// gets a list of page that are sub pages of the current page and assigns then to pagekids ?>
 		
 		<?php if ($pagekids) { // if there are any values stored in pagekids and therefore the current page has subpages ?>
-			<ul id="sub-links">
+			<ul id="sub-links" class="sub-pages">
 				<?php wp_list_pages("depth=1&title_li=&sort_column=menu_order&child_of=".$thispage); 
 				// display the sub pages of the current page only ?>
 			</ul>
-		<?php } elseif ( $post->post_parent )
-			$children = wp_list_pages("depth=1&title_li=&child_of=".$post->post_parent."&echo=0"); 
-			if ( $children ) { // if there are no sub pages for the current page ?>
+		<?php } elseif ( $post->post_parent ) {
+			$children = wp_list_pages("depth=1&title_li=&child_of=" . $post->post_parent . "&echo=0"); 
+			if ( $children != '' ) { // if there are no sub pages for the current page ?>
 				<ul id="sub-links"><?php echo $children; ?></ul>
+            <?php } ?>
 		<?php } 
 	} ?>
 

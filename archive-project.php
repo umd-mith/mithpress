@@ -36,7 +36,9 @@ Template Name: Current Projects
 			);
 
 			$posts = new WP_Query( $args ); ?>
+			
 			<?php 
+			
 			$i = 0; // set up a counter so we know which post we're currently showing
 			$counter_class = ''; // set up a variable to hold an extra CSS class
 			if ( $posts -> have_posts() ) : 
@@ -46,7 +48,8 @@ Template Name: Current Projects
                 $counter_class = ''; // we're on an odd post
                 } else {
                 $counter_class = 'last'; }
-            ?>
+            
+			?>
                 <article id="post-<?php the_ID(); ?>" <?php post_class($counter_class); ?>>
                 
                     <div class="entry-content">
@@ -65,8 +68,9 @@ Template Name: Current Projects
             
 			<?php endif; ?>
 			</div>
+            <?php wp_reset_postdata(); ?>
 			</div>
-<!-- /page content -->
+			<!-- /page content -->
 		</div>
 <div class="clear"></div>
 <!-- /primary -->
