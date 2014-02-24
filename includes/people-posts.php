@@ -6,7 +6,7 @@ add_action( 'init', 'register_taxonomy_staffgroup' );
 
 function register_taxonomy_staffgroup() {
 
-    $labels = array( 
+    $ppl_taxonomy = array( 
         'name' => _x( 'Staff Groups', 'staff group' ),
         'singular_name' => _x( 'Staff Group', 'staff group' ),
         'all_items' => _x( 'All Staff Groups', 'staff group' ),
@@ -23,7 +23,7 @@ function register_taxonomy_staffgroup() {
     );
 
     $args = array( 
-        'labels' => $labels,
+        'labels' => $ppl_taxonomy,
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
@@ -40,14 +40,14 @@ function register_taxonomy_staffgroup() {
 }
 
 
-add_action( 'init', 'register_cpt_people' );
-
-
 /* People Post Type */
 /*-------------------------------------------------------------------------------------------*/
+
+add_action( 'init', 'register_cpt_people' );
+
 function register_cpt_people() {
 
-    $peoplelabels = array( 
+    $people_cpt = array( 
         'name' => _x( 'People', 'people' ),
         'singular_name' => _x( 'People', 'people' ),
         'add_new' => _x( 'Add New Person', 'people' ),
@@ -62,7 +62,7 @@ function register_cpt_people() {
     );
 
     $args = array( 
-        'labels' => $peoplelabels,
+        'labels' => $people_cpt,
         'hierarchical' => false,
         
         'supports' => array( 'featured image', 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields'),
@@ -70,7 +70,7 @@ function register_cpt_people() {
         'public' => true,
         'show_ui' => true,
         'show_in_menu' => true,
-		'menu_icon' => get_template_directory_uri() . '/admin/images/icon-people.png',
+		'menu_icon' => get_stylesheet_directory_uri() . '/admin/images/icon-people.png',
         'menu_position' => 5,
         
         'show_in_nav_menus' => false,
@@ -115,9 +115,9 @@ function register_people_columns( $columns ) {
 		'cb' => '<input type="checkbox" />',
 		'person_thumbnail' => __('Photo'),
 		'title' => __('Name'),
-		'fname' => __('First'),
-		'lname' => __('Last'),
-		'stafftitle' => __( 'Title' ),
+		'first_name' => __('First'),
+		'last_name' => __('Last'),
+		'person_title' => __( 'Title' ),
 		'staffgroup' => __( 'Staff Group' ),
 		'menu_order' => __( 'Sort Order' ),
 	);
@@ -131,26 +131,26 @@ function manage_people_columns( $column, $post_id ) {
 
 	switch( $column ) {
 
-		case 'fname' :
+		case 'first_name' :
 			/* Get the post meta. */
-			$fname = get_post_meta( $post_id, 'fname', true );
+			$first_name = get_post_meta( $post_id, 'first_name', true );
 
 			/* If no title is found, output a default message. */
-			if ( empty( $fname ) )
+			if ( empty( $first_name ) )
 				echo __( ' ' );
 
-			else printf( $fname );
+			else printf( $first_name );
 			break;
 
-		case 'lname' :
+		case 'last_name' :
 			/* Get the post meta. */
-			$lname = get_post_meta( $post_id, 'lname', true );
+			$last_name = get_post_meta( $post_id, 'last_name', true );
 
 			/* If no title is found, output a default message. */
-			if ( empty( $lname ) )
+			if ( empty( $last_name ) )
 				echo __( ' ' );
 
-			else printf( $lname );
+			else printf( $last_name );
 			break;
 
 		case 'pplsort' :
@@ -172,15 +172,15 @@ function manage_people_columns( $column, $post_id ) {
 			else printf( $order) ;
      		break;
 
-		case 'stafftitle' :
+		case 'person_title' :
 			/* Get the post meta. */
-			$stafftitle = get_post_meta( $post_id, 'stafftitle', true );
+			$person_title = get_post_meta( $post_id, 'person_title', true );
 
 			/* If no title is found, output a default message. */
-			if ( empty( $stafftitle ) )
+			if ( empty( $person_title ) )
 				echo __( ' ' );
 
-			else printf( $stafftitle );
+			else printf( $person_title );
 			break;
 
 		/* If displaying the 'staffgroup' column. */
@@ -211,11 +211,11 @@ function manage_people_columns( $column, $post_id ) {
 			break;
 
 		case 'person_thumbnail':
-			$thumb =  get_the_post_thumbnail($page->ID, 'mini-thumbnail'); 
+			$thumb =  get_the_post_thumbnail($post_id, 'mini-thumbnail'); 
 			if ( $thumb != '') {
 				the_post_thumbnail( 'mini-thumbnail' );
 			} elseif ( $thumb == '' ) { ?>
-				<img src="<?php echo home_url(); ?>/wp-content/uploads/no-image-50x50.jpg">
+				<img src="<?php echo get_template_directory_uri() ?>/images/no-image-50x50.jpg">
             <?php }
 			break;
 
@@ -233,23 +233,23 @@ add_filter('manage_edit-people_sortable_columns', 'register_people_sortable_colu
 function register_people_sortable_columns( ) {
   return array(
 	'title' => 'name',
-	'fname' => 'fname',
-	'lname' => 'lname',
+	'first_name' => 'first_name',
+	'last_name' => 'last_name',
 	'menu_order' => 'menu_order'
   );
 }
 
 add_filter('request', 'handle_people_column_sorting');
 function handle_people_column_sorting( $vars ){
-  if( isset($vars['orderby']) && 'fname' == $vars['orderby'] ){
+  if( isset($vars['orderby']) && 'first_name' == $vars['orderby'] ){
     $vars = array_merge( $vars, array(
-		'meta_key' => 'fname',
+		'meta_key' => 'first_name',
 		'orderby' => 'meta_value',
     ));
   }
- elseif( isset($vars['orderby']) && 'lname' == $vars['orderby'] ){
+ elseif( isset($vars['orderby']) && 'last_name' == $vars['orderby'] ){
     $vars = array_merge( $vars, array(
-		'meta_key' => 'lname',
+		'meta_key' => 'last_name',
 		'orderby' => 'meta_value',
     ));
   }
@@ -278,14 +278,16 @@ function add_people_taxonomy_filters() {
 	if( $typenow == 'people' ){
  
 		foreach ($taxonomies as $tax_slug) {
+			$current_tax_slug = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
 			$tax_obj = get_taxonomy($tax_slug);
 			$tax_name = $tax_obj->labels->name;
 			$terms = get_terms($tax_slug);
 			if(count($terms) > 0) {
-				echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
-				echo "<option value=''>Show All $tax_name</option>";
+				echo "<select name='" . $tax_slug . "' id='" . $tax_slug . "' class='postform'>";
+				echo "<option value=''>Show All " . $tax_name . "</option>";
 				foreach ($terms as $term) { 
-					echo '<option value='. $term->slug, $_GET[$tax_slug] == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>'; 
+					echo '<option value='. $term->slug, $current_tax_slug == $term->slug ? ' selected="selected"' : '','>';
+					echo $term->name .' (' . $term->count .')</option>'; 
 				}
 				echo "</select>";
 			}
@@ -293,6 +295,4 @@ function add_people_taxonomy_filters() {
 	}
 }
 add_action( 'restrict_manage_posts', 'add_people_taxonomy_filters' );
-
-
 ?>

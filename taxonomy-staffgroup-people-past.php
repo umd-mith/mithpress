@@ -38,7 +38,7 @@ get_header(); ?>
 					),
 					'post_type' => 'people',
 					'posts_per_page' => '-1',
-				    'meta_key' => $people_mb->get_the_name('lname'),
+				    'meta_key' => 'last_name',
 					'orderby' => 'custmo_sort menu_order meta_value',
 					'order' => 'ASC',
 				);
@@ -58,8 +58,6 @@ get_header(); ?>
                     
                     <?php while ( $new_query->have_posts() ) : $new_query->the_post(); ?>
                     
-					<?php global $people_mb; $people_mb->the_meta(); ?>
-                
                     <?php get_template_part( 'content', 'people-archive'); ?>
 					                    
 					<?php $i++; // increment the counter 

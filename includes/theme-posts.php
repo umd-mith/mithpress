@@ -10,6 +10,7 @@ TABLE OF CONTENTS
 - Preserve Post formatting in Excerpt 
 - Conditional Tags for Custom Taxonomy Pages
 - Sidebar Posts for specific Tag
+- Gravatar
 - Search Functions
 
 -----------------------------------------------------------------------------------*/
@@ -54,6 +55,67 @@ function mithpress_content_nav( $nav_id ) {
 add_theme_support( 'post-formats', array( 'aside', 'podcast', 'project', 'people', 'event' ) );
 
 
+/*-----------------------------------------------------------------------------------*/
+/* Category Dropdown Function */
+/*-----------------------------------------------------------------------------------*/
+class SH_Walker_TaxonomyDropdown extends Walker_CategoryDropdown{
+ 
+    function start_el(&$output, $category, $depth, $args) {
+        $pad = str_repeat('&nbsp;', $depth * 3);
+        $cat_name = apply_filters('list_cats', $category->name, $category);
+ 
+        if( !isset($args['value']) ){
+            $args['value'] = ( $category->taxonomy != 'category' ? 'slug' : 'id' );
+        }
+ 
+        $value = ($args['value']=='slug' ? $category->slug : $category->term_id );
+ 
+        $output .= "\t<option class=\"level-$depth\" value=\"".$value."\"";
+        if ( $value === (string) $args['selected'] ){ 
+            $output .= ' selected="selected"';
+        }
+        $output .= '>';
+        $output .= $pad.$cat_name;
+        if ( $args['show_count'] )
+            $output .= '&nbsp;&nbsp;('. $category->count .')';
+ 
+        $output .= "</option>\n";
+        }
+ 
+}
+ 
+function restrict_listings_by_series() {
+    global $typenow;
+    global $wp_query;
+
+    $taxonomy = 'podcast_series';
+	$tax_args = array(
+		'taxonomy' => 'podcast_series',
+		'orderby' => 'slug',
+		'order' => 'ASC',
+	);
+    $terms = get_categories($tax_args);
+	$newest_tax = end($terms);
+	$selected_tax = $wp_query->query[$taxonomy];
+	if ($selected_tax == '') { $selected_tax = $newest_tax->slug; } 
+    wp_dropdown_categories(
+        array(
+            'walker'		  => new SH_Walker_TaxonomyDropdown(),
+            'value'			  =>'slug',
+            //'show_option_all' =>  __("Show All {$current_taxonomy->label}"),
+            'taxonomy'        =>  $taxonomy,
+            'name'            =>  'podcast_series',
+            'orderby'         =>  'slug',
+			'order'			  =>  'DESC',
+            'selected'        =>  $selected_tax,
+            'hierarchical'    =>  true,
+            'depth'           =>  3,
+            'show_count'      =>  true, // Show # series in parents
+            'hide_empty'      =>  true, // Don't show series w/o listings
+            )
+        );
+ }
+
 /* Custom Post Type Navigation Classes */
 /*-----------------------------------------------------------------------------------*/
 
@@ -71,7 +133,7 @@ function current_type_nav_class($classes, $item)
 
 	// your custom post type name
 	if ( !is_home() ) { 
-		if (get_post_type() == 'people' || get_post_type() == 'project' || get_post_type() == 'podcast' || get_post_type() == 'event' || get_post_type() == 'job' || is_tax('projecttype') || is_tax('staffgroup') || is_tax('event_type') || is_post_type_archive('people') ||  is_post_type_archive('event') ) {
+		if (get_post_type() == 'people' || get_post_type() == 'project' || get_post_type() == 'podcast' || get_post_type() == 'event' || get_post_type() == 'job' || is_tax('projecttype') || is_tax('staffgroup') || is_tax('podcast_series') || is_tax('event_type') || is_post_type_archive('people') ||  is_post_type_archive('event') ) {
 			// we're viewing a custom post type, so remove the 'current_page_xxx and current-menu-item' from all menu items.
 			$classes = array_filter($classes, "remove_parent");
 	
@@ -160,6 +222,8 @@ function removeEmptyParagraphs($content) {
 
 add_filter('the_content', 'removeEmptyParagraphs', 7);
 
+// remove p tags from acf content
+//remove_filter ('acf_the_content', 'wpautop');
 
 /* Automatically Generated Excerpt */
 /* -------------------------------------------------------------------------
@@ -293,19 +357,17 @@ function mithpress_display_tagged_posts() {
 	if( $tagged->have_posts() ) : ?>
     <div id="project_posts" class="widget widget_recent_posts">
     
-    	<h3>Related Blog Posts</h3>
+    	<h3><?php _e('Related Blog Posts'); ?></h3>
     
         <aside class="widget-body clear">
     
-            <ul id="blog-feed">
+            <ul id="project-blog-posts">
     
             <?php while ( $tagged->have_posts() ) : $tagged->the_post(); ?>
     
                 <li>
-                	<a href="<?php echo get_permalink(); ?>" class="rpost clear">
-                        <span class="rpost-title"><?php echo get_the_title(); ?></span>
-                        <span class="rpost-date"><?php the_time(__('M j, Y')) ?></span>
-                    </a>
+                    <span class="post-date"><?php the_time(__('M j, Y')) ?></span>
+                    <span class="post-title"><a href="<?php echo get_permalink(); ?>" title="<?php echo get_the_title(); ?>"><?php echo get_the_title(); ?></a></span>
                 </li>
     
             <?php endwhile; ?>
@@ -322,10 +384,22 @@ function mithpress_display_tagged_posts() {
 }
 
 /*-----------------------------------------------------------------------------------*/
-/* RSS FEEDS */
-/*-----------------------------------------------------------------------------------
+/* Gravatar */
+/*-----------------------------------------------------------------------------------*/
 
-*/
+function validate_gravatar($email) {
+	// Craft a potential url and test its headers
+	$hash = md5(strtolower(trim($email)));
+	$uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+	$headers = @get_headers($uri);
+	if (!preg_match("|200|", $headers[0])) {
+		$has_valid_avatar = FALSE;
+	} else {
+		$has_valid_avatar = TRUE;
+	}
+	return $has_valid_avatar;
+}
+
 /*-----------------------------------------------------------------------------------*/
 /* Search */
 /*-----------------------------------------------------------------------------------*/
@@ -352,4 +426,38 @@ function search_excerpt_highlight() {
 
     echo '<p>' . $excerpt . '</p>';
 }
-?>
+
+
+/*-----------------------------------------------------------------------------------*/
+/* Custom Podcast Series Taxonomy Query */
+/*-----------------------------------------------------------------------------------*/
+
+/*
+if ( !is_admin() ) :
+function __include_future_podcasts( $query )
+{
+    if ( $query->is_tax('podcast_series') )
+        $GLOBALS[ 'wp_post_statuses' ][ 'future' ]->public = true;
+}
+add_filter( 'pre_get_posts', '__include_future_podcasts' );
+endif;
+ 
+function mithpress_podcast_series_query( $query ) {
+	
+	if( $query->is_main_query() && !$query->is_feed() && !is_admin() && is_tax( 'podcast_series' ) ) {
+		$meta_query = array(
+			array(
+				'key' => 'podcast_date',
+				'value' => time(),
+				'compare' => '>'
+			)
+		);
+		$query->set( 'post_status', array('publish, future') );
+		$query->set( 'orderby', 'meta_value_num date' );
+		$query->set( 'order', 'ASC' );
+	}
+ 
+}
+ 
+add_action( 'pre_get_posts', 'mithpress_podcast_series_query' );
+*/

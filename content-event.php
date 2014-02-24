@@ -4,16 +4,16 @@
  *
 **/
 
-global $event_mb;
-$event_mb->the_meta();
-$twitter = $event_mb->get_the_value('twitter'); 
-$hashtag = $event_mb->get_the_value('hashtag');
+$twitter = get_field('event_twitter_account'); 
+$hashtag = get_field('event_twitter_hashtag');
 
-$date_start_string = $event_mb->get_the_value('date-start');
-$date_end_string = $event_mb->get_the_value('date-end');
+$date_start_string = get_field('date_start');
+$date_end_string = get_field('date_end');
 
-$time_start = $event_mb->get_the_value('time-start');
-$time_end = $event_mb->get_the_value('time-end');
+$time_start = get_field('time_start');
+$time_end = get_field('time_end');
+
+$location = get_field('event_location');
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -36,11 +36,11 @@ $time_end = $event_mb->get_the_value('time-end');
 
             <p class="event-info">
             
-                <?php if ($event_mb->get_the_value('location') != null ) { // check if there's a location ?>
+                <?php if ($location != null ) { // check if there's a location ?>
                 <span class="info-location">
             
                 	<strong>Where: </strong>
-					<?php $event_mb->the_value('location'); ?>
+					<?php echo $location; ?>
             
                 </span>
 				
@@ -52,7 +52,7 @@ $time_end = $event_mb->get_the_value('time-end');
 					<?php echo $date_start; ?>
                 
 					<?php // check if there's an ending date
-					if (!is_null($date_end_string)) { 
+					if ($date_end_string != '') { 
 						$date_end = date('l, F j, Y', strtotime($date_end_string));
 					 ?> &ndash; <?php echo $date_end; ?>
                     
@@ -61,13 +61,17 @@ $time_end = $event_mb->get_the_value('time-end');
                 </span>
                 <?php } 
                 
-                } if ($time_start != null && $time_end != null ) { // if there's a start and end time ?>
+                } 
+				
+				if ($time_start != null && $time_end != null ) { // if there's a start and end time ?>
                 <span class="info-times">
                 	<strong>Times:</strong>
                     <?php echo $time_start; ?> &ndash; <?php echo $time_end; ?>
                 </span>
                  
-                <?php } elseif ( $time_start != null && $time_end == null ) { // if there's only a start time ?>
+                <?php } 
+				
+				elseif ( $time_start != null && $time_end == null ) { // if there's only a start time ?>
                 	<strong>Time:</strong>
                 	<?php echo $time_start; ?>
                 </span>
@@ -98,46 +102,58 @@ $time_end = $event_mb->get_the_value('time-end');
 		<!-- /event-desc -->
         
         <?php 
+		$event_participating_staff = get_field('event_participating_staff', $post->ID);
+			if ($event_participating_staff > '0') :
+			$i = 0;
+			$count = 0;
+			
+			while(has_sub_field('event_participating_staff')):
+				$linked_staff = get_sub_field('staff_names');
+				$status = $linked_staff->post_status; 
+				if ( $status == "publish") : 
+				$count++;
+				endif;
+			endwhile;
 		
-		$i = 0;
-		
-		while($event_mb->have_fields('event_staff') ) {  
-		
-		if ($i == 0) { ?>
-        
-        <div id="info-staff" class="column left prepend-top">
-        
-            <h2 class="column-title">Participating MITH Staff</h2>
-        
-            <ul>
-		
-		<?php } // endif ?>
-            
-			<?php // loop through current staff
-            
-			$staffname = $event_mb->get_the_value('staff'); 
-            
-            if ($event_mb->get_the_value('cb_past') ) { ?>
+			if ( $count != 0 ) { // have one or more staff ?>
+			<div id="info-staff" class="column left prepend-top">
+					
+				<h2 class="column-title">Participating MITH Staff</h2>
+			
+				<ul>				
+			<?php } ?>
 
-                <li><?php echo get_the_title($staffname); ?></li>
-                    
-			<?php } else { ?>
-
-                <li><a href="<?php echo get_permalink($staffname); ?>"><?php echo get_the_title($staffname); ?></a></li>
+		<?php 
+			while(has_sub_field('event_participating_staff')):
+				$linked_staff = get_sub_field('staff_names'); 
+		
+				$id = $linked_staff->ID; 
+				$status = $linked_staff->post_status; 
+				$meta_values = wp_get_object_terms($id, 'staffgroup');;
+				$terms = array('people-past','people-past-directors','people-past-finance-administration','people-past-staff','people-past-research-associates','people-past-resident-fellows');
+				
+			    if ( $status == "publish") { // display person ?>
+                <li>
+                <?php if ( !has_term( $terms, 'staffgroup', $id) ) : ?>
+                <a href="<?php echo get_permalink($id); ?>"><?php echo get_the_title($id); ?></a>
+                <?php else : ?>
+                <?php echo get_the_title($id); ?>
+                <?php endif; ?>
+                </li>
+                            
+				<?php 
+                $i++; } // end published person display
                 
-            <?php } 
-		
-		$i++; } // end while loop 
-                
-		if ($i > 0) { ?>
-
-            </ul>
-
-        </div>
+            endwhile; // end linked person
+        
+            if ( $count > 0 ) { // have one or more staff ?>
+            	</ul>
+            </div>
+            <?php } ?>
+        
+        <?php endif; // end linked posts ?>
         <!-- /event-staff -->
-		
-		<?php } ?>
-        
+	        
     	<?php get_template_part('sharing', 'column'); ?>
 
 	</div>

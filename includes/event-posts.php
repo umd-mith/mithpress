@@ -73,7 +73,7 @@ function register_cpt_event() {
         'public' => true,
         'show_ui' => true,
         'show_in_menu' => true,
-		'menu_icon' => get_template_directory_uri() . '/admin/images/icon-events.png',  // Icon Path
+		'menu_icon' => get_stylesheet_directory_uri() . '/admin/images/icon-events.png',  // Icon Path
         'menu_position' => 5,
         
 		'show_in_nav_menus' => false,
@@ -106,7 +106,7 @@ function edit_event_columns( $columns ) {
 		'cb' => '<input type="checkbox" />',
 		'featured_thumbnail' => __('Thumbnail'),
 		'title' => __( 'Name' ),
-		'event_date' => __(' Event Date '),
+		'date_start' => __(' Event Date '),
 		'event_type' => __( 'Type' ),
 		'date' => __( 'Post Date' ),
 		);
@@ -124,9 +124,10 @@ function manage_event_columns( $column, $post_id ) {
 	switch( $column ) {
 
 		/* If displaying the 'event_date' column. */
-		case 'event_date' :
+		case 'date_start' :
 			/* Get the post meta. */
-			$event_date = get_post_meta( $post_id, 'date-start', true );
+			$event_date_raw = get_post_meta( $post_id, 'date_start', true );
+			$event_date = date('l, F j, Y', strtotime($event_date_raw));      
 
 			/* If nothing is found, output a default message. */
 			if ( empty($event_date) )
@@ -200,37 +201,4 @@ function add_event_taxonomy_filters() {
 	}
 }
 add_action( 'restrict_manage_posts', 'add_event_taxonomy_filters' );
-
-// DATE SORTING
-
-add_action("admin_init", "admin_event_init");
-add_action('save_post', 'save_event_meta');
-
-function admin_event_init(){
-	add_meta_box("event-sort", "Event Sort", "event_meta_options", "event", "side", "low");
-}
-
-
-function event_meta_options() {
-	global $post;
-	//$event_start_date = get_post_meta($post->ID, 'date-start', true);
-	$custom = get_post_custom($post->ID);
-	$event_start_date = $custom["date-start"][0];
-	$date_sort = date('Ymd', strtotime( $event_start_date ) );	
-	$event_sort = date('Ymd', strtotime( $event_start_date ) ); ?>
-    
-	<label>Sort:</label><input name="event-sort" value="<?php echo $event_sort; ?>" />
-<?php 
-}
-
-add_action( 'wp_ajax_update_meta', 'save_event_meta' );
-
-function save_event_meta(){
-	global $post;
-	update_post_meta($post->ID, "event-sort", $_POST["event-sort"]);
-	echo 'Meta Updated';
-	die();
-}
-
-
 ?>

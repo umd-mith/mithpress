@@ -103,12 +103,12 @@ function register_cpt_project() {
         'labels' => $projectlabels,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+        'supports' => array( 'title', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
         'taxonomies' => array( 'categories', 'tags' ),
         'public' => true,
         'show_ui' => true,
         'show_in_menu' => true,
-		'menu_icon' => 'http://mith.umd.edu/wp-content/themes/mithpressnew/admin/images/icon-projects.png',
+		'menu_icon' => get_stylesheet_directory_uri() . '/admin/images/icon-projects.png',
         'menu_position' => 5,
         
         'show_in_nav_menus' => false,
@@ -225,6 +225,4 @@ function add_project_taxonomy_filters() {
 	}
 }
 add_action( 'restrict_manage_posts', 'add_project_taxonomy_filters' );
-
-
 ?>

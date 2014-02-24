@@ -4,15 +4,13 @@
  *
 **/
 ?>
-
 <?php 
 
-global $people_mb;
-$people_mb->the_meta();
-$email = $people_mb->get_the_value('email');
-$twit = $people_mb->get_the_value('twitter');
-$phone = $people_mb->get_the_value('phone');
-$website = $people_mb->get_the_value('website');
+$title = get_post_meta($post->ID, 'person_title', true);
+$email = get_post_meta($post->ID, 'person_email', true);
+$twitter = get_post_meta($post->ID, 'person_twitter_handle', true);
+$phone = get_post_meta($post->ID, 'person_phone', true);
+$website = get_post_meta($post->ID, 'person_website', true);
 
 ?>
 
@@ -26,13 +24,13 @@ $website = $people_mb->get_the_value('website');
         
         	<h1 class="entry-title"><?php the_title(); ?></h1>
             
-            <h2 class="info-title"><?php $people_mb->the_value('stafftitle'); ?></h2>
+            <h2 class="info-title"><?php echo $title ?></h2>
             
 			<?php if ( $email != '') { ?>
             <span class="info-email"><a href="mailto:<?php echo $email; ?>" rel="nofollow"><?php echo $email; ?></a></span>
             
-			<?php } if ( $twit != '') { ?>
-            <span class="info-twitter"><a href="http://www.twitter.com/#!/<?php echo $twit ?>" rel="nofollow" target="_blank">@<?php echo $twit ?></a></span>	
+			<?php } if ( $twitter != '') { ?>
+            <span class="info-twitter"><a href="http://www.twitter.com/<?php echo $twitter ?>" rel="nofollow" target="_blank">@<?php echo $twitter ?></a></span>	
             
 			<?php } if ( $phone != '') { ?>
             <span class="info-phone"><?php echo $phone ?></span>
@@ -51,47 +49,43 @@ $website = $people_mb->get_the_value('website');
         </div>
         <!-- /bio -->
     
-	<?php 
-	
-	global $peoplelinks_mb;
-	$peoplelinks_mb->the_meta();
-    $i = 0;
-	
-	while($peoplelinks_mb->have_fields('links')) { 
-	
-		if ( $i == 0 ) { ?>
-        
-        <div id="info-links" class="column left prepend-top">
-        
-        <h2 class="column-title">Links</h2>
-        
-            <ul>
+        <?php 
+		$person_links = get_field('person_links', $post->ID);
+			if( get_field('person_links') ) :
+			
+			$i = 0;
+			$count = $person_links;
+					
+			if ( $count != 0 ) { // have one or more link ?>
+            <div id="info-links" class="column right prepend-top">
+                
+                <h2 class="column-title">Links</h2>
     
-		<?php } // endif; loop a set of field groups
-            
-			$url = $peoplelinks_mb->get_the_value('url');
-			$title = $peoplelinks_mb->get_the_value('title');
-			echo '<li><a href="' . $url . '" target="_blank" rel="nofollow">';
-			echo $title . '</a></li>';
+                    <ul>
+			<?php } ?>
 
-			$i++;
-            
-	} // End while loop
-	
-    	if ( $i > 0 ) { ?>
+			<?php while(has_sub_field('person_links')):
+				$linky = get_sub_field('person_link_url'); 
+				$linky_title = get_sub_field('person_link_title');
+				?>
+                <li>
+                <a href="<?php echo $linky; ?>"><?php if ($linky_title != '') { echo $linky_title; } else { echo $linky; } ?></a>
+                </li>
+				
+			<?php $i++;
+			endwhile; // end link
         
-            </ul>
-            
-        </div>
-        <!-- /info-links --> 
+            if ( $count > 0 ) { // have one or more links, so close the list ?>
+            	</ul>
+            </div>
+            <?php } ?>
         
-		<?php } ?>
-    	
+        <!-- /info-links -->          
+        <?php endif; // end links ?>    	
         
 	<?php 
 
-	$people_mb->the_meta();
-	$blogrss = $people_mb->get_the_value('blogrss');
+	$blogrss = get_post_meta($post->ID, 'person_blog_rss_feed', true);
 		
 	if ( $blogrss != '') { ?>
         
@@ -104,7 +98,7 @@ $website = $people_mb->get_the_value('website');
 			include_once(ABSPATH . WPINC . '/feed.php');
             
             // Get a SimplePie feed object from the specified feed source.
-			$blogrss = $people_mb->get_the_value('blogrss');
+			$blogrss = get_post_meta($post->ID, 'person_blog_rss_feed', true);
             $rss = fetch_feed( $blogrss );
             
 			if (!is_wp_error( $rss ) ) : // Checks that the object is created correctly 
@@ -139,7 +133,7 @@ $website = $people_mb->get_the_value('website');
             
             <div id="blog-more">
         
-            	<?php $blogcat = $people_mb->get_the_value('blogcat'); ?>
+            	<?php $blogcat = get_post_meta($post->ID, 'person_blog_url', true); ?>
         
                 <a href="<?php echo $blogcat ?>" target="_blank" class="readmore">More Posts</a>
                 <a href="<?php echo $blogrss ?>" target="_blank" class="rss">Subscribe</a>
@@ -156,7 +150,7 @@ $website = $people_mb->get_the_value('website');
     
     <br clear="all" />
 	
-	<?php edit_post_link( __( 'Edit', 'mithpress' ), '<div class="edit-link">', '</div>' ); ?>
+	<?php edit_post_link( __( 'Edit', 'mithpress' ), '<div class="edit-link">', '</div>' ); wp_reset_query(); ?>
 
 </article>
 <!-- /post-<?php the_ID(); ?> -->

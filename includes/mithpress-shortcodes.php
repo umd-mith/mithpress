@@ -630,4 +630,4 @@ function pricing_box($atts, $content=null){
 
 }
 add_shortcode('pricing_box', 'pricing_box');
-
+?>

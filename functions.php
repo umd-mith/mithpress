@@ -1,5 +1,4 @@
 <?php
-
 define('MY_WORDPRESS_FOLDER',$_SERVER['DOCUMENT_ROOT']);
 define('MY_THEME_FOLDER',str_replace('\\','/',dirname(__FILE__)));
 define('MY_THEME_PATH','/' . substr(MY_THEME_FOLDER,stripos(MY_THEME_FOLDER,'wp-content'))); 
@@ -11,7 +10,6 @@ define('MY_THEME_PATH','/' . substr(MY_THEME_FOLDER,stripos(MY_THEME_FOLDER,'wp-
 $functions_path = TEMPLATEPATH . '/functions/';
 $includes_path = TEMPLATEPATH . '/includes/';
 $scripts_path = TEMPLATEPATH . '/js/';
-$metabox_path = TEMPLATEPATH . '/metaboxes/';
 //$admin_path = TEMPLATEPATH . '/admin/';
 
 /*-----------------------------------------------------------------------------------*/
@@ -24,16 +22,12 @@ require_once ($includes_path . 'theme-widgets.php');		// Theme widgets
 require_once ($includes_path . 'theme-comments.php');		// Comments & Pingbacks, etc
 require_once ($includes_path . 'theme-posts.php');		
 require_once ($includes_path . 'mithpress-breadcrumbs.php');// Breadcrumbs function
-//require_once ($admin_path . 'taxonomy-class.php'); // taxonomy meta
 
 require_once ($includes_path . 'project-posts.php');
 require_once ($includes_path . 'podcast-posts.php');
 require_once ($includes_path . 'people-posts.php');
 require_once ($includes_path . 'job-posts.php');
 require_once ($includes_path . 'event-posts.php');
-
-include_once ($metabox_path . 'setup.php');
-include_once ($metabox_path . 'full-spec.php');
 
 /*-----------------------------------------------------------------------------------*/
 // Shortcodes
@@ -48,34 +42,12 @@ add_filter('widget_text', 'do_shortcode');
 /* Options Framework Theme
 /*-----------------------------------------------------------------------------------*/
 
-/**
- * Optional: set 'ot_show_pages' filter to false.
- * This will hide the settings & documentation pages.
- */
-add_filter( 'ot_show_pages', '__return_false' );
+add_filter( 'ot_show_pages', '__return_false' );  // This will hide the settings & documentation pages.
+add_filter( 'ot_show_new_layout', '__return_false' ); // hide new layout tab
 
-/**
- * Required: set 'ot_theme_mode' filter to true.
- */
-add_filter( 'ot_theme_mode', '__return_true' );
+add_filter( 'ot_theme_mode', '__return_true' ); // Required: set 'ot_theme_mode' filter to true.
 
-/**
- * Required: include OptionTree.
- */
-include_once( 'option-tree/ot-loader.php' );
-
-require_once ($includes_path . 'theme-options.php' );
-
-
-/* 
- * Turns off the default options panel from Twenty Eleven
- */
- 
-add_action('after_setup_theme','remove_twentyeleven_options', 100);
-
-function remove_twentyeleven_options() {
-	remove_action( 'admin_menu', 'twentyeleven_theme_options_add_page' );
-}
+include_once( 'admin/ot-loader.php' );  // Required: include OptionTree.
 
 /*-----------------------------------------------------------------------------------*/
 /* Conditional Tags for Custom Taxonomy Pages */
@@ -118,4 +90,6 @@ function post_is_in_descendant_category( $cats, $_post = null )
 	}
 	return false;
 }
+
+
 ?>

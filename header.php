@@ -25,13 +25,13 @@
         echo ' | ' . sprintf( __( 'Page %s', 'mithpress' ), max( $paged, $page ) );
     ?></title>
     
-    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory'); ?>/favicon.ico" />
+    <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 	<link rel="stylesheet" href="http://www.umd.edu/wrapper/css/xhtml-960px.css" />
-    <link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/css/screen.css" type="text/css" media="screen, projection, print" />
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/screen.css" type="text/css" media="screen, projection, print" />
     <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 	 <!--<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="/feed.xml">-->
 	<?php if (is_front_page() ) { ?> 
-    <link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/css/slider.css" type="text/css" media="screen, projection, print" />
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/slider.css" type="text/css" media="screen, projection, print" />
 	<?php } ?>      
     <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
     
@@ -55,7 +55,7 @@
 
 	<?php if (is_front_page() ) { ?> 
 	<script>jQuery.noConflict();</script>
-    <script type="text/javascript" src="<?php echo bloginfo('template_directory'); ?>/js/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/js/jquery.nivo.slider.pack.js"></script>
 
     <script type="text/javascript">
     jQuery(window).load(function() {
@@ -99,7 +99,7 @@
     <header id="branding" role="banner">
         <hgroup>
         	<div class="width-limit">
-            <a href="<?php echo get_option('home'); ?>/" class="logo-wrap left"><img src="<?php bloginfo('template_directory'); ?>/images/logo_mith_skinny.png" alt="MITH :: University of Maryland" /></a>
+            <a href="<?php echo get_option('home'); ?>/" class="logo-wrap left"><img src="<?php echo get_template_directory_uri(); ?>/images/logo_mith_skinny.png" alt="MITH :: University of Maryland" /></a>
             <div class="search-wrap right"><?php get_search_form(); ?></div>
             </div>
         </hgroup>

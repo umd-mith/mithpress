@@ -3,51 +3,35 @@
  * The template for displaying past staff 
  *
 **/
-    global $people_mb;
-	$people_mb->the_meta();
 ?>
-<!-- content-people-archive.php -->
 	<article id="post-<?php the_ID(); ?>" <?php post_class('archive'); ?>>
 	
 		<div class="entry-content">
 			<div id="person" class="append-bottom prepend-top">                        	
 				<div class="person-info">
 					<span class="info-name"><?php the_title(); ?></span>
-					<?php 
-                    global $peopledates_mb;
-                    $peopledates_mb->the_meta();
-                    $i = 0;
-                    while($peopledates_mb->have_fields('dates')) {
-                    ?>
-                    <?php 
-                    if($i == 0) { ?>
+			
+					<?php if (get_field('person_dates', $post->ID)) : ?>
+
+					<?php while(has_sub_field('person_dates')) :
+                        $person_title = get_sub_field('person_dates_title'); 
+                        $date_start = get_sub_field('person_dates_start');
+                        $date_end = get_sub_field('person_dates_end');
+					?>
 					<span class="info-dates">
-                    <?php } ?>
-						<?php  // loop a set of field groups
-                        $start = $peopledates_mb->get_the_value('dates-start');
-                        $end = $peopledates_mb->get_the_value('dates-end');
-                        $title = $peopledates_mb->get_the_value('dates-title'); ?>
-                        
-                        <span class="span-date"><?php if ( $title != '') { ?>
-							<em><?php echo $title ?></em> 
-						<?php } if ( $start != '' || $end != '' ) { 
-						echo ',&nbsp;'; 
-						} if ( $start != '') { 
-							echo $start;
-						} if ( $start != '' && $end != '' ) { ?>
+                        <span class="span-date"><?php if ( $person_title != '') { ?>
+                            <em><?php echo $person_title; } if ( $date_start != '' || $date_end != '' ) { echo ',&nbsp;</em>'; } else { echo '</em>'; }
+						if ( $date_start != '') { 
+                            echo $date_start;
+						} if ( $date_start != '' && $date_end != '' ) { ?>
                         &ndash;  
-						<?php } if ( $end != '') { 
-							echo $end;
-						} ?> 
-						</span>
-                        
-                        <?php
-                             $i++;
-                             // End while loop
-                             } 
-                         if($i > 0) { ?>
-                        </span>
-                    <?php } ?>                      
+                        <?php } if ( $date_end != '') { 
+                            echo $date_end;
+                        } ?> 
+                        </span>  
+					</span>
+                    <?php endwhile; 
+					endif; ?>
 				</div>
 			</div><!-- /person-->
 		</div><!-- /entry-content -->

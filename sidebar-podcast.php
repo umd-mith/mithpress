@@ -1,55 +1,40 @@
-<?php if ( is_post_type_archive('podcast') || 'podcast' == get_post_type() ) { ?>
+<?php if ( is_post_type_archive('podcast') || 'podcast' == get_post_type() || is_page_template( 'page-upcoming-dialogues.php' ) ) { ?>
 	<div id="sidebar" class="podcast widget-area span-5 prepend-1 append-bottom last" role="complementary">
 
-	<?php if ( is_singular('podcast') ) {
-    // single podcast page 
-        global $podcast2_mb;
-        $podcast2_mb->the_meta(); 
+	<?php if ( is_singular('podcast') ) { // single podcast page ?>
+    
+        <?php $podcast_files = get_field('podcast_files');
 		
-		$video = $podcast2_mb->get_the_value('vidurl');
-		$ppt = $podcast2_mb->get_the_value('ppturl');
-		$keynote = $podcast2_mb->get_the_value('keyurl');
-		$slides = $podcast2_mb->get_the_value('slideurl');
-		$audio = $podcast2_mb->get_the_value('audurl');
-		
-		// check for files
-		if ( $video == '' && $ppt == '' && $keynote == '' && $slides == '' && $audio == '' ) {
-		// if all fields are empty do nothing
-		} else { // show files
-	?>
-    <aside id="podcast-downloads" class="widget widget_downloads">
-        <h3><?php _e( 'Available Downloads', 'mithpress' ); ?></h3>
-        <ul class="podcast-files">
-			<?php if ( $video != '') { ?>
-            <li>
-            <a href="<?php echo $video ?>" rel="nofollow" class="pod-vid">Video</a>
-            </li>
-            <?php } if ( $ppt != '') { ?>
-            <li>
-            <a href="<?php echo $ppt ?>" rel="nofollow" class="pod-ppt">Powerpoint</a>
-            </li>
-            <?php } if ( $keynote != '') { ?>
-            <li>
-            <a href="<?php echo $keynote ?>" rel="nofollow" class="pod-key">Keynote</a>
-            </li>
-            <?php } if ( $slides != '') { ?>
-            <li>
-            <a href="<?php echo $slides ?>" rel="nofollow" class="pod-sld">Slides Only</a>
-            </li>
-            <?php } if ( $audio != '') { ?>
-            <li>
-            <a href="<?php echo $audio ?>" rel="nofollow" class="pod-aud">Audio Only</a>
-            </li>
-            <?php } ?>
-        </ul>
-    </aside>
-	<?php } // end file check
+		if($podcast_files) : ?>
+			<aside id="podcast-downloads" class="widget widget_downloads">
+					
+				<h3 class="column-title"><?php _e( 'Available Downloads', 'mithpress' ); ?></h3>
+			
+				<ul class="podcast-files">
+			 
+				<?php foreach($podcast_files as $file) : 
+					$type = $file['podcast_file_type']; // slug		
+					$url = $file['podcast_file_url'];
+					
+					if ($type == 'podcast_vid' ) : $label = 'Video'; //label
+					elseif ($type == 'podcast_key' ) : $label = 'Keynote';
+					elseif ($type == 'podcast_ppt' ) : $label = 'Powerpoint';
+					elseif ($type == 'podcast_slides' ) : $label = 'Slides-Only';
+					elseif ($type == 'podcast_aud' ) : $label = 'Audio-Only';
+					endif;
+				?>
+					<li><a href="<?php echo $url; ?>" rel="nofollow" class="<?php echo $type; ?>"><?php echo $label; ?></a></li>
+				<?php endforeach; ?>
+				</ul>
+        	</aside>
+		<?php endif; ?>
+        <?php
 	} // end check for single podcast ?>
 
+        
 <?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('podcast') ); 
-	
-} else { 
-//blank placeholder ?>
+	// do nothing
+} else { ?>
 <div id="sidebar" class="widget-area span-5 prepend-1 append-bottom last" role="complementary">
 <?php  } ?>
 

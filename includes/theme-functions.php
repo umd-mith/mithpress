@@ -93,7 +93,6 @@ add_filter('intermediate_image_sizes_advanced', 'sgr_filter_image_sizes');
 /*-----------------------------------------------------------------------------------*/
 /* Remove Standard Image Sizes */
 /*-----------------------------------------------------------------------------------*/
-// 
 
 add_filter('post_thumbnail_html', 'remove_feat_img_title');
 function remove_feat_img_title($img) {
@@ -169,7 +168,6 @@ if ( function_exists('wp_nav_menu') ) {
 		'main-menu' => __( 'Main Menu' ), 
 		'about-menu' => __( 'About Menu' ),
 		'research-menu' => __( 'Research Menu' ),
-		//'community-menu' => __( 'Community Menu' ),
 		'staff-menu' => __( 'Staff Menu' ),
 		'digital-dialogues-menu' => __( 'Digital Dialogues Menu'),
 		'footer-textlinks' => __( 'Footer Text Links ' ),
@@ -210,7 +208,7 @@ function mithpress_body_classes($classes, $class='') {
     global $wp_query;
     // detecting the 404 page since the $post_id won't be valid 
     // if we're on a 404 page and we'll get a debug error
-    if( !is_404() ){
+    if( !is_404() && !is_tax() && !is_archive() ){
         $post_id = $wp_query->post->ID;
         if(is_page($post_id )){
             $page = get_page($post_id);
@@ -237,6 +235,13 @@ function mithpress_body_classes($classes, $class='') {
 			if ($staff_terms) {
 			  foreach ($staff_terms as $staff_term) {
 				$classes[] = 'staff-' . $staff_term->slug;
+			  }
+			}
+
+		    $podcast_terms = get_the_terms($post_id, 'podcast_series');
+			if ($podcast_terms) {
+			  foreach ($podcast_terms as $podcast_term) {
+				$classes[] = 'podcast-series-' . $podcast_term->slug;
 			  }
 			}
 
@@ -334,8 +339,8 @@ function remove_dashboard_widgets() {
     remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
  
     //Recent Drafts
-    //wp_unregister_sidebar_widget( 'dashboard_recent_drafts' );
-    //remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
+    wp_unregister_sidebar_widget( 'dashboard_recent_drafts' );
+    remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
 }
 
 
@@ -345,7 +350,7 @@ function remove_dashboard_widgets() {
 
 function my_custom_login_logo() {
     echo '<style type="text/css">
-        h1 a { background-image:url('.get_bloginfo('template_directory').'/images/logo_mith_skinny_blk.png) !important; background-size: auto !important; }
+        h1 a { background-image:url('. get_stylesheet_directory_uri() .'/images/logo_mith_skinny_blk.png) !important; background-size: auto !important; }
     </style>';
 }
 
@@ -356,6 +361,7 @@ add_action('admin_head', 'my_custom_logo');
 
 function my_custom_logo() {
    echo '<style type="text/css">
-         #header-logo { background-image: url('.get_bloginfo('template_directory').'/images/logo_mith_skinny_blk.png) !important; }
+         #header-logo { background-image: url('. get_stylesheet_directory_uri() .'/images/logo_mith_skinny_blk.png) !important; }
 		 </style>';
 }
+?>

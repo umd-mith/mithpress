@@ -26,7 +26,7 @@ Template Name: Past Events
 						'terms' => array( 'past-event'),
 					)
 				),
-				'meta_key' => 'date-sort',
+				'meta_key' => 'date_start',
 				'order' => 'DESC',
                 'orderby' => 'meta_value_num',	
 			);

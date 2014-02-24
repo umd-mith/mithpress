@@ -4,11 +4,10 @@
 <div id="img-links">
 	<ul id="menu-people">
 <?php 
-	global $people_mb;
-	$people_mb->the_meta();
+
 	$args = array(
 		'post_type' => 'people',
-		'meta_key' => $people_mb->get_the_name('lname'),
+		'meta_key' => 'last_name',
 		'orderby' => 'meta_value',
 		'order' => 'ASC',
 		'posts_per_page' => -1,

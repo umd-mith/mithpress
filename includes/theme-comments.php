@@ -11,7 +11,7 @@ function commentslist($comment, $args, $depth) {
             <table>
                 <tr>
                     <td>
-                        <?php echo get_avatar($comment, 55, get_bloginfo('template_url') . '/images/no-avatar.png'); ?>
+                        <?php echo get_avatar($comment, 55, get_template_directory_uri() . '/images/no-avatar.png'); ?>
                     </td>
                     <td>
                         <div class="comment-meta">
@@ -69,9 +69,6 @@ function pingslist($comment, $args, $depth) {
 <?php
 }
 
-
-
-
 if (!function_exists("list_pings")) {
 	function list_pings($comment, $args, $depth) {
 	
@@ -102,7 +99,4 @@ if (!function_exists("the_commenter_avatar")) {
 	    echo $avatar;
 	}
 }
-
-
-
 ?>

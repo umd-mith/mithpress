@@ -20,7 +20,7 @@ get_header(); ?>
 			<?php 
             $cat_terms = get_terms( 'staffgroup', array(
 				'parent' => $parent, 
-				'orderby' => 'custom_sort',
+				'orderby' => 'custom_sort menu_order',
 				'order' => 'ASC'
 				) 
 			);
@@ -39,15 +39,15 @@ get_header(); ?>
 					),
 					'post_type' => 'people',
 					'posts_per_page' => '-1',
-				    'meta_key' => $people_mb->get_the_name('lname'),
-					'orderby' => 'custmo_sort menu_order meta_value',
+				    'meta_key' => 'last_name',
+					'orderby' => 'custom_sort menu_order meta_value',
 					'order' => 'ASC',
 				);
 				
-				$new_query = new WP_Query( $args ); ?>
+				$ppl_query = new WP_Query( $args ); ?>
                 
 				<?php 
-				if ( $new_query->have_posts() ) : 
+				if ( $ppl_query->have_posts() ) : 
 				$i = 0; // set up a counter 
 				?>
 				<div id=" <?php echo $cat->slug; ?>" class="article-row group row-<?php echo $cat->term_id; ?>">
@@ -55,10 +55,8 @@ get_header(); ?>
 					<h1 class="page-title append-bottom prepend-top"><?php echo $cat->name; ?></h1>
 				</header>
 				
-				<?php while ( $new_query->have_posts() ) : $new_query->the_post(); ?>
+				<?php while ( $ppl_query->have_posts() ) : $ppl_query->the_post(); ?>
                 <?php 
-				global $people_mb; 
-				$people_mb->the_meta(); 
 				
 				if ($i % 3 != 0 ) { 
 					$endclass = ''; 
@@ -78,7 +76,7 @@ get_header(); ?>
 				
 							<div class="person-info">
 								<span class="info-name"><?php the_title(); ?></span>                            
-								<span class="info-title"><?php $people_mb->the_value('stafftitle'); ?></span>
+								<span class="info-title"><?php the_field('person_title'); ?></span>
 							</div>
 							
 						</a>
@@ -96,6 +94,7 @@ get_header(); ?>
 				
 			<?php endif; ?>            
 			<?php endforeach; //endforeach  ?>
+            <?php wp_reset_query; wp_reset_postdata(); ?>
         </div>
         <!-- /content -->
 	</div>
