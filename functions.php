@@ -29,6 +29,17 @@ require_once ($includes_path . 'people-posts.php');
 require_once ($includes_path . 'job-posts.php');
 require_once ($includes_path . 'event-posts.php');
 
+function show_future_posts($posts)
+{
+   global $wp_query, $wpdb;
+   if(is_single() && $wp_query->post_count == 0)
+   {
+      $posts = $wpdb->get_results($wp_query->request);
+   }
+   return $posts;
+}
+add_filter('the_posts', 'show_future_posts');
+
 /*-----------------------------------------------------------------------------------*/
 // Shortcodes
 /*-----------------------------------------------------------------------------------*/
@@ -48,6 +59,9 @@ add_filter( 'ot_show_new_layout', '__return_false' ); // hide new layout tab
 add_filter( 'ot_theme_mode', '__return_true' ); // Required: set 'ot_theme_mode' filter to true.
 
 include_once( 'admin/ot-loader.php' );  // Required: include OptionTree.
+
+//require_once ( 'admin/theme-options.php' );
+
 
 /*-----------------------------------------------------------------------------------*/
 /* Conditional Tags for Custom Taxonomy Pages */
@@ -91,5 +105,35 @@ function post_is_in_descendant_category( $cats, $_post = null )
 	return false;
 }
 
+$research_posts = get_posts( array( 'posts_per_page'   => -1, 'post_type' => 'project' ) );
+	foreach ( $research_posts as $post ) : setup_postdata( $post );
 
+	$research_start_mth = get_post_meta($post->ID,'research_start_mth', true);
+	$research_start_yr = get_post_meta($post->ID,'research_start_yr', true);
+	$research_end_mth = get_post_meta($post->ID,'research_end_mth', true);
+	$research_end_yr = get_post_meta($post->ID,'research_end_yr', true);
+
+	if ( $research_start_yr ) { 
+		$research_start = $research_start_yr;
+		if ( $research_start_mth && $research_start_mth != 'null' ) { 
+			$research_start .= '-' . $research_start_mth;
+			if ( !add_post_meta( $post->ID,'research_start_yyyymm', $research_start , true) ) { 
+				update_post_meta($post->ID,'research_start_yyyymm', $research_start );
+			}
+		}
+	}
+	if ( $research_end_yr) { 
+		$research_end = $research_end_yr; 
+		if ( $research_end_mth && $research_end_mth != 'null' ) { 
+			$research_end .= '-' . $research_end_mth;
+			if ( !add_post_meta( $post->ID,'research_end_yyyymm', $research_end , true) ) { 
+			update_post_meta($post->ID,'research_end_yyyymm', $research_end );
+			}
+		}
+	}
+
+		
+		
+	endforeach; 
+wp_reset_postdata();
 ?>

@@ -37,7 +37,7 @@
     </h1>
 	<!--/subnav title-->
 
-    <?php if (is_tree('2') || get_post_type() == 'job' ) {
+    <?php if (is_tree('10886') || get_post_type() == 'job' ) {
 		// about page menu
         wp_nav_menu( array( 
             'theme_location' => 'about-menu', 

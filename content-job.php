@@ -19,11 +19,19 @@
     
 	<div class="entry-content">
 
-		<div class="job-desc">
+	    <div class="job-desc">
+	    <?php 
+		$current_date = date('Ymd');
+		$exp_date = get_field('expiration_date');
+		
+		if ( $exp_date < $current_date) : ?>
+            <div class="job-expire"><?php _e('Job Closed: ', 'mithpress'); ?><?php $date = DateTime::createFromFormat('Ymd', get_field('expiration_date'));
+echo $date->format('F j, Y'); ?></div>
+            <?php endif; ?>
             
             <?php the_content(); ?>
             
-        </div>
+                </div>
 		<!-- /job-desc -->
         
     	<?php get_template_part('sharing', 'post'); ?>

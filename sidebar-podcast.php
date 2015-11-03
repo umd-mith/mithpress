@@ -16,14 +16,26 @@
 					$type = $file['podcast_file_type']; // slug		
 					$url = $file['podcast_file_url'];
 					
-					if ($type == 'podcast_vid' ) : $label = 'Video'; //label
-					elseif ($type == 'podcast_key' ) : $label = 'Keynote';
-					elseif ($type == 'podcast_ppt' ) : $label = 'Powerpoint';
-					elseif ($type == 'podcast_slides' ) : $label = 'Slides-Only';
-					elseif ($type == 'podcast_aud' ) : $label = 'Audio-Only';
+					$file_icon = $file['dialogue_file_icon'];
+					
+					if ($type == 'podcast_vid' ) : $icon = 'fa-play'; $label = 'Video'; //label
+					elseif ($type == 'fa-file-audio-o' ) : $icon = $type; $label = 'Keynote';
+					elseif ($type == 'fa-file-powerpoint-o' ) : $icon = $type; $label = 'Powerpoint Presentation';
+					elseif ($type == 'fa-file-pdf-o' ) : $icon = $type; $label = 'View PDF';
+					elseif ($type == 'fa-clone' ) : $icon = $type; $label = 'Slides / Presentation';
+					elseif ($type == 'fa-headphones' ) : $icon = $type; $label = 'Listen to the Audio';
+					elseif ($type == 'fa-image' ) : $icon = $type ; $label = 'View Image';
+					elseif ($type == 'fa-file-text-o' ) : $icon = $type; $label = 'View Document';
+					elseif ($type == 'fa-play-circle' ) : $icon = $type; $label = 'Watch the Video';
+					else : $label = 'Download File'; $icon = $type = 'fa-file-o';
 					endif;
+
+					if ( ! $file_icon ) $file_icon = $icon; 
+					
+					$file_title = $file['dialogue_file_name'];
+					if ( ! $file_title ) $file_title = $label;
 				?>
-					<li><a href="<?php echo $url; ?>" rel="nofollow" class="<?php echo $type; ?>"><?php echo $label; ?></a></li>
+					<li><a href="<?php echo $url; ?>" rel="nofollow" class="type-<?php echo $type; ?>"><i class="fa <?php echo $file_icon; ?> fa-pull-left"></i> <?php echo $file_title; ?></a></li>
 				<?php endforeach; ?>
 				</ul>
         	</aside>

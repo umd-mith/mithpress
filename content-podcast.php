@@ -79,7 +79,7 @@
             <?php 
 			$vimeo = get_post_meta( $post->ID, 'podcast_vimeo_embed', TRUE); 
 			if ($vimeo != '' ) : ?>
-            <div class="podcast_files-video">
+            <div class="podcast_files-video" style="padding-top:20px;">
             <?php //$shortcode = apply_filters('the_content', '[embed width="410"]'. $vimeo .'[/embed]');
 			global $wp_embed; 
 			$video_embed = $wp_embed->run_shortcode('[embed width="410"]'. $vimeo .'[/embed]');
@@ -116,7 +116,7 @@
 
     <?php get_template_part('sharing', 'post'); ?>
     
-    <br clear="all" />
+    <div class="clearfix" clear="all"></div>
 	
 	<?php edit_post_link( __( 'Edit', 'mithpress' ), '<div class="edit-link">', '</div>' ); ?>
 

@@ -19,7 +19,7 @@ TABLE OF CONTENTS
 add_theme_support( 'post-thumbnails', array('page','post','people','project','podcast','event','job' ) );
 
 function mithpress_thumbnails() {
-	//add_image_size( 'featured-image', 640, 130 ); 
+    //add_image_size( 'featured-image', 640, 130 ); 
 	update_option('medium_size_w', 225);
 	update_option('medium_size_h', 225);
 	update_option('large_size_w', 410);
@@ -278,7 +278,7 @@ function add_cat_id_to_quick_edit( $actions, $tag ) {
 
 // Easier Access to Media File from Media Library
 //--------------------------------------------------------------
-/* will add a link to the ‘row actions’ for the File URL (as opposed the the attachment URL you’ll get with the ‘view’ link)*/
+/* will add a link to the â€˜row actionsâ€™ for the File URL (as opposed the the attachment URL youâ€™ll get with the â€˜viewâ€™ link)*/
 
 add_filter ('media_row_actions','add_direct_link', 10, 3 );
 function add_direct_link( $actions, $post, $detached ) {
@@ -350,7 +350,7 @@ function remove_dashboard_widgets() {
 
 function my_custom_login_logo() {
     echo '<style type="text/css">
-        h1 a { background-image:url('. get_stylesheet_directory_uri() .'/images/logo_mith_skinny_blk.png) !important; background-size: auto !important; }
+        h1 a { background-image:url('. get_stylesheet_directory_uri() .'/images/logo_mith_skinny_blk.png) !important; background-size: auto !important; width: auto !important; }
     </style>';
 }
 

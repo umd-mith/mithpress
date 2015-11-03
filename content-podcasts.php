@@ -36,6 +36,6 @@
         </div>
         <!-- /entry-content -->
 
-        <br clear="all" />
+        <div class="clearfix" clear="all"></div>
 
     </article><!-- /post-<?php the_ID(); ?> -->

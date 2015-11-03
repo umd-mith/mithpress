@@ -7,7 +7,7 @@
 	
         <div class="entry-meta span-5 append-1">
         
-            <?php if ( is_page() || 'event' == get_post_type() || 'people' == get_post_type() || 'job' == get_post_type()) : 
+            <?php if ( is_page() || 'people' == get_post_type() || 'job' == get_post_type()) : 
 			// do nothing 
 			else : ?>        	
             

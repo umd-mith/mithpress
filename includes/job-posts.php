@@ -44,4 +44,44 @@ function register_cpt_job() {
 
     register_post_type( 'job', $args );
 }
+
+
+/* Custom Columns */
+add_filter( 'manage_edit-job_columns', 'register_job_columns' ) ;
+add_action( 'manage_job_posts_custom_column', 'manage_job_columns', 10, 2 );
+
+function register_job_columns( $columns ) {
+
+	$columns = array(
+		'cb' => '<input type="checkbox" />',
+		'title' => __('Title'),
+		'expiration_date' => __('Expiration Date'),
+	);
+
+	return $columns;
+}
+
+
+function manage_job_columns( $column, $post_id ) {
+	global $post;
+
+	switch( $column ) {
+
+		case 'expiration_date' :
+			/* Get the post meta. */
+			$expiration_date = get_post_meta( $post_id, 'expiration_date', true );
+
+			/* If nothing is found, output a default message. */
+			if ( empty( $expiration_date ) )
+				echo __( 'none set' );
+
+			else printf( $expiration_date );
+			break;
+
+		/* Just break out of the switch statement for everything else. */
+		default :
+			break;
+	}
+}
+
 ?>

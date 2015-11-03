@@ -36,7 +36,10 @@
     <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
     
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
-    
+	
+	<?php if ((is_single() && 'people' == get_post_type()) && has_term( array( 'people-past-directors', 'people-past-staff', 'people-past-research-associates', 'people-past-finance-administration', 'people-past-resident-fellows' ), 'staffgroup' ) ) : ?>
+	<meta name="robots" content="noindex,nofollow"/>
+    <?php endif; ?>    
     <?php if ( is_singular() && get_option( 'thread_comments' ) )
             wp_enqueue_script( 'comment-reply' ); ?>
 

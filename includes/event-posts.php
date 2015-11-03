@@ -68,7 +68,7 @@ function register_cpt_event() {
         'labels' => $labels,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'editor', 'featured image', 'thumbnail', 'revisions', 'custom-fields'),
+        'supports' => array( 'title', 'editor', 'featured image', 'thumbnail', 'revisions', 'custom-fields','author'),
         'taxonomies' => array( 'event_type', 'post_tag'),
         'public' => true,
         'show_ui' => true,

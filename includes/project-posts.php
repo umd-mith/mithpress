@@ -1,4 +1,85 @@
 <?php
+/* Research Types */
+/*-------------------------------------------------------------------------------------------*/
+add_action( 'init', 'register_taxonomy_mith_research_type' );
+function register_taxonomy_mith_research_type() {
+
+    $research_tax = array( 
+        'name' => _x( 'Types', 'mith_research_type' ),
+        'singular_name' => _x( 'Type', 'mith_research_type' ),
+        'search_items' => _x( 'Search Types', 'mith_research_type' ),
+        'popular_items' => _x( 'Popular Types', 'mith_research_type' ),
+        'all_items' => _x( 'All Types', 'mith_research_type' ),
+        'parent_item' => _x( 'Parent Type', 'mith_research_type' ),
+        'parent_item_colon' => _x( 'Parent Type:', 'mith_research_type' ),
+        'edit_item' => _x( 'Edit Type', 'mith_research_type' ),
+        'update_item' => _x( 'Update Type', 'mith_research_type' ),
+        'add_new_item' => _x( 'Add New Type', 'mith_research_type' ),
+        'new_item_name' => _x( 'New Type', 'mith_research_type' ),
+        'separate_items_with_commas' => _x( 'Separate Types with commas', 'mith_research_type' ),
+        'add_or_remove_items' => _x( 'Add or remove Types', 'mith_research_type' ),
+        'choose_from_most_used' => _x( 'Choose from most used Types', 'mith_research_type' ),
+        'menu_name' => _x( 'Types', 'mith_research_type' ),
+    );
+
+    $research_tax_args = array( 
+        'labels' => $research_tax,
+        'public' => true,
+        'show_in_nav_menus' => true,
+        'show_ui' => true,
+        'show_tagcloud' => false,
+        'show_admin_column' => true,
+        'hierarchical' => true,
+
+        'rewrite' => array(
+			'slug' => 'research-type',
+		),
+        'query_var' => true,
+    );
+
+    register_taxonomy( 'mith_research_type', array('mith_research', 'project'), $research_tax_args );
+}
+
+/* Research Sponsors */
+/*-------------------------------------------------------------------------------------------*/
+add_action( 'init', 'register_taxonomy_mith_research_sponsor' );
+
+function register_taxonomy_mith_research_sponsor() {
+
+    $labels = array( 
+        'name' => _x( 'Sponsors', 'mith_research_sponsor' ),
+        'singular_name' => _x( 'Sponsor', 'mith_research_sponsor' ),
+        'search_items' => _x( 'Search Sponsors', 'mith_research_sponsor' ),
+        'popular_items' => _x( 'Popular Sponsors', 'mith_research_sponsor' ),
+        'all_items' => _x( 'All Sponsors', 'mith_research_sponsor' ),
+        'parent_item' => _x( 'Parent Sponsor', 'mith_research_sponsor' ),
+        'parent_item_colon' => _x( 'Parent Sponsor:', 'mith_research_sponsor' ),
+        'edit_item' => _x( 'Edit Sponsor', 'mith_research_sponsor' ),
+        'update_item' => _x( 'Update Sponsor', 'mith_research_sponsor' ),
+        'add_new_item' => _x( 'Add New Sponsor', 'mith_research_sponsor' ),
+        'new_item_name' => _x( 'New Sponsor', 'mith_research_sponsor' ),
+        'separate_items_with_commas' => _x( 'Separate sponsors with commas', 'mith_research_sponsor' ),
+        'add_or_remove_items' => _x( 'Add or remove Sponsors', 'mith_research_sponsor' ),
+        'choose_from_most_used' => _x( 'Choose from most used Sponsors', 'mith_research_sponsor' ),
+        'menu_name' => _x( 'Sponsors', 'mith_research_sponsor' ),
+    );
+
+    $args = array( 
+        'labels' => $labels,
+        'public' => true,
+        'show_in_nav_menus' => false,
+        'show_ui' => true,
+        'show_tagcloud' => false,
+        'show_admin_column' => false,
+        'hierarchical' => false,
+
+        'rewrite' => false,
+        'query_var' => true
+    );
+
+    register_taxonomy( 'mith_research_sponsor', array('mith_research', 'project', 'podcast'), $args );
+}
+
 
 /* Project Categories */
 /*-------------------------------------------------------------------------------------------*/
@@ -39,45 +120,6 @@ function register_taxonomy_projecttype() {
     register_taxonomy( 'projecttype', array('project'), $args );
 }
 
-/* Research Tags */
-/*-------------------------------------------------------------------------------------------*/
-add_action( 'init', 'register_taxonomy_research_type' );
-
-function register_taxonomy_research_type() {
-
-    $labels = array( 
-        'name' => _x( 'Research Types', 'research type' ),
-        'singular_name' => _x( 'Research Type', 'research type' ),
-        'search_items' => _x( 'Search Research Types', 'research type' ),
-        'popular_items' => _x( 'Popular Research Types', 'research type' ),
-        'all_items' => _x( 'All Research Types', 'research type' ),
-        'parent_item' => _x( 'Parent Research Type', 'research type' ),
-        'parent_item_colon' => _x( 'Parent Research Type:', 'research type' ),
-        'edit_item' => _x( 'Edit Research Type', 'research type' ),
-        'update_item' => _x( 'Update Research Type', 'research type' ),
-        'add_new_item' => _x( 'Add New Research Type', 'research type' ),
-        'new_item_name' => _x( 'New Research Type Name', 'research type' ),
-        'separate_items_with_commas' => _x( 'Separate research types with commas', 'research type' ),
-        'add_or_remove_items' => _x( 'Add or remove research types', 'research type' ),
-        'choose_from_most_used' => _x( 'Choose from the most used research types', 'research type' ),
-        'menu_name' => _x( 'Research Types', 'research type' ),
-    );
-
-    $args = array( 
-        'labels' => $labels,
-        'public' => true,
-        'show_in_nav_menus' => false,
-        'show_ui' => true,
-        'show_tagcloud' => true,
-        'hierarchical' => false,
-
-        'rewrite' => true,
-        'query_var' => true
-    );
-
-    register_taxonomy( 'research_type', array('project'), $args );
-}
-
 /* Project Post Type */
 /*-------------------------------------------------------------------------------------------*/
 
@@ -99,11 +141,11 @@ function register_cpt_project() {
         'menu_name' => _x( 'Projects', 'project' ),
     );
 
-    $args = array( 
+    $projectargs = array( 
         'labels' => $projectlabels,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
+        'supports' => array( 'title', 'editor', 'excerpt','thumbnail', 'revisions', 'custom-fields' ),
         'taxonomies' => array( 'categories', 'tags' ),
         'public' => true,
         'show_ui' => true,
@@ -124,14 +166,16 @@ function register_cpt_project() {
         'can_export' => true,
         'capability_type' => 'post',
 		
-		'taxonomies' => array('projecttype', 'post_tag'),
+		'taxonomies' => array('projecttype', 'mith_research_type','mith_research_topic','post_tag', 'mith_research_sponsor'),
 		
     );
 
-    register_post_type( 'project', $args );
+    register_post_type( 'project', $projectargs );
 }
 
 add_action( 'init', 'register_taxonomy_projecttype' );
+
+
 
 
 /* Project Columns */
@@ -144,7 +188,9 @@ function edit_project_columns( $columns ) {
 		'cb' => '<input type="checkbox" />',
 		'featured_thumbnail' => __('Thumbnail'),
 		'title' => __( 'Name' ),
-		'projecttype' => __( 'Type' ),
+		//'projecttype' => __( 'Type' ),
+		'mith_research_type' => __('Type'),
+		'mith_topic' => __( 'Topic' ),
 		'tags' => __( 'Tags' ),
 	);
 
@@ -186,6 +232,40 @@ function manage_project_columns( $column, $post_id ) {
 				_e( 'not assigned' );
 			}
 			break;
+		case 'mith_research_type' :
+			$terms = get_the_terms( $post_id, 'mith_research_type' );
+			if ( !empty( $terms ) ) {
+				$out = array();
+				foreach ( $terms as $term ) {
+					$out[] = sprintf( '<a href="%s">%s</a>',
+						esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'mith_research_type' => $term->slug ), 'edit.php' ) ),
+						esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'mith_research_type', 'display' ) )
+					);
+				}
+				echo join( ', ', $out );
+			}
+			else {
+				_e( '' );
+			}
+			break;
+		case 'mith_topic' :
+			$terms = get_the_terms( $post_id, 'mith_topic' );
+			if ( !empty( $terms ) ) {
+				$out = array();
+				foreach ( $terms as $term ) {
+					$out[] = sprintf( '<a href="%s">%s</a>',
+						esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'mith_topic' => $term->slug ), 'edit.php' ) ),
+						esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'mith_topic', 'display' ) )
+					);
+				}
+				/* Join the terms, separating them with a comma. */
+				echo join( ', ', $out );
+			}
+			/* If no terms were found, output a default message. */
+			else {
+				_e( '' );
+			}
+			break;
 		case 'featured_thumbnail':
 			if( function_exists('the_post_thumbnail') )
 				echo the_post_thumbnail( 'horiz-thumbnail' );
@@ -225,4 +305,48 @@ function add_project_taxonomy_filters() {
 	}
 }
 add_action( 'restrict_manage_posts', 'add_project_taxonomy_filters' );
+
+
+/*-------------------------------------------------------------------------------------------*/
+/* TOPIC TAXONOMY */
+/*-------------------------------------------------------------------------------------------*/
+
+add_action( 'init', 'register_taxonomy_mith_topic' );
+function register_taxonomy_mith_topic() {
+
+    $research_tax = array( 
+        'name' => _x( 'Topics', 'mith_topic' ),
+        'singular_name' => _x( 'Topic', 'mith_topic' ),
+        'search_items' => _x( 'Search Topics', 'mith_topic' ),
+        'popular_items' => _x( 'Popular Topics', 'mith_topic' ),
+        'all_items' => _x( 'All Topics', 'mith_topic' ),
+        'parent_item' => _x( 'Parent Topic', 'mith_topic' ),
+        'parent_item_colon' => _x( 'Parent Topic:', 'mith_topic' ),
+        'edit_item' => _x( 'Edit Topic', 'mith_topic' ),
+        'update_item' => _x( 'Update Topic', 'mith_topic' ),
+        'add_new_item' => _x( 'Add New Topic', 'mith_topic' ),
+        'new_item_name' => _x( 'New Topic', 'mith_topic' ),
+        'separate_items_with_commas' => _x( 'Separate Topics with commas', 'mith_topic' ),
+        'add_or_remove_items' => _x( 'Add or remove Topics', 'mith_topic' ),
+        'choose_from_most_used' => _x( 'Choose from most used Topics', 'mith_topic' ),
+        'menu_name' => _x( 'Topics', 'mith_topic' ),
+    );
+
+    $research_tax_args = array( 
+        'labels' => $research_tax,
+        'public' => true,
+        'show_in_nav_menus' => true,
+        'show_ui' => true,
+        'show_tagcloud' => true,
+        'show_admin_column' => true,
+        'hierarchical' => true,
+
+        'rewrite' => array(
+			'slug' => 'topic',
+		),
+        'query_var' => true,
+    );
+
+    register_taxonomy( 'mith_topic', array('mith_research','mith_dialogue','project', 'post', 'podcast'), $research_tax_args );
+}
 ?>

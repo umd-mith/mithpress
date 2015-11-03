@@ -20,7 +20,7 @@ get_header(); ?>
 			<?php 
             $cat_terms = get_terms( 'staffgroup', array(
 				'parent' => $parent, 
-				'orderby' => 'custom_sort menu_order',
+				'orderby' => 'custom_sort',
 				'order' => 'ASC'
 				) 
 			);
@@ -94,7 +94,7 @@ get_header(); ?>
 				
 			<?php endif; ?>            
 			<?php endforeach; //endforeach  ?>
-            <?php wp_reset_query; wp_reset_postdata(); ?>
+            <?php wp_reset_postdata(); ?>
         </div>
         <!-- /content -->
 	</div>

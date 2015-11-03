@@ -14,7 +14,7 @@ Template Name: Home
         <!-- /slideshow -->
         
         <?php dynamic_sidebar( 'home-center-widgets' ); ?>
-        <!-- /twitter feed -->
+            <!-- /twitter feed -->
 
             <div id="column-wrap">
             
@@ -103,7 +103,7 @@ Template Name: Home
                 <?php 
     
                 $args = array(
-                    'post_type' => array('post','podcast'),
+                    'post_type' => array('post','podcast','event'),
                     'posts_per_page' => '2',
                     'orderby' => 'date',
                     'order' => 'DESC'

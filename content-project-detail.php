@@ -4,7 +4,38 @@
  *
 **/
 ?>
-
+<?php 
+	if ( get_post_meta( $post->ID, 'project_start_date', true ) ) :
+	$start_date = new DateTime(get_post_meta( $post->ID, 'project_start_date', true ) );
+		
+	//if ( !$start_date ) $start_date = get_post_meta( $post->ID, 'launchdate', true );
+        if( $start_date ) : 
+            $start_date_mth = $start_date->format('m');
+            $start_date_yr = $start_date->format('Y'); 
+        endif;
+	endif;
+        
+	if (get_post_meta( $post->ID, 'project_end_date', true ) ) :
+        $end_date = new DateTime( get_post_meta( $post->ID, 'project_end_date', true ) );
+        if ( $end_date ) : 
+            $end_date_mth = $end_date->format('m');
+            $end_date_yr = $end_date->format('Y');
+        endif; 	
+	endif;
+        
+        /*if ( ! add_post_meta( $post->ID, 'research_start_yr', $start_date_yr, true ) ) { 
+            update_post_meta ( $post->ID, 'research_start_yr', $start_date_yr );
+        }
+        if ( ! add_post_meta( $post->ID, 'research_start_mth', $start_date_mth, true ) ) { 
+            update_post_meta ( $post->ID, 'research_start_mth', $start_date_mth );
+        }
+        if ( ! add_post_meta( $post->ID, 'research_end_yr', $end_date_yr, true ) ) { 
+            update_post_meta ( $post->ID, 'research_end_yr', $end_date_yr );
+        }
+        if ( ! add_post_meta( $post->ID, 'research_end_mth', $end_date_mth, true ) ) { 
+            update_post_meta ( $post->ID, 'research_end_mth', $end_date_mth );
+        }*/
+		?>		
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<?php if ( ! has_post_thumbnail() ) { ?>

@@ -17,7 +17,7 @@ get_header(); ?>
 			
 				query_posts( 
 					array(
-						'post_type' => array('post','podcast' ),
+						'post_type' => array('post','podcast','event' ),
 						'posts_per_page' => '10',
 						'paged' => get_query_var('paged')
 						)

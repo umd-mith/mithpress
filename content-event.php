@@ -45,7 +45,7 @@ $location = get_field('event_location');
                 </span>
 				
 				<?php } 
-				if (!is_null($date_start_string)) { // check if there's a start date 
+				if ($date_start_string) { // check if there's a start date 
 				$date_start = date('l, F j, Y', strtotime($date_start_string)); ?>                
                 <span class="info-dates">
                 	<strong>When: </strong>
@@ -102,15 +102,23 @@ $location = get_field('event_location');
 		<!-- /event-desc -->
         
         <?php 
-		$event_participating_staff = get_field('event_participating_staff', $post->ID);
-			if ($event_participating_staff > '0') :
+			$event_people_int = get_field('event_participating_staff', $post->ID);
+			$event_people_ext = get_field('event_participating_people', $post->ID);
+			if ($event_people_int > '0' || $event_people_ext > '0' ) :
 			$i = 0;
 			$count = 0;
 			
 			while(has_sub_field('event_participating_staff')):
-				$linked_staff = get_sub_field('staff_names');
-				$status = $linked_staff->post_status; 
+				$internal_person = get_sub_field('staff_names');
+				$status = $internal_person->post_status; 
 				if ( $status == "publish") : 
+				$count++;
+				endif;
+			endwhile;
+
+			while(has_sub_field('event_participating_people')):
+				$external_person = get_sub_field('event_person_name');
+				if ( $external_person != "") : 
 				$count++;
 				endif;
 			endwhile;
@@ -118,17 +126,17 @@ $location = get_field('event_location');
 			if ( $count != 0 ) { // have one or more staff ?>
 			<div id="info-staff" class="column left prepend-top">
 					
-				<h2 class="column-title">Participating MITH Staff</h2>
+				<h2 class="column-title">Participating People</h2>
 			
 				<ul>				
 			<?php } ?>
 
 		<?php 
 			while(has_sub_field('event_participating_staff')):
-				$linked_staff = get_sub_field('staff_names'); 
+				$event_people_int = get_sub_field('staff_names'); 
 		
-				$id = $linked_staff->ID; 
-				$status = $linked_staff->post_status; 
+				$id = $event_people_int->ID; 
+				$status = $event_people_int->post_status; 
 				$meta_values = wp_get_object_terms($id, 'staffgroup');;
 				$terms = array('people-past','people-past-directors','people-past-finance-administration','people-past-staff','people-past-research-associates','people-past-resident-fellows');
 				
@@ -144,7 +152,24 @@ $location = get_field('event_location');
 				<?php 
                 $i++; } // end published person display
                 
-            endwhile; // end linked person
+            endwhile; // end linked person ?>
+
+			<?php while(has_sub_field('event_participating_people')):
+				$ext_name = get_sub_field('event_person_name'); 
+				$ext_title = get_sub_field('event_person_title'); 
+				$ext_dept = get_sub_field('event_person_department'); 
+				$ext_aff = get_sub_field('event_person_affiliation'); ?>
+                <li>
+				<?php echo $ext_name; 
+                if ( $ext_title ) { echo ', <span class="ext-person-title">' . $ext_title . '</span>'; } 
+                if ( $ext_dept ) { echo ', <span class="ext-person-dept">' . $ext_dept. '</span>'; } 
+                if ( $ext_aff ) { echo ', <span class="ext-person-aff">' . $ext_aff. '</span>'; } 
+                ?>
+                </li>
+				
+			<?php $i++;
+			endwhile; // end linked external person 	
+            
         
             if ( $count > 0 ) { // have one or more staff ?>
             	</ul>

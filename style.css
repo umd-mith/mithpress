@@ -2,7 +2,7 @@
 Theme Name: MITH Theme
 Theme URI: http://mith.umd.edu
 Description: A WordPress theme designed specifically for MITH. 
-Version: 1.6
+Version: 1.5
 Author: Kirsten Keister
 Tags: clean, grid, white, fonts, 3-column, 2-column
 Author URI: www.lamppostcreative.com
@@ -51,7 +51,7 @@ body strong {font-weight: 700; }
 	#content p + ul, #content p + ol { margin-top: 0.25em; }
 	#content ul + p, #content ol + p { margin-top: 0.25em; }
 	
-	#content article.project p, #content article.people p, #content article.podcast p, #content article.event p { text-align: justify; }
+	#content article.project p, #content article.people p, #content article.podcast p, #content article.event p { }
 	#content .article-row { clear: both; }
 	
 	#footer ul, #footer ul li { list-style: none outside none; padding:0; margin:0; }
@@ -59,6 +59,7 @@ body strong {font-weight: 700; }
 	#content ul.no-bullets { list-style:none; padding-left:0; margin: 0 0 0 0; }
 	#content ul.no-bullets li { padding-left: 0; margin: 0; list-style-image: none; list-style-type: none; padding-right:0px; }
 
+	
 	/*===  Headers      ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	
@@ -98,6 +99,7 @@ body strong {font-weight: 700; }
 	/*-------------------------------------------------------------------------------------------*/
 	#umd-wrapper { margin: 0; padding: 0; background: #000 url(http://www.umd.edu/images/site/body-bg.gif) repeat-x top left; text-align: center; }
 	#umd-frame { width: 870px; }
+	
 	
 	/*===  Assistive text      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -197,7 +199,8 @@ body strong {font-weight: 700; }
 #primary-links ul.links ul li a span.icon { background: none !important; display: none; }
 
 	/*===  Left Side Subnav      ===*/
-	/*-------------------------------------------------------------------------------------------*/	
+	/*-------------------------------------------------------------------------------------------*/
+	
 	#subnav { text-align:left; }
 		#subnav h1 {  margin: 0; padding: 0; height:17px; padding-bottom:16px; margin-bottom: 2px; border-bottom: 1px dashed #b1b1b1; font-weight: 700; color:#424242; }
 		#subnav ul { margin:0px; padding:0px; list-style-type: none; border-top: 1px dashed #b1b1b1; font-size: .8125em; }
@@ -205,6 +208,7 @@ body strong {font-weight: 700; }
 		#subnav li a { display:block; border-bottom: 1px solid #E7E7E7; padding: 0.8125em 0; text-decoration: none; color:#20558A; line-height: normal;}
 		#subnav li a:hover, #subnav li.current-menu-item a, #subnav li.current_page_item a,
 		.post-type-archive-people #subnav .current-staff a { color:#424242 !important; background: url(images/stripe-menu-hover.png) repeat; }
+	
 	
 	/*===  Taxonomy Navigation Highlighting      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -226,6 +230,7 @@ body strong {font-weight: 700; }
 	.term-archive-project #sub-links .archived-projects,
 	.tax-podcast_series #sub-links .dialogues-archive { color:#424242 !important; background: url(images/stripe-menu-hover.png) repeat;  }
 	
+	
 	/*===  People Navigation      ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	#subnav #img-links li a { display:block; border: 1px solid #E7E7E7; padding: 0; text-decoration: none; color:#20558A; line-height: normal; float:left; margin: 0 10px 10px 0; }
@@ -237,7 +242,7 @@ body strong {font-weight: 700; }
 /*===  Breadcrumbs */
 /*-------------------------------------------------------------------------------------------*/
 
-#crumbs { font-size: 0.7em; margin: 0; padding: 0; margin-bottom: 16px; line-height: normal; height:16px; width: 640px;}
+#crumbs { font-size: 0.7em; margin: 0; padding: 0; margin-bottom: 16px; line-height: normal; height:16px; }
 	#curmbs a { color: #20558A; padding-bottom: 1px; }
 	#crumbs a:hover { border-bottom: 1px solid #3C5F8A; }
 	#crumbs .bc_home { background: url(images/icon_home.png) no-repeat left center; display:block; float:left; padding: 0 5px 0 0; width: 12px; height:12px;}
@@ -284,7 +289,6 @@ body strong {font-weight: 700; }
 
 #content #posts { float: left; width: 640px; }
 	#content #posts .entry-content { float:right; }
-	#content #posts .entry-content p { text-align:justify; }
 	#content #posts .post-wrap, #content .post-wrap { width:410px; float:right; }
 	#content #posts article { padding-bottom:1em; margin-bottom:2em; border-bottom: 1px solid #EEEEEE; overflow:auto; }
 
@@ -302,7 +306,6 @@ body strong {font-weight: 700; }
 	/*-------------------------------------------------------------------------------------------*/
 	.single-post #content article { padding-bottom: 1em; margin-bottom: 2em; border-bottom: 1px solid #EEEEEE; } 
 	.single-post #content .entry-content { float:right; padding-bottom: 1em;}
-	.single-post #content .entry-content p { text-align:justify; }
 
 
 /*-------------------------------------------------------------------------------------------*/
@@ -403,6 +406,7 @@ body strong {font-weight: 700; }
 /*===  Jobs */
 /*-------------------------------------------------------------------------------------------*/
 #content .job .entry-content { width: 100% ; } 
+#content .job .job-expire { padding: 5px 8px; background-color: #FFFFE0; border: 1px solid lightgoldenrodyellow; margin-bottom: 20px; }
 
 /*-------------------------------------------------------------------------------------------*/
 /*===  Home Page */
@@ -412,13 +416,18 @@ body strong {font-weight: 700; }
 	/*-------------------------------------------------------------------------------------------*/
 	#content .rotatingtweets, #content .norotatingtweets { border-bottom: 0 !important; margin-bottom: 0 !important; margin-top: 2%; }
 	
-	.widget_twitter_timeline h3 { display: none; }
-	.var-narrow .timeline-header .summary, 
-	.timeline-header h1.summary,
-	.timeline-header .custom-timeline-summary { font-size: 14px !important; font-weight: 600; font-family: Vegur, 'Open Sans', Verdana, Tahoma, Geneva, sans-serif; }
-	
+	#twitter_wrap { margin: 14px 0; width:600px; clear: both; }
+		#twitter_wrap .twtr-widget { padding-left: 25px; }
+		#twitter_wrap .twtr-widget .twtr-timeline { height: 20px !important; }
+		#twitter_wrap .follow { float:none; display:block; width:25px; text-align:left; background: url(images/icon_info-twitter.png) no-repeat left center;  float:left; cursor:pointer; }
+		#content .twtr-bd p { font-size: 10px; }
+		#twitter_wrap .twtr-widget em { float:left; color:#FFF; }
+		#twitter_wrap .twtr-widget em .twtr-reply, #twitter_wrap .twtr-widget em .twtr-rt, #twitter_wrap .twtr-widget em .twtr-fav { display:none; }
+		#twitter_wrap .twtr-widget em, #witter_wrap .twtr-widget .twtr-new-results { margin-top: 0; }
+
 	/*===  Columns			===*/
 	/*-------------------------------------------------------------------------------------------*/
+	
 	#column-wrap { border-top: 1px solid #949494; padding-top:30px; }
 	#left-column { float:left; width:415px; }
 	#right-column { float:right; width:415px; }
@@ -426,7 +435,7 @@ body strong {font-weight: 700; }
 	
 	#content #right-column article { padding-bottom: 0.75em; margin-bottom: 1.5em; border-bottom: 1px solid #EEE; }
 		#content #right-column .entry-content { width: 300px; float: right; }
-		#content #right-column .entry-content p { text-align:justify; }
+		#content #right-column .entry-content p {  }
 		#content #right-column .entry-header { width: 300px; float: right; }
 	
 	#right-column .entry-meta { width:94px; float:left; margin-right:10px; font-size: 0.7em; }
@@ -504,18 +513,18 @@ body strong {font-weight: 700; }
 	#podcast-info span a:hover, .home .podcast span a:hover { text-decoration:none; color:#20558A }
 	.post-twitter { font-size: 0.725em; color: #555555; background-image: url("images/icon_info-twitter.png"); background-position: left center; background-repeat: no-repeat; padding-left: 22px; width:230px; float:left; }
 	#podcast-info.no-thumb .post-twitter { display: block; float:none; width: auto; } 
-	.home .podcast .post-twitter { display: none; }
 	#podcast-info .post-affiliation, .home .podcast .post-affiliation { color: #656565; font-weight: 500; font-size: 0.875em; margin-bottom: 2px; }
 	#podcast-info .post-date, .home .podcast .post-date { font-size: 0.8em; color: #555555; display: block; padding:5px 0 0 0; }
 	#podcast-info .post-speaker, .home .podcast .post-speaker { margin-bottom: 3px; }
 	#podcast-info span.post-speaker span { float:none; display:inline; width:auto; font-style:italic }
 
-#abstract { text-align:justify; clear:both; }
+#abstract { clear:both; }
 	#abstract .pod-bio { display: block; border-top: 1px dashed #d4d4d4; padding-top: 1em; margin-top: 1.25em;}
 	#abstract .pod-bio p { color: #666666; }
 	#abstract .pod-bio + .pod-bio { border-top-width: 0px; padding-top: 0em; }
 	#abstract .pod-bio:last-child { border-bottom: 1px dashed #d4d4d4; padding-bottom: 1em; }
 	#abstract iframe { padding-bottom: 0.25em; }
+
 
 #dd-info { padding-top: 1em; }
 #content #dd-info p { color: #888888; font-size: 0.7em; }
@@ -525,7 +534,7 @@ body strong {font-weight: 700; }
 #content #articles article.podcast { border-bottom: 1px dotted #D9D9D9; margin-bottom: 16px; overflow:auto;}
 #content #article article.podcast { float:left; margin-right: 0; }
 
-#content #posts .entry-content p { text-align:justify; }
+#content #posts .entry-content p { }
 #content #posts article.podcast p.event-info, #content article.podcast p.event-info  {text-align:left; margin-bottom: 0px; margin-top: 5px; display: inline-block; width: auto; max-width: 255px; }
 .single-podcast .event-info  { text-align: left;}
 .event-info .info-sponsored { color: #666; font-weight: 300;}
@@ -630,12 +639,13 @@ body strong {font-weight: 700; }
 	#sidebar .podcast-files ul li { list-style:none; margin: 0 0; }
 	#sidebar .podcast-files li { padding: 6px 0; border-bottom: 1px dotted #E4E4E4; font-size:0.7825em; }
 	#sidebar .podcast-files li:last-child { padding-bottom: 0px; border-bottom: 0px; }
-	#sidebar .podcast-files li a { padding-left: 25px; height: 20px; display: block; }
-	#sidebar .podcast_vid { background: url(images/icon-pod-vid.png) no-repeat left top }
+	#sidebar .podcast-files li a { /* padding-left: 25px; */ display: block; }
+	/*#sidebar .podcast_vid { background: url(images/icon-pod-vid.png) no-repeat left top }
 	#sidebar .podcast_ppt { background: url(images/icon-pod-ppt.png) no-repeat left top }
 	#sidebar .podcast_slides { background: url(images/icon-pod-slides.png) no-repeat left top }
 	#sidebar .podcast_key { background: url(images/icon-pod-key.png) no-repeat left top }
-	#sidebar .podcast_aud { background: url(images/icon-pod-aud.png) no-repeat left top }
+	#sidebar .podcast_aud { background: url(images/icon-pod-aud.png) no-repeat left top } */
+	
 	
 	/*===  Blog Sidebar     ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -668,6 +678,7 @@ body strong {font-weight: 700; }
 	
 	#footer .widget_recent_entries_pp ul li:last-child { border-bottom: 0px; }
 	#footer .widget_recent_entries_pp ul li { display: block; margin: 1em 0; padding-bottom: 1em; border-bottom: 1px dotted #D9D9D9; line-height: 125%; }
+	
 	
 	/*===  Project Blog Posts      ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -875,6 +886,7 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 /*-------------------------------------------------------------------------------------------*/
 /*===  Columns      ===*/
 /*-------------------------------------------------------------------------------------------*/
+
 .one_half, .one_third, .one_fourth, .three_fourth, .two_third, .one_fifth, .two_fifth, .three_fifth, .four_fifth { margin-bottom: 20px; float:left; margin-right: 4%; position:relative; }
 
 .one_half { width:48%; }
@@ -908,6 +920,7 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 	
 	.one_third .icon-text { width:233px; }
 	.one_fifth .icon-text { width:109px; }
+	
 	
 	/*===  2. Buttons    ===*/
 	/*-------------------------------------------------------------------------------------------*/
@@ -955,26 +968,36 @@ blockquote { color:#aaa; font-size:15px; font-style:italic;  margin:20px 0px 20p
 	
 	.ui-tabs-hide { display: none; }
 	
+	
 	/*===  4. Toggles    ===*/
 	/*-------------------------------------------------------------------------------------------*/
 	
-	.toggle-container { width:100%; margin-bottom:4px; position:relative; cursor:pointer; overflow:hidden; }
+	.toggle-container { width:100%; }
+	
+	.toggle-container { margin-bottom:4px; position:relative; cursor:pointer; overflow:hidden; }
 	p + .toggle-container { margin-top: 10px; }
+
 	.toggle-container h6 { text-decoration: none; text-transform: uppercase; padding:7px 8px 7px 33px; font-size:12px; line-height:20px; margin:0; border: 1px solid #e1e1e1; }
 	.toggle-container .toggle { background:url(images/elements/toggle.png) no-repeat 10px 2px; }
-	.toggle-container .active { background:url(images/elements/toggle.png) no-repeat 10px -48px;}		
+	.toggle-container .active { background:url(images/elements/toggle.png) no-repeat 10px -48px;}
+	
+	
 	.toggle-container p, .toggle-container div { padding:10px 10px 10px 32px; margin:0px; } 
 	.toggle-content { display:none; font-size: 0.7825em; }
 	
+	
 	/*===  5. Lists      ===*/
 	/*-------------------------------------------------------------------------------------------*/
+
 		.square { list-style-type:square; }
 		.circle { list-style-type:circle; }
 		.check li { background:transparent url(images/elements/checklist.png) no-repeat 0px 2px; padding-left:22px; }
 		.checkgrey li { background:transparent url(images/elements/checkgrey.png) no-repeat 0px 2px; padding-left:22px; }
 		
+	
 	/*===  6. Pricing Boxes ===*/
-	/*-------------------------------------------------------------------------------------------*/	
+	/*-------------------------------------------------------------------------------------------*/
+	
 	.pricing-box { border:5px solid #f1f1f1; }
 		.pricing-box p { margin-bottom:0; }
 		.pricing-title { text-align:center; padding:20px 30px 0 30px;}
@@ -1032,4 +1055,3 @@ address { margin:0 0 1.5em; font-style:italic; }
 del { color:#666; }
 pre { margin:1.5em 0; white-space:pre; }
 pre, code, tt { font:1em 'andale mono', 'lucida console', monospace; line-height: 1.5; }
-.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

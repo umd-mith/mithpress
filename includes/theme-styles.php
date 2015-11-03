@@ -39,12 +39,13 @@ function mp_enqueue_scripts() {
 
 	wp_register_script('slimbox', get_template_directory_uri() . '/js/jquery.slimbox-2.04.js', array('jquery'), '2.04', false);
 	wp_register_script('easing', get_template_directory_uri() . '/js/jquery.easing.js', array('jquery'), '1.3', false);		
+	wp_register_script('gigpress', get_template_directory_uri() . '/js/gigpress.js', array('jquery'), false, false);
 
 	wp_register_script('grayscale', get_template_directory_uri() .'/js/grayscale.js', array(), false, true);
 	wp_register_script('highlight', get_template_directory_uri() .'/js/jquery.highlight-4.js', array(), '4', true);
 	
 	// styles
-	wp_enqueue_style('font-awesome', ('//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'), array(), '3.2.1', 'all');
+	wp_enqueue_style('font-awesome', get_template_directory_uri() .'/css/font-awesome.min.css', array(), '4.4.0', 'all');
 	wp_register_style('superfish', get_template_directory_uri() .'/css/superfish.css', array(), '1.4.8', 'all' );
 	wp_register_style('slimbox', get_template_directory_uri() .'/css/slimbox.css', array(), '2.04', 'screen, projection' );
 
