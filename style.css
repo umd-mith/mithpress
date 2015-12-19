@@ -13,21 +13,29 @@
  Text Domain:  Avada
 */
 
+/**---------------------------------------------------------------------------
+Main
+----------------------------------------------------------------------------*/
 #umh-cont { z-index: 10020 !important; }
 .fusion-logo a img { width: 380px; }
 
-
-/** Layout **/
+/**---------------------------------------------------------------------------
+Layout
+----------------------------------------------------------------------------*/
 .post-type-archive-mith_dialogue #content, .single-mith_person #content { width: 56%; margin-left: 22%; }
 .post-type-archive-mith_dialogue #main #sidebar, .single-mith_person #main #sidebar { width: 19%; margin-left: -78%; }
 .post-type-archive-mith_dialogue #main #sidebar-2, .single-mith_person #main #sidebar-2 { width: 19%; margin-left: 3%; }
 
-/** Images **/
+/**---------------------------------------------------------------------------
+Images
+----------------------------------------------------------------------------*/
 .page .post-slideshow.fusion-flexslider .slides li a,
 .page .post-slideshow.fusion-flexslider .slides li { pointer-events: none; cursor: default; }
 
 
-/** Research Items **/
+/**---------------------------------------------------------------------------
+Research Single Page
+----------------------------------------------------------------------------*/
 .research-details .research-info-box { margin-bottom: 40px; }
 .research-content .research-details h3 { margin-bottom: 20px; }
 .sidebar .widget.research-info-box ul { padding: 0; margin:0; list-style-type: none; }
@@ -40,35 +48,54 @@
 .sidebar .widget .ext-person-dept { font-style: italic; line-height: 1.5; }
 .research-content .event-meta.fusion-one-third i { display:table-cell; min-width: 20px; }
 .research-content .event-meta.fusion-one-third span:not(.dates-sep) { display:table-cell; }
+.single-mith_research .single-navigation { display:none; margin-bottom:16px; }
 
-
-/* Research Archive Page */
-/*.post-type-archive-mith_research #wrapper #main .post .fusion-post-timeline h2 { font-size: 14px; line-height: 16px; }*/
+/**---------------------------------------------------------------------------
+Research Archive Page
+----------------------------------------------------------------------------*/
+.post-type-archive-mith_research #main { padding-top: 0; }
+.post-type-archive-mith_research .fusion-portfolio-wrapper .fusion-col-spacing { padding: 6px; }
+.post-type-archive-mith_research .fusion-portfolio-wrapper { margin: 0 -6px } 
 .post-type-archive-mith_research #main .fusion-portfolio .mith-research-content h2 { margin-top: 0; margin-bottom: 3px; font-size:12px; line-height: normal;}
-.post-type-archive-mith_research .fusion-post-content  { font-size: 10px; line-height: 1.5; }
-.post-type-archive-mith_research .fusion-portfolio-wrapper .fusion-col-spacing { border-left: #dcdcdc 1px solid; }
 .post-type-archive-mith_research .fusion-portfolio-content-wrapper .fusion-portfolio-content { margin: 0 0 0 0; }
+#mre_sorting .gform_wrapper .left_label .gfield_label { float:left; line-height: 30px; text-transform: uppercase; margin-right: 10px; }
 
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper { padding: 15px 10px 0 10px; }
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-container { font-size: 11px; line-height: 1.5; margin-top:0px; }
-.post-type-archive-mith_research .fusion-blog-layout-timeline .fusion-post-content-wrapper .image-wrapper { margin: -15px -10px 10px -10px; }
+/**-- Filters ----------------------------------------------------------------------------*/
+.filters-column label.gfield_label { color: #333333; font-weight: 600; }
+.filters-column span + dl { margin-top: 0; }
+.filters-column dl dl { display: none; }
+.filters-column .category i { float: left; line-height: 20px; }
+#types, #topics, #sponsors { display: block; width: 100%; }
+#all_topics, #all_types, #all_sponsors, #all_years { float: right; font-size: 11px; }
+.filters-column .only_cat { float: right; display: none; position: relative; z-index: 2; color: #444; }
+.filters-column .only_cat:hover { color: #a0ce4e; }
+.filters-column .category { position: relative; font-size: 11px; } /*filter-option*/
+.filters-column dt, .filters-column dd { padding: 4px 0; }
+.filters-column .cb-icon { position: absolute; top: 8px; left: -25px; margin-top: -10px; width: 20px; height: 20px; overflow: hidden; }
+.filters-column .cb-wrapper { display: block; position: relative; z-index: 1; white-space: nowrap; cursor: pointer; margin-left: 33px; }
+.filters-column .cb-input { outline: 0; /*opacity: 0;
+	filter: alpha(opacity=0);*/ -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; cursor: pointer; width: 100%; height: 100%; top: 0; left: 0; position: absolute; background-image: url(images/checkbox-sprite.png); background-position: center top; background-repeat: no-repeat; }
+.filters-column a.cb-icon:hover .cb-input { background-position: center -60px; }
+.filters-column .cb-input:checked { background-position: center -30px; }
+.filters-column a.cb-icon:hover .cb-input:checked { background-position: center -90px; }
+.filters-column .cb-input.indeterminate { background-position: center -120px; }
+.filters-column a.cb-icon:hover .cb-input.indeterminate { background-position: center -150px; }
+.filters-column .cb-label { display: block; white-space: nowrap; text-overflow: ellipsis; -o-text-overflow: ellipsis; -ms-text-overflow: ellipsis; overflow: hidden; }
+.filters-column .cb-label:hover { color: #a0ce4e; }
+.filters-column .cat_count { min-width: 30px; float: right; margin-left: 5px; display: inline-block; text-align: right; position: relative; z-index: 2; }
+.filters-column dl.subset { margin: 0; margin-left: .7em; }
 
-.post-type-archive-mith_research .fusion-filter.fusion-active a,
-.post-type-archive-mith_research .fusion-filters { font-size: 11px; line-height:21px;}
-.post-type-archive-mith_research .fusion-filter { float: none; }
-.post-type-archive-mith_research .fusion-filters label { /*font-weight: 600; text-transform: uppercase; line-height: 28px; font-size: 13px; */}
-.post-type-archive-mith_research .fusion-filter a,
-.post-type-archive-mith_research .fusion-filters .fusion-filter.fusion-active a { border-top: none; border-bottom: none;}
-.post-type-archive-mith_research .fusion-filter a span { float: right; }
-.post-type-archive-mith_research .fusion-filter.filter-child { padding-left: 8px; }
+/**-- Research Items ----------------------------------------------------------------------------*/
+.mith-research-post .fusion-portfolio-content-wrapper { padding: 10px; border: 1px solid #c9c9c9; min-height: 330px; }
+.mith-research-post .fusion-image-wrapper img { margin-bottom: 1em; }
+#wrapper #main .mith-research-post .fusion-portfolio-content > h2.entry-title { line-height:normal; }
+#main .mith-research-content .fusion-post-content-wrapper { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; }
+#main .mith-research-content .fusion-post-content { display:block; height:150px; overflow: hidden; text-overflow: ellipsis; }
 
-.research-portfolio .gform_wrapper { float: left; margin-bottom: 0; }
-.research-portfolio .gform_wrapper .gfield_label { float: left; margin: 0 1em 0 0; text-transform: uppercase; font-size: 11px; font-weight: 600; line-height: 33px; }
-.research-portfolio .ginput_container { float: left; }
-.research-portfolio .gform_wrapper .gfield select { min-width: 160px !important; }
-.research-portfolio .gform_wrapper .gfield option { }
 
-/** Dialogues **/
+/**---------------------------------------------------------------------------
+Dialogues
+----------------------------------------------------------------------------*/
 .mith_dialogue .post-content .dialogue-info h3, 
 .dialogue-archive .dialogue-info h3 { font-weight: 600 !important; margin-top: 0; margin-bottom: 0; }
 .mith_dialogue .post-content .dialogue-info h3 span, 
@@ -108,18 +135,28 @@
 .dialogue-series-item .dialogue-time { display: block; }
 .dialogue-series-item .dialogue-sponsor { display: block; font-style:italic; }
 
-/** People **/
+/**---------------------------------------------------------------------------
+ People 
+----------------------------------------------------------------------------*/
 .fusion-post-content .person-info h3, .post-content .person-info h3 { margin-top: 0; margin-bottom: 0; }
 .fusion-post-content .person-info .post-info-title , .post-content .person-info .post-info-title { margin-top: 0; margin-bottom: 10px; }
 .fusion-post-content .person-info .info-dates h4 { line-height: 1.35; margin-top: 4px; margin-bottom: 0; color: #4E4E4E; }
 .fusion-post-content .person-info .info-dates h4:last-of-type { margin-bottom: inherit; }
 
-/** Blog **/
+
+
+/**---------------------------------------------------------------------------
+Blog 
+----------------------------------------------------------------------------*/
 .fusion-format-box { display: none; }
 
-/** Search **/
+/**---------------------------------------------------------------------------
+Search 
+----------------------------------------------------------------------------*/
 
-/** MISC **/
+/**---------------------------------------------------------------------------
+MISC 
+----------------------------------------------------------------------------*/
 .screen-reader-text { display:none; }
 .fusion-alert.alert-lowercase { text-transform:none; }
 .fusion-alert.hide-alert-close .close { display:none; } 
