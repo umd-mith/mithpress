@@ -1,242 +1,174 @@
-<?php
-/**
- * Render the blog layouts
- *
- * @author 		ThemeFusion
- * @package 	Avada/Templates
- * @version     1.0
- */
- 
-fusion_block_direct_access();
+<?php 
+$events_list = '';
+// get event category name
+if ( has_term( array('mith-event', 'event-conference', 'event-workshop', 'event-symposium', 'event-training-institute', 'event-institute', 'event-meeting'), 'mith_research_type') ) : // check if research item is an event
+	$parent_term = get_term_by( 'slug', 'mith-event', 'mith_research_type' ); 
+	$parent = $parent_term->term_id;
+	$cat_terms = get_terms( 'mith_research_type', array( 'parent' => $parent, ) );
+	$parent_terms = array();
+	foreach ($cat_terms as $cat) $parent_terms[] = $cat->slug; // create array of term slugs			
+	$terms = get_the_terms( $post->ID, 'mith_research_type' );										
+	if ( $terms && ! is_wp_error( $terms ) ) : 
+		$type_terms = array();
+		foreach ( $terms as $term ) {
+			if ( in_array( $term->slug, $parent_terms ) ) // check if item term is in parent array
+			$type_terms[] = $term->name;
+		}
+		$research_event_category = $type_terms[0];
+	endif;
+endif;
+					
+if( have_rows('research_events') ) : 
+$events_list .= '<div class="research-events-content">';
 
-global $wp_query, $smof_data;
+while( have_rows('research_events') ): the_row(); 
+	$event_details = '';
+	$event_title = get_sub_field('event_title');
+	$event_loc = get_sub_field('event_location');
+	$event_desc = get_sub_field('event_description');
+	$event_start_date_raw = get_sub_field('event_date_start');
+	$event_end_date_raw = get_sub_field('event_date_end');
+	$event_start_time_raw = get_sub_field('event_time_start');
+	$event_end_time_raw = get_sub_field('event_time_end');
 
-// Set the correct post container layout classes
-$blog_layout = 	'timeline';
-$post_class = sprintf( 'fusion-post-%s', $blog_layout );
-if ( $blog_layout == 'grid' ) {
-	$container_class = sprintf( 'fusion-blog-layout-%s fusion-blog-layout-%s-%s isotope ', $blog_layout, $blog_layout, $smof_data['blog_grid_columns'] );
-} else {
-	$container_class = sprintf( 'fusion-blog-layout-%s ', $blog_layout );
-}
+	if ( $event_title) $event_label = $event_title;
+	elseif ( $research_event_category ) $event_label = $research_event_category;
+	else $event_label = 'Event';
+	//title
+	$event_details .= sprintf('<h3 style="margin-bottom:0;margin-top:0;">%s</h3>', __($event_label, 'Avada') );
 
-// Set class for scrolling type
-$container_class .= 'fusion-blog-infinite fusion-posts-container-infinite ';
-
-if ( ! $smof_data['featured_images'] ) {
-	$container_class .= 'fusion-blog-no-images ';
-}
-
-// Add the timeline icon
-if ( $blog_layout == 'timeline' ) {
-	echo '<div class="fusion-timeline-icon"><i class="fusion-icon-bubbles"></i></div>';
-}
-
-if ( is_search() && 
-	 $smof_data['search_results_per_page'] 
-) {
-	$number_of_pages = ceil( $wp_query->found_posts / $smof_data['search_results_per_page'] );
-} else {
-	$number_of_pages = $wp_query->max_num_pages;
-}
-
-echo sprintf( '<div id="posts-container" class="%sfusion-blog-archive fusion-clearfix" data-pages="%s">', $container_class, $number_of_pages );
-
-	if( $blog_layout == 'timeline' ) {
-		// Initialize the time stamps for timeline month/year check
-		$post_count = 1;
-		$prev_post_timestamp = null;
-		$prev_post_month = null;
-		$prev_post_year = null;
-		$first_timeline_loop = false;
-		
-		// Add the container that holds the actual timeline line
-		echo '<div class="fusion-timeline-line"></div>';
-	}
-
-	// Start the main loop
-	while ( have_posts() ): the_post();
-		// Set the time stamps for timeline month/year check
-		$alignment_class = '';
-		if( $blog_layout == 'timeline' ) {
-			$post_start_date = get_post_meta( $post->ID, 'research_start_date', true);
-			$post_year =  get_post_meta($post->ID, 'research_start_yr', true);
-			$current_date = get_the_date( 'o-n' );
-			
-			// Set the correct column class for every post
-			if( $post_count % 2 ) {
-				$alignment_class = 'fusion-left-column';
-			} else {
-				$alignment_class = 'fusion-right-column';
-			}
+	// date
+	if ($event_start_date_raw ) $event_start_date = date('D, M j, Y', strtotime($event_start_date_raw)); 
+	if ($event_end_date_raw ) $event_end_date = date('D, M j, Y', strtotime($event_end_date_raw));
 	
-			// Set the timeline month label
-			if ( $prev_post_year != $post_year 
-			) {
-			
-				if( $post_count > 1 ) {
-					echo '</div>';
-				}
-				echo sprintf( '<h3 class="fusion-timeline-date">%s</h3>', $post_year ); 
-				echo '<div class="fusion-collapse-month">';
-			}
-		}
-		
-		// Set the has-post-thumbnail if a video is used. This is needed if no featured image is present.
-		$thumb_class = '';
-		if ( get_post_meta( get_the_ID(), 'pyre_video', true ) ) {
-			$thumb_class = ' has-post-thumbnail';
-		}
-		
-		$post_classes = sprintf( '%s %s %s post fusion-clearfix', $post_class, $alignment_class, $thumb_class ); 
-		ob_start();
-		post_class( $post_classes );
-		$post_classes = ob_get_clean();
-		
-		echo sprintf( '<div id="post-%s" %s>', get_the_ID(), $post_classes );
-			// Add an additional wrapper for grid layout border
-			if ( $blog_layout == 'grid' ) {
-				echo '<div class="fusion-post-wrapper">';
-			}
-			
-				// Get featured images for all but large-alternate layout
-				
-				// post-content-wrapper only needed for grid and timeline
-				if ( $blog_layout == 'grid' || 
-					 $blog_layout == 'timeline' 
-				) { 
-					echo '<div class="fusion-post-content-wrapper">';
-				}
-				
-					// Add the circles for timeline layout
-					if ( $blog_layout == 'timeline' ) {
-						echo '<div class="fusion-timeline-circle"></div>';
-						echo '<div class="fusion-timeline-arrow"></div>';
-					}
-					
-					echo '<div class="fusion-post-content">';
-					echo '<div class=""><a href="' . get_permalink() . '" title="' . get_the_title( get_the_ID() ) . '">';
-					the_post_thumbnail();
-					echo '</a></div>';
-
-						// Render the post title
-						echo $post_timestamp;
-						echo '<h3><a href="' . get_permalink() . '" title="' . get_the_title( get_the_ID() ) . '">' . get_the_title( get_the_ID() ) . '</a></h3>';
-						//echo avada_render_post_title( get_the_ID() );
-					
-						// Render post meta for grid and timeline layouts
-						//echo avada_render_post_metadata( 'grid_timeline' );
-						//echo '<div class="fusion-content-sep"></div>';
-						
-						echo '<div class="fusion-post-content-container">';
-						$event_date = mith_research_event_date();
-							if ( $event_date ) :
-							$research_date = $event_date;
-							/*$event_times = mith_research_event_time();
-							if ( $event_times ) 
-							$event_details .= sprintf( '<span>%s</span></h4>', $event_times );
-							else $event_details .= '</h4>';
-							*/
-							else : 				
-								$start_date_raw = get_post_meta( $post->ID, 'research_start_yyyymm', true);
-								if ($start_date_raw ) {
-									$start_date = date('F Y', strtotime($start_date_raw)); 
-								} else { 
-									$start_date = get_post_meta($post->ID, 'research_start_yr', true);
-								}
-								$research_date = $start_date;
-								$end_date_raw = get_post_meta( $post->ID, 'research_end_yyyymm', true);
-								if ($end_date_raw ) {
-									$end_date = date('F Y', strtotime($end_date_raw)); 
-									$research_date .= '<span class="dates-sep"> &ndash; </span>' . $end_date;
-								} else {
-									$end_date = get_post_meta($post->ID, 'research_end_yr', true);
-									$research_date .= '<span class="dates-sep"> &ndash; </span>' . $end_date;
-								}
-							endif;
-							$full_date = sprintf( '<h4 class="mith-research-dates" style="margin-top:0;margin-bottom:5px;">%s</h4>', $research_date );
-							
-							echo $full_date;
-						
-							/**
-							 * avada_blog_post_content hook
-							 *
-							 * @hooked avada_render_blog_post_content - 10 (outputs the post content wrapped with a container)
-							 */						
-							echo get_the_excerpt();
-							//do_action( 'avada_blog_post_content' );
-							
-						echo '</div>';
-				
-					echo '</div>'; // end post-content
-					
-					
-					// Render post meta data according to layout
-					if ( $smof_data['post_meta'] ) {
-						echo '<div class="fusion-meta-info">';
-							if ( $blog_layout == 'grid' || 
-								 $blog_layout == 'timeline' 
-							) {
-								// Render read more for grid/timeline layouts
-								echo '<div class="fusion-alignleft">';
-									if ( ! $smof_data['post_meta_read'] ) {
-										$link_target = '';
-										if( fusion_get_page_option( 'link_icon_target', get_the_ID() ) == 'yes' ||
-											fusion_get_page_option( 'post_links_target', get_the_ID() ) == 'yes' ) {
-											$link_target = ' target="_blank"';
-										}
-										echo sprintf( '<a href="%s" class="fusion-read-more"%s>%s</a>', get_permalink(), $link_target, apply_filters( 'avada_blog_read_more_link', __( 'More', 'Avada' ) ) );
-									}
-								echo '</div>';
-							
-								// Render comments for grid/timeline layouts
-								/*echo '<div class="fusion-alignright">';
-									if ( ! $smof_data['post_meta_comments'] ) { 
-										if( ! post_password_required( get_the_ID() ) ) {
-											comments_popup_link('<i class="fusion-icon-bubbles"></i>&nbsp;' . __( '0', 'Avada' ), '<i class="fusion-icon-bubbles"></i>&nbsp;' . __( '1', 'Avada' ), '<i class="fusion-icon-bubbles"></i>&nbsp;' . '%' );
-										} else {
-											echo sprintf( '<i class="fusion-icon-bubbles"></i>&nbsp;%s', __( 'Protected', 'Avada' ) );
-										}
-									}
-								echo '</div>';*/
-							} else {
-								
-							}
-						echo '</div>'; // end meta-info
-					}
-				if ( $blog_layout == 'grid' || 
-					 $blog_layout == 'timeline' 
-				) { 					
-					echo '</div>'; // end post-content-wrapper
-				}
-			if ( $blog_layout == 'grid' ) {
-				echo '</div>'; // end post-wrapper
-			}
-		echo '</div>'; // end post
-		
-		// Adjust the timestamp settings for next loop
-		if ( $blog_layout == 'timeline' ) {
-			//$prev_post_timestamp = $post_timestamp;
-			//$prev_post_month = $post_month;
-			$prev_post_year = $post_year;
-			$post_count++;
-		}
-	endwhile; // end have_posts()
-	
-	if ( $blog_layout == 'timeline' &&
-		 $post_count > 1 
-	) {
-		echo '</div>';
+	if ( $event_start_date_raw ) { 
+		$event_date = $event_start_date;
+		if ( $event_end_date ) $event_date .= sprintf('<span class="dates-sep"> &ndash; </span>%s', $event_end_date);
+	$event_details .= sprintf( '<div class="event-date"><i class="fa fa-calendar"></i> <span>%s</span></div>', $event_date );
 	}
-echo '</div>'; // end posts-container
+	//times
+	if ($event_start_time_raw) $event_start_time = $event_start_time_raw;
+	if ($event_end_time_raw) $event_end_time = $event_end_time_raw;
+	
+	if ($event_start_time_raw) {
+		$event_times = $event_start_time;
+		if ( $event_end_time ) $event_times .= sprintf('<span class="dates-sep"> &ndash; </span>%s', $event_end_time);
+	$event_details .= sprintf( '<div class="event-time"><i class="fa fa-clock-o"></i> <span>%s</span></div>', $event_times );
+	}
+	
+	//location
+	if ($event_loc ) 
+	$event_details .= sprintf( '<div class="event-location"><i class="fa fa-map-marker"></i> <span>%s</span></div>', $event_loc );
+					
+	//description 
+	if ( $event_desc )
+	$event_details .= do_shortcode('[accordian divider_line="yes" class="event-desc" id=""]
+	[toggle title="' . __('Description', 'Avada') . '" open="no"]' . $event_desc .'[/toggle]');				
+	
+	$events_list .= do_shortcode('[one_full spacing="yes" class="event-meta" last="no" margin_bottom="20px"]' . $event_details . '[/one_full]');
+	//event-details
 
-// If infinite scroll with "load more" button is used
-if ( $smof_data['blog_pagination_type'] == 'load_more_button' ) {
-	echo sprintf( '<div class="fusion-load-more-button fusion-clearfix">%s</div>', __( 'Load More Posts', 'Avada' ) );
+endwhile; 			
+$events_list .= '</div>'; 
+endif; //research-events-content
+
+//meta
+$start_date_raw = get_post_meta( $post->ID, 'research_start_yyyymm', true);
+if ($start_date_raw ) {
+	$start_date = date('M Y', strtotime($start_date_raw)); 
+} else { 
+	$start_date = get_post_meta($post->ID, 'research_start_yr', true);
+}
+$end_date_raw = get_post_meta( $post->ID, 'research_end_yyyymm', true);
+if ($end_date_raw ) {
+	$end_date = date('M Y', strtotime($end_date_raw)); 
+} else {
+	$end_date = get_post_meta($post->ID, 'research_end_yr', true);
 }
 
-// Get the pagination
-fusion_pagination( $pages = '', $range = 2 );
+$research_date = '<i class="fa fa-calendar-o"></i> ' . $start_date;
+if ( $end_date ) $research_date .= '<span class="dates-sep"> &ndash; </span>' . $end_date;
+$metadata .= sprintf( '<span>%s</span><span class="fusion-inline-sep">|</span>', $research_date );
 
-wp_reset_query();
+//Director
+$director_arr = array();
+$director_int_obj = get_post_meta($post->ID, 'research_director_int', true);
+$director_int = get_the_title($director_int_obj);
+$director_ext = get_post_meta($post->ID, 'research_director_ext', true);
+if ($director_int) $director_arr['int'] = $director_int;
+if ($director_ext) $director_arr['ext'] = $director_ext;
 
+if ( $director_int || $director_ext ) : 			
+	if ( $director_int && $director_ext) :
+		$director_header = __('Directors',  'Avada' ); 
+		$directors = $director_int . ' &#183; ' . $director_ext; 
+	else : 
+		$director_header = __('Director',  'Avada' ); 
+		$directors = $director_int . $director_ext; 
+	endif;
+	$metadata .= sprintf( '<i class="fa fa-user"></i> %s: <span>%s</span><span class="fusion-inline-sep">|</span>', $director_header, $directors );
+endif; 
+
+//Sponsors
+$research_sponsors = get_post_meta($post->ID, 'research_sponsors', true);
+$research_sponsors_array = get_post_meta($post->ID, 'research_sponsors_array', true);
+if ( $research_sponsors > 0) :
+	$int_sponsors = $ext_sponsors = array();
+	$count = $research_sponsors;
+	while(has_sub_field('research_sponsors')):
+	$sponsor_name = get_sub_field('research_sponsor_name');
+	$sponsor_url = get_sub_field('research_sponsor_link');
+	$sponsor_type = get_sub_field('research_sponsor_type');
+	$research_sponsor = sprintf( '<a href="%s" title="%s" class="sponsor-' . $sponsor_type . '">%s</a>', $sponsor_url, $sponsor_name, $sponsor_name);
+		if ( $sponsor_type = 'int') {
+			$int_sponsors[] .= $research_sponsor;
+		} elseif ( $sponsor_type = 'ext' ) {
+			$ext_sponsors[] .= $research_sponsor;
+		} 
+	endwhile;
+	$arrays_merge = array_merge($int_sponsors, $ext_sponsors);
+	$sponsors_list = implode( ' &#183; ', $arrays_merge );
+	if ( $research_sponsors > 1 ) $sponsors_label = 'Sponsors'; else $sponsors_label = 'Sponsor';
+	$metadata .= sprintf( '<i class="fa fa-money"></i> %s: <span>%s</span><span class="fusion-inline-sep">|</span>', __( $sponsors_label, 'Avada' ), $sponsors_list);
+endif;
+
+//Topics
+ob_start();
+echo get_the_term_list( $post->ID, 'mith_topic', '<i class="fa fa-tags"></i> ' . __( 'Topics', 'Avada' ) . ': <span>', ', ', '</span>' );
+$topics = ob_get_clean();
+if ( $topics )
+$metadata .= sprintf( '%s<span class="fusion-inline-sep">|</span>', $topics );
+
+//Partnerships
+$partnerships = get_post_meta($post->ID, 'research_partners', true);
+if ( $partnerships > 0 ) :
+$partners = '';
+$ext_partners = $int_partners = array();
+
+	while ( has_sub_field('research_partners') ) :
+		$partner_int = get_sub_field('research_partner_int'); 
+		$partner_int_obj = get_sub_field_object('research_partner_int');
+		$partner_int_val = get_sub_field('research_partner_int');
+		$partner_ext = get_sub_field('research_partner_ext');
+		$partner_ext_obj = get_sub_field_object('research_partner_ext');
+		$partner_ext_val = get_sub_field('research_partner_ext');
+		foreach( $partner_ext_obj['choices'] as $e => $ev ): 
+			if( $e == $partner_ext_val ):
+				$ext_partners[] .= sprintf('<span class="partner-ext %s">%s</span>', $e, $ev );
+			endif;
+		endforeach;
+		foreach( $partner_int_obj['choices'] as $i => $iv ): 
+			if( $i == $partner_int_val ):
+				$int_partners[] .= sprintf('<span class="partner-int %s">%s</span>', $i, $iv );
+			endif;
+		endforeach; 				
+	endwhile;
+$partners_merge = array_merge($int_partners, $ext_partners);
+$partners = implode( ' &#183; ', $partners_merge);
+if ( $partnerships > 1 ) $partners_label = 'Partners'; else $partners_label = 'Partner';				
+$metadata .= sprintf( '<i class="fa fa-university"></i> %s: %s<span class="fusion-inline-sep">|</span>', __( $partners_label, 'Avada' ), $partners);
+
+endif;	
+
+$html = $events_list . sprintf ( '<div class="fusion-meta-info"><div class="fusion-meta-info-wrapper">%s</div></div>', $metadata);
+echo $html; ?>
