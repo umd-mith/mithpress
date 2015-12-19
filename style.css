@@ -96,6 +96,9 @@ Research Archive Page
 /**---------------------------------------------------------------------------
 Dialogues
 ----------------------------------------------------------------------------*/
+.post-type-archive-mith_dialogue .side-nav li:first-child { display: none; }
+.post-type-archive-mith_dialogue .fusion-meta-info .fusion-alignleft { display:none; }
+
 .mith_dialogue .post-content .dialogue-info h3, 
 .dialogue-archive .dialogue-info h3 { font-weight: 600 !important; margin-top: 0; margin-bottom: 0; }
 .mith_dialogue .post-content .dialogue-info h3 span, 
