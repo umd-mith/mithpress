@@ -9,43 +9,7 @@
 	$content_css = 'float:right;';
 	
 	$page = get_page_by_title( 'Current Schedule', OBJECT, 'page' );
-	$pageid = $page->ID; 
-
-/*
-$sidebar_1 = Avada()->settings->get( 'portfolio_archive_sidebar' );
-$sidebar_2 = Avada()->settings->get( 'portfolio_archive_sidebar_2' );
-if( $sidebar_1 != 'None' && $sidebar_2 != 'None' ) {
-	$double_sidebars = true;
-}
-
-if( $sidebar_1 != 'None' ) {
-	$sidebar_exists = true;
-} else {
-	$sidebar_exists = false;
-}
-
-if( ! $sidebar_exists ) {
-	$content_css = 'width:100%';
-	$sidebar_css = 'display:none';
-	$content_class = 'full-width';
-	$sidebar_exists = false;
-} elseif(Avada()->settings->get( 'portfolio_sidebar_position' ) == 'Left') {
-	$content_css = 'float:right;';
-	$sidebar_css = 'float:left;';
-	$sidebar_left = 1;
-} elseif(Avada()->settings->get( 'portfolio_sidebar_position' ) == 'Right') {
-	$content_css = 'float:left;';
-	$sidebar_css = 'float:right;';
-	$sidebar_left = 2;
-}
-
-if($double_sidebars == true) {
-	$content_css = 'float:left;';
-	$sidebar_css = 'float:left;';
-	$sidebar_2_css = 'float:left;';
-} else {
-	$sidebar_left = 1;
-} */
+	$page_id = $page->ID; 
 ?>
 
 	<div id="content" class="<?php echo $content_class; ?>" style="<?php echo $content_css; ?>">
@@ -60,7 +24,7 @@ if($double_sidebars == true) {
 		<?php
 		if( $sidebar_exists == true ) {
 			if($sidebar_left == 1) {
-				echo avada_display_sidenav( $pageid );
+				echo mith_display_sidenav( $page_id );
 				generated_dynamic_sidebar($sidebar_1);
 			}
 			if($sidebar_left == 2) {

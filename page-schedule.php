@@ -166,55 +166,57 @@ get_header(); ?>
 				<input type="submit" name="submit" value="view" />
 				</div></form>
 							  
-				<?php if ( $current_dds->have_posts() ) : 
+				<?php if ( $current_dds->have_posts() ) :
 				echo do_shortcode('[separator style_type="double" top_margin="20" bottom_margin="20" sep_color="#BBBBBB" border_size="" width="" alignment="" class="" id=""]'); ?>
 				<div class="dialogue-series">
 				
-				<?php while ( $current_dds->have_posts() ) : $current_dds->the_post(); 
-				
-					$dialogue_date_raw = get_post_meta( get_the_ID(), 'dialogue_date', TRUE);
-					if ($dialogue_date_raw != '') { $dialogue_date = date('F j, Y', strtotime($dialogue_date_raw)); } 
-					elseif ( get_post_meta(get_the_ID(), 'talk-date', TRUE) != '') { $dialogue_date = get_post_meta(get_the_ID(), 'talk-date', TRUE); } 
-					else { $dialogue_date = the_date( 'F j, Y' ); }
-					$dialogue_time = get_post_meta( get_the_ID(), 'dialogue_time', TRUE);
-					$dialogue_location = get_post_meta( get_the_ID(), 'dialogue_location', TRUE); 
-					if (!$location) $dialogue_location = 'MITH Conference Room';
-					$dialogue_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
-					if (!$dialogue_title) $dialogue_title = the_title();
-					$dialogue_sponsor = get_post_meta( get_the_ID(), 'dialogue_sponsors', TRUE );
-					$dialogue_meta = ''; ?>
-					
-					<div class="dialogue-series-item">
-						<?php echo do_shortcode('[one_sixth last="no" class="dialogue-date"]' . $dialogue_date . '[/one_sixth]'); 
-						$dialogue_meta .= do_shortcode('[button link="' . get_permalink() . '" color="custom" size="small" type="flat" shape="square" target="" title="Link to: ' . $dialogue_title . '" gradient_colors="#ffffff|#ffffff" gradient_hover_colors="#fafafa|#fafafa" accent_color="#20558A" accent_hover_color="#2E7BC6" bevel_color="" border_width="1px" shadow="no" icon="" icon_divider="" icon_position="" modal="" animation_type="" animation_direction="" animation_speed="" alignment="right" class="dialogue-link post-link" id=""]' . __('Details', 'Avada') . '[/button]');
+					<?php while ( $current_dds->have_posts() ) : $current_dds->the_post(); 
+						$dialogue_date_raw = get_post_meta( get_the_ID(), 'dialogue_date', TRUE);
+						if ($dialogue_date_raw != '') { $dialogue_date = date('F j, Y', strtotime($dialogue_date_raw)); } 
+						elseif ( get_post_meta(get_the_ID(), 'talk-date', TRUE) != '') { $dialogue_date = get_post_meta(get_the_ID(), 'talk-date', TRUE); } 
+						else { $dialogue_date = the_date( 'F j, Y' ); }
+						$dialogue_time = get_post_meta( get_the_ID(), 'dialogue_time', TRUE);
+						$dialogue_location = get_post_meta( get_the_ID(), 'dialogue_location', TRUE); 
+						if (!$location) $dialogue_location = 'MITH Conference Room';
+						$dialogue_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
+						if (!$dialogue_title) $dialogue_title = the_title();
+						$dialogue_sponsor = get_post_meta( get_the_ID(), 'dialogue_sponsors', TRUE );
+						$dialogue_meta = ''; ?>
 						
-						$dialogue_speakers = get_field('dialogue_speakers');
-							if( $dialogue_speakers ) :
-								$i = 0;
-								$count = $dialogue_speakers;
-								while(has_sub_field('dialogue_speakers')) :
-									$speaker_name = get_sub_field('dialogue_speaker_name');
-									$speaker_title = get_sub_field('dialogue_speaker_title');
-									$speaker_affiliation = get_sub_field('dialogue_speaker_affiliation');
-									$speaker_twitter = get_sub_field('twitter_handle');
-									
-									$dialogue_speaker = '
-									<span class="dialogue-speaker">' . $speaker_name . '</span>';
-										if ($speaker_title != '') { $dialogue_speaker .= ', <span class="dialogue-speaker-title">' . $speaker_title . '</span>'; } 
-										if ($speaker_affiliation != '') { $dialogue_speaker .= ', <span class="dialogue-affiliation">' . $speaker_affiliation . '</span>'; }
-									$dialogue_meta .= $dialogue_speaker;
-								$i++; endwhile; 
-							endif; // end speakers 
-							$dialogue_meta .= '<h4 class="dialogue-title"><a href="' . get_permalink() . '" title="Link to: ' . $dialogue_title . '">' . $dialogue_title . '</a></h4>';
-							if ($dialogue_time != '') $dialogue_meta .= '<span class="dialogue-time"><strong>' . __('Time', 'Avada') . ': </strong> ' . $dialogue_time . '</span>';
-							$dialogue_meta .= '<span class="dialogue-location"><strong>' . __('Location', 'Avada') . ': </strong>' . $dialogue_location . '</span>';
-							if ($dialogue_sponsor != '') $dialogue_meta .= '<span class="dialogue-sponsor">' . $dialogue_sponsor . '</span>';
+						<div class="dialogue-series-item">
+							<?php echo do_shortcode('[one_fifth last="no" class="dialogue-date"]' . $dialogue_date . '[/one_fifth]'); 
+							$dialogue_meta .= do_shortcode('[button link="' . get_permalink() . '" color="custom" size="small" type="flat" shape="square" target="" title="Link to: ' . $dialogue_title . '" gradient_colors="#ffffff|#ffffff" gradient_hover_colors="#fafafa|#fafafa" accent_color="#20558A" accent_hover_color="#2E7BC6" bevel_color="" border_width="1px" shadow="no" icon="" icon_divider="" icon_position="" modal="" animation_type="" animation_direction="" animation_speed="" alignment="right" class="dialogue-link post-link" id=""]' . __('Details', 'Avada') . '[/button]');
 							
-							echo do_shortcode('[five_sixth last="yes" class="dialogue-info"]' . $dialogue_meta . '[/five_sixth]'); ?>
-					</div>
-					<?php echo do_shortcode('[separator style_type="solid" top_margin="0" bottom_margin="10" sep_color="#BBBBBB" width="" alignment="" class="" id=""]'); ?>
+							$dialogue_speakers = get_field('dialogue_speakers');
+								if( $dialogue_speakers ) :
+									$i = 0;
+									$count = $dialogue_speakers;
+									while(has_sub_field('dialogue_speakers')) :
+										$speaker_name = get_sub_field('dialogue_speaker_name');
+										$speaker_title = get_sub_field('dialogue_speaker_title');
+										$speaker_affiliation = get_sub_field('dialogue_speaker_affiliation');
+										$speaker_twitter = get_sub_field('twitter_handle');
+										
+										$dialogue_speaker = '
+										<span class="dialogue-speaker">' . $speaker_name . '</span>';
+											if ($speaker_title != '') { $dialogue_speaker .= ', <span class="dialogue-speaker-title">' . $speaker_title . '</span>'; } 
+											if ($speaker_affiliation != '') { $dialogue_speaker .= ', <span class="dialogue-affiliation">' . $speaker_affiliation . '</span>'; }
+										$dialogue_meta .= $dialogue_speaker;
+									$i++; endwhile; 
+								endif; // end speakers 
+								$dialogue_meta .= '<h4 class="dialogue-title"><a href="' . get_permalink() . '" title="Link to: ' . $dialogue_title . '">' . $dialogue_title . '</a></h4>';
+								if ($dialogue_time != '') $dialogue_meta .= '<span class="dialogue-time"><strong>' . __('Time', 'Avada') . ': </strong> ' . $dialogue_time . '</span>';
+								$dialogue_meta .= '<span class="dialogue-location"><strong>' . __('Location', 'Avada') . ': </strong>' . $dialogue_location . '</span>';
+								if ($dialogue_sponsor != '') $dialogue_meta .= '<span class="dialogue-sponsor">' . $dialogue_sponsor . '</span>';
+								
+								echo do_shortcode('[four_fifth last="yes" class="dialogue-info"]' . $dialogue_meta . '[/four_fifth]'); ?>
+						</div>
+						<?php echo do_shortcode('[separator style_type="solid" top_margin="0" bottom_margin="10" sep_color="#BBBBBB" width="" alignment="" class="" id=""]'); ?>
 					<?php endwhile; // while have posts ?>
-				</div>
+                </div>
+                <?php else : // if no posts ?>
+               	<div class="no-upcoming-dialogues">
+				<?php echo do_shortcode('[separator style_type="none" top_margin="5" bottom_margin="5" sep_color="" width="" alignment="" class="" id=""]'); ?>The current semester of Digital Dialogues has ended. We will add information on the upcoming semester as it becomes available. In the meantime, please check out our recent dialogues by choosing a series from the dropdown above.</div>
 				<?php endif; ?>
 
 				<?php avada_link_pages(); ?>
@@ -235,7 +237,7 @@ get_header(); ?>
 		<?php
 		if( $sidebar_exists == true ) {
 			if($sidebar_left == 1) {
-				echo avada_display_sidenav( $page_id );
+				echo mith_display_sidenav( $page_id );
 				generated_dynamic_sidebar($sidebar_1);
 			}
 			if($sidebar_left == 2) {
