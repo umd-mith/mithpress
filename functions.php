@@ -22,7 +22,10 @@ if ( ! function_exists( 'load_mith_child_scripts' ) ) {
 		}
 		//wp_enqueue_script('ajax', 'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js', '', '', false);	
 		//wp_enqueue_script('chosen_jquery', get_stylesheet_directory_uri() . '/js/chosen.jquery.js', '', '', false);
-		wp_enqueue_script('filtrify', get_stylesheet_directory_uri() . '/js/filtrify.js', array('jquery'), '', false);
+		//wp_enqueue_script('filtrify', get_stylesheet_directory_uri() . '/js/filtrify.js', array('jquery'), '', false);
+		if ( is_post_type_archive('mith_research') ) {
+		wp_enqueue_script('mith_mre_js', get_stylesheet_directory_uri() . '/js/mre.min.js', array('jquery'), '', false);		
+		}
 	}
 }
 add_action('wp_enqueue_scripts', 'load_mith_child_scripts',50);
@@ -65,8 +68,7 @@ get_template_part('includes/posts', 'taxonomies');
 
 /* Filter Dropdowns */
 /*-----------------------------------------------------------------------------------*/
- class MITHF_walker extends Walker_CategoryDropdown
-{
+class MITHF_walker extends Walker_CategoryDropdown {
     public $tree_type = 'category';
     public $db_fields = array(
         'parent' => 'parent',
@@ -139,7 +141,6 @@ class MITH_Admin_PT_List_Tax_Filter
         return array_merge( taxonomies, $this->taxonomies );
     }
 
-
     public function get_select()
     {
         $walker = new MITHF_walker;
@@ -163,26 +164,37 @@ class MITH_Admin_PT_List_Tax_Filter
                 'walker'          => $walker,
             ) );
         }
-
     }
-
 } 
 
 /*
   SIDEBARS & WIDGETS	------------------------------------------------------------
-
-if ( function_exists('register_sidebars') )
-    register_sidebar(array(
-        'name' => __( 'Digital Dialogue', 'Avada' ),
-		'id' => 'digital-dialogue',
-		'description' => __( 'Sidebar displayed on individual DD posts', 'Avada' ),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-    	'after_widget'  => '</div>',
-    	'before_title'  => '<div class="heading"><h3>',
-    	'after_title'   => '</h3></div>',
-	)
-);
 */
+function mith_display_sidenav( $page_id ) {
+
+	$html = '<ul class="side-nav">';
+
+	$post_ancestors = get_ancestors( $page_id, 'page' );
+	$post_parent    = end( $post_ancestors );
+
+	$html .= ( is_page( $post_parent ) ) ? '<li class="current_page_item">' : '<li>';
+
+	if ( $post_parent ) {
+		$html .= sprintf( '<a href="%s" title="%s">%s</a></li>', get_permalink( $post_parent ), __( 'Back to Parent Page', 'Avada' ), get_the_title( $post_parent ) );
+		$children = wp_list_pages( sprintf( 'title_li=&child_of=%s&echo=0', $post_parent ) );
+	} else {
+		$html .= sprintf( '<a href="%s" title="%s">%s</a></li>', get_permalink( $page_id ), __( 'Back to Parent Page', 'Avada' ), get_the_title( $page_id ) );
+		$children = wp_list_pages( sprintf( 'title_li=&child_of=%s&echo=0', $page_id ) );
+	}
+
+	if ( $children ) {
+		$html .= $children;
+	}		
+
+	$html .= '</ul>';
+
+	return $html;
+}
 
 /*
   IMAGES	------------------------------------------------------------------------
@@ -213,8 +225,14 @@ function add_body_classes( $classes ){
         }
 		$classes[] = "{$post->post_type}-{$post->post_name}";
 	}
+	if ( is_singular( array('mith_person') ) ) {
+		$classes[] = 'has-sidebar';
+		$classes[] = 'double-sidebars';	
+	}
 	if ( is_singular( array('mith_research', 'project') ) ) {
 		$classes[] = 'single-post';
+		$classes[] = 'has-sidebar';
+		if (get_the_post_thumbnail($post->ID) != '') $classes[] = 'has-thumbnail';
 	}
 	if ( is_post_type_archive('mith_dialogue') ) {
 		$classes[] = 'double-sidebars';
@@ -222,8 +240,6 @@ function add_body_classes( $classes ){
 return $classes;
 }
 add_filter( 'body_class', 'add_body_classes' );
-
-
 
 /* 
   PROJECTS -------------------------------------------------------------------------
@@ -411,10 +427,10 @@ function mith_dialogues_shortcode($atts) {
 		'order' 	=> 'DESC',
 		'orderby' 	=> 'date',
 		'size' => 'full',
-		'status' => '',
+		'term' => '',
 	), $atts ));
 	$html  = '';
-	$post_status = $status;
+	//$post_status = $status;
 	$cats = get_terms('mith_dialogue_series', array(
 		'orderby'    => 'slug',
 		'order' 	 => 'DESC',
@@ -423,12 +439,12 @@ function mith_dialogues_shortcode($atts) {
 	$first_cat_value = reset($cats);
 	$first_cat_slug = $first_cat_value->slug;
 	$current_date = date('Ymd');
-
-	if ( $status = 'future') : $post_status = array('future');
-	elseif ( $status = 'publish') : $post_status = 'publish';
-	else : $post_status = array('future', 'publish'); endif;
 	
-	if ( $status != 'future' && $total === '-1') $total = '5';
+	if ( $term === 'future') : $post_status = 'future';
+	elseif ( $term === 'publish') : $post_status = 'publish';
+	elseif ( $term === '' ) : $post_status = array('future', 'publish'); endif;
+	
+	//if ( $term != 'future' && $total = '-1') $total = '5'; // set default # of posts to 5
 	$args = array( 
 		'order' 				=> $order,
 		'orderby' 			=> $orderby,
@@ -436,7 +452,7 @@ function mith_dialogues_shortcode($atts) {
 		'post_status' 		=> $post_status,
 		'posts_per_page'	=> $total,
 	);
-	if ( $status === 'future' ) :
+	if ( $term = 'future' ) :
 		$args['meta_query'][] = array(
 				'key'		=> 'dialogue_date',
 				'value' 		=> $current_date,
@@ -452,27 +468,26 @@ function mith_dialogues_shortcode($atts) {
 	
 	$query = new WP_Query( $args );
 	
-	//print_r( $query);
 	if( $query->have_posts() ):
 	
-	if ( $post_status == 'future' ) $status_css = 'upcoming'; elseif ($post_status = 'publish') $status_css = 'recent';
+		if ( $post_status == 'future' ) $status_css = 'upcoming'; elseif ($post_status = 'publish') $status_css = 'recent';
 		$html .= '<div class="dialogues-list ' . $status_css . '-dialogues layout-' . $size . '">';
 			while( $query->have_posts()) : $query->the_post();
-			$img_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
-			$img_src = sprintf( '<img alt="%s" src="%s" />', get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true), $img_url[0]);
-			$image = do_shortcode('[imageframe lightbox="no" lightbox_image="no" style_type="glow" bordercolor="#ffffff" bordersize="4px" borderradius="" stylecolor="" align="left" link="' .  get_permalink() . '" linktarget="" animation_type="" animation_direction="" animation_speed="" class="" id=""]' . $img_src . '[/imageframe]');
-			
-			$talk_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
-			if ( $talk_title ) $the_title = $talk_title;
-			else $the_title = get_the_title(); 
-			$title = sprintf( '<div class="entry-title"><a href="%1$s">%2$s</a></div>', get_permalink(), $the_title );	
-			ob_start();
-			dialogue_info_snippet($size = $size, $col = 'one_full');	
-			$info = ob_get_clean();
-			$html .= $image . $title . $info;
+				$img_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
+				$img_src = sprintf( '<img alt="%s" src="%s" />', get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true), $img_url[0]);
+				$image = do_shortcode('[imageframe lightbox="no" lightbox_image="no" style_type="glow" bordercolor="#ffffff" bordersize="4px" borderradius="" stylecolor="" align="left" link="' .  get_permalink() . '" linktarget="" animation_type="" animation_direction="" animation_speed="" class="" id=""]' . $img_src . '[/imageframe]');
+				
+				$talk_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
+				if ( $talk_title ) $the_title = $talk_title;
+				else $the_title = get_the_title(); 
+				$title = sprintf( '<div class="entry-title"><a href="%1$s">%2$s</a></div>', get_permalink(), $the_title );	
+				ob_start();
+				dialogue_info_snippet($size = $size, $col = 'one_full');	
+				$info = ob_get_clean();
+				$html .= $image . $title . $info;
 			endwhile;
 		$html .= '</div>';
-		else : 
+	else : 
 	$archive = sprintf( '<a href="%s" title="%s">%s</a>', esc_url( home_url('digital-dialogues') ), __('Dialogues Archive Page', 'Avada'), __('Dialogues Archive', 'Avada') );
 	$html .= '<div class="no-upcoming-dialogues">' . __('The current semester of Digital Dialogues has ended. We will add information on the upcoming semester as it becomes available. In the meantime, please check out our recent dialogues by visiting our ' . $archive . ' page.', 'Avada') . '</div>';
 	endif;
@@ -545,6 +560,36 @@ function restrict_dialogues_by_series() {
 get_template_part('includes/person', 'info-snippet');
 
 
+function mith_people_shortcode() {
+	$html = '';
+	$args = array(
+		'post_type'			=> 'mith_person',
+		'meta_key'			=> 'last_name',
+		'orderby'			=> 'meta_value',
+		'order'				=> 'ASC',
+		'posts_per_page'	=> -1,
+		'tax_query' => array(
+			array(
+				'taxonomy'	=> 'mith_staff_group',
+				'field'		=> 'slug',
+				'terms'		=> array( 'people-past' ),
+				'operator'	=> 'NOT IN'
+			)
+		)
+	);
+	$query = new WP_Query( $args );
+	if( $query->have_posts() ) :
+	$html .= '<div id="img-links" class="recent-works-items clearfix">';
+		while( $query->have_posts()) : $query->the_post();
+			$html .= '<a href="' . get_permalink() . '" rel="alternate" title="Profile of ' . the_title_attribute( array('echo' => 0) ) . '">' . get_the_post_thumbnail( get_the_ID(), 'recent-works-thumbnail' ) . '</a>';
+		endwhile;
+	$html .= '</div>';
+	endif; 
+	wp_reset_query(); 
+	return $html;
+}
+add_shortcode( 'mith_people', 'mith_people_shortcode' );
+
 /* Display tagged posts in sidebar */
 /*-----------------------------------------------------------------------------------*/
 
@@ -562,12 +607,11 @@ function mith_display_blog_posts() {
 		if ( $post_query->have_posts() ) : ?>
 		<div id="person_posts" class="widget mith_recent_posts-widget widget_recent_entries person-<?php echo $post_slug; ?>">
 			<div class="heading"><h4><?php _e('Blog Posts', 'Avada'); ?></h4></div>
-				<ul>
-				<?php while ( $post_query->have_posts() ) : $post_query->the_post(); ?>
-					<li><a href="<?php echo get_permalink(); ?>" title="<?php echo get_the_title(); ?>"><?php echo get_the_title(); ?></a><span class="post-date" style="display: none;"><?php the_time(__('M j, Y')) ?></span></li>
-				<?php endwhile; ?>
-
-				</ul>
+            <ul>
+            <?php while ( $post_query->have_posts() ) : $post_query->the_post(); ?>
+                <li><a href="<?php echo get_permalink(); ?>" title="<?php echo get_the_title(); ?>"><?php echo get_the_title(); ?></a><span class="post-date" style="display: none;"><?php the_time(__('M j, Y')) ?></span></li>
+            <?php endwhile; ?>
+            </ul>
 		</div>   
 		<?php endif; wp_reset_query();
 }
