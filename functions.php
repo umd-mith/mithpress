@@ -235,6 +235,7 @@ function add_body_classes( $classes ){
 		if (get_the_post_thumbnail($post->ID) != '') $classes[] = 'has-thumbnail';
 	}
 	if ( is_post_type_archive('mith_dialogue') ) {
+		$classes[] = 'has-sidebar';
 		$classes[] = 'double-sidebars';
 	}
 return $classes;
