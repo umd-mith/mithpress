@@ -1,6 +1,8 @@
 <?php 
 
-class MITHF_walker extends Walker_CategoryDropdown
+/* Filter Dropdowns */
+/*-----------------------------------------------------------------------------------*/
+ class MITHF_walker extends Walker_CategoryDropdown
 {
     public $tree_type = 'category';
     public $db_fields = array(
