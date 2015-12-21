@@ -580,7 +580,7 @@ function register_cpt_mith_dialogue() {
         'labels' => $pcast_cpt,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
+        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields','excerpt' ),
         'taxonomies' => array( 'mith_dialogue_categories', 'mith_dialogue_tags' ),
         'public' => true,
         'show_ui' => true,
