@@ -599,8 +599,11 @@ function mith_display_blog_posts() {
 	$post_slug = $post->post_name;
 	$person_username = str_replace('-', '', $post_slug);
 	
+	if ( is_singular('mith_person') ) $number = '5';
+	else ( $number = '10');
+	
 	$args = array( 
-		'posts_per_page' => 5,
+		'posts_per_page' => $number,
 		'author_name' => $person_username,
 	);
 	
