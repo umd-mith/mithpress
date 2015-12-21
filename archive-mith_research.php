@@ -3,7 +3,7 @@
 /* Template Name: MRE */
 
 get_header(); ?>
-	<div id="content" class="fusion-portfolio fusion-portfolio-two research-portfolio" style="float:right;">
+	<div id="content" class="fusion-portfolio fusion-portfolio-two research-portfolio" style="float:right; width:100%;">
 	<?php 
 	
 	$sort_by = '<form method="post" id="gform_1" class="start-year-sort">
