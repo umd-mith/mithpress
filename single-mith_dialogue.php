@@ -1,5 +1,4 @@
 <?php get_header(); ?>
-<?php get_header(); ?>
 	<div id="content" style="float: left;">
 		<?php if( ( ! Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) != 'no' ) ||
 				  ( Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) == 'yes' ) ): ?>
@@ -12,7 +11,8 @@
 		<div id="post-<?php the_ID(); ?>" <?php post_class('post dialogue-post'); ?>>
 			<div class="post-content dialogue-content">            	
 				<?php get_template_part('templates/dialogue-layout'); ?>
-			</div><!-- /post-content /dialogue-content -->
+			</div>
+            <!-- /post-content /dialogue-content -->
             
 			<?php if( ! post_password_required($post->ID) ): ?>
 			<?php avada_render_social_sharing(); ?>
