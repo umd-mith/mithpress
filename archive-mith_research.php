@@ -3,7 +3,7 @@
 /* Template Name: MRE */
 
 get_header(); ?>
-	<div id="content" class="fusion-portfolio fusion-portfolio-two research-portfolio" style="float:right; width:100%;">
+	<div id="content" class="fusion-portfolio fusion-portfolio-two research-portfolio" style="float:none; width:100%;">
 	<?php 
 	
 	$sort_by = '<form method="post" id="gform_1" class="start-year-sort">
@@ -39,10 +39,10 @@ get_header(); ?>
 		<label class="gfield_label filter-by filter-label">Filter By Start Year</label>
 	</div>';
 	
-    echo do_shortcode('[one_fourth spacing="yes" last="no"]&nbsp;[/one_fourth]');
-	echo do_shortcode('[three_fourth spacing="yes" last="yes" id="mre_sorting"]' . $sort_by . '[/three_fourth]');
-	echo do_shortcode('[one_fourth spacing="yes" last="no" id="mre_filters" class="filters-column gform_wrapper"]' . $filter_by . '[/one_fourth]');
-	echo do_shortcode('[three_fourth last="yes" spacing="yes" class="fusion-portfolio-wrapper clearfix" id="mre_items"]<!--RESEARCH ITEMS HERE-->[/three_fourth]');
+    echo do_shortcode('[one_third spacing="yes" last="no"]&nbsp;[/one_third]');
+	echo do_shortcode('[two_third spacing="yes" last="yes" id="mre_sorting"]' . $sort_by . '[/two_third]');
+	echo do_shortcode('[one_third spacing="yes" last="no" id="mre_filters" class="filters-column gform_wrapper"]' . $filter_by . '[/one_third]');
+	echo do_shortcode('[two_third last="yes" spacing="yes" class="fusion-portfolio-wrapper" id="mre_items"]<!--RESEARCH ITEMS HERE-->[/two_third]');
 	?>
 	</div>
 	<?php wp_reset_query(); ?>
