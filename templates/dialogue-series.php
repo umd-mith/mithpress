@@ -7,10 +7,11 @@ $current_cat_count = $current_cat_posts->count;
 <h2 class="post-title dialogues-series-title dialogues-header"><?php single_cat_title(); _e( ' Digital Dialogues Schedule', 'Avada' ); ?></h2>
     
 <form id="dialogue_series_form" action="<?php esc_url( home_url( '/' ) ); ?>/" method="get">
-<div class="dialogue-series-form">
-<?php restrict_dialogues_by_series(); ?>
-<input type="submit" name="submit" value="view" />
-</div></form>
+    <div class="dialogue-series-form">
+        <?php restrict_dialogues_by_series(); ?>
+        <input type="submit" name="submit" value="view" />
+    </div>
+</form>
               
 <?php if ( have_posts() ) : 
 echo do_shortcode('[separator style_type="double" top_margin="20" bottom_margin="20" sep_color="#BBBBBB" border_size="" width="" alignment="" class="" id=""]'); ?>

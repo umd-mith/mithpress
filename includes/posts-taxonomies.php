@@ -35,7 +35,6 @@ function register_cpt_mith_research() {
         'taxonomies' => array( 'mith_research_type', 'mith_partner', 'mith_research_sponsor', 'post_tag' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
         'menu_position' => 5,
         
@@ -83,7 +82,6 @@ function register_taxonomy_mith_research_type() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => true,
         'hierarchical' => true,
@@ -126,7 +124,6 @@ function register_taxonomy_mith_research_sponsor() {
         'public' => true,
         'show_in_nav_menus' => false,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => false,
         'hierarchical' => false,
@@ -286,7 +283,6 @@ function register_taxonomy_mith_staff_group() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => true,
         'hierarchical' => true,
@@ -330,7 +326,6 @@ function register_cpt_mith_person() {
         'taxonomies' => array( 'post_tag', 'mith_staff_group' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
         'menu_position' => 5,
         
@@ -500,7 +495,7 @@ add_filter('manage_edit-header_text_sortable_columns','order_column_register_sor
 function add_mith_person_taxonomy_filters() {
 	global $typenow;
  
-	// an array of all the taxonomyies you want to display. Use the taxonomy name or slug
+	// an array of all the taxonomies you want to display. Use the taxonomy name or slug
 	$taxonomies = array('mith_staff_group');
  
 	// must set this to the post type you want the filter(s) displayed on
@@ -553,9 +548,8 @@ function register_taxonomy_mith_dialogue_series() {
         'labels' => $pcast_tax,
         'public' => true,
         'show_in_nav_menus' => true,
-        'publicly_queryable' => true,
+		'publicly_queryable' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'hierarchical' => false,
 		'query_var' => true,
@@ -586,13 +580,11 @@ function register_cpt_mith_dialogue() {
         'labels' => $pcast_cpt,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
+        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields','excerpt' ),
         'taxonomies' => array( 'mith_dialogue_categories', 'mith_dialogue_tags' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
-		'menu_icon' => get_stylesheet_directory_uri() . '/admin/images/icon-dialogues.png',
         'menu_position' => 5,
         
         'show_in_nav_menus' => false,
@@ -882,7 +874,6 @@ function register_taxonomy_mith_topic() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => true,
         'show_admin_column' => true,
         'hierarchical' => true,
