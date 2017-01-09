@@ -1,7 +1,6 @@
 <?php 
 function person_info_snippet($size = 'full') {
 	global $post;
-	global $smof_data;
 	
 	$person_info = '';
 	$post_thumbnail = '';
@@ -30,12 +29,12 @@ function person_info_snippet($size = 'full') {
 	?> 
 
 	<?php 
-	$person_title = get_field('person_title', get_the_ID());
-	$person_affiliation = get_field('person_affiliation', get_the_ID());
-	$person_email = get_field('person_email', get_the_ID());
-	$person_phone = get_field('person_phone', get_the_ID());
-	$person_website = get_field('person_website', get_the_ID());
-	$person_twitter = get_field('person_twitter_handle', get_the_ID()); 
+	$person_title = get_post_meta( get_the_ID(), 'person_title', true );
+	$person_affiliation = get_post_meta( get_the_ID(), 'person_affiliation', true);
+	$person_email = get_post_meta( get_the_ID(),'person_email', true );
+	$person_phone = get_post_meta( get_the_ID(),'person_phone', true );
+	$person_website = get_post_meta( get_the_ID(),'person_website', true );
+	$person_twitter = get_post_meta( get_the_ID(),'person_twitter_handle', true ); 
 	
 	if ( $size == 'name-only') : 
 	$person_details .= '<h3 class="post-info-name">' . get_the_title( get_the_ID() ) . '</h3>';
@@ -71,8 +70,8 @@ function person_info_snippet($size = 'full') {
 		endif;
 	endif; 
 
-
-	if ( $size == 'name-only' && get_field('person_dates', get_the_ID()) ) :
+	//$person_dates = get_post-meta( $post->ID, 'person_dates' );
+	if ( $size == 'name-only' && get_field( 'person_dates', get_the_ID() ) ) :
 		$margin_bottom = '0';
 		$person_info_dates .= '<div class="info-dates">';
 		while(has_sub_field('person_dates')) :

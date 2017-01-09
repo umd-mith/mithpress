@@ -35,9 +35,9 @@ function register_cpt_mith_research() {
         'taxonomies' => array( 'mith_research_type', 'mith_partner', 'mith_research_sponsor', 'post_tag' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
         'menu_position' => 5,
+		'menu_icon' => 'dashicons-screenoptions',
         
         'show_in_nav_menus' => false,
         'publicly_queryable' => true,
@@ -83,7 +83,6 @@ function register_taxonomy_mith_research_type() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => true,
         'hierarchical' => true,
@@ -126,7 +125,6 @@ function register_taxonomy_mith_research_sponsor() {
         'public' => true,
         'show_in_nav_menus' => false,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => false,
         'hierarchical' => false,
@@ -286,7 +284,6 @@ function register_taxonomy_mith_staff_group() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'show_admin_column' => true,
         'hierarchical' => true,
@@ -330,9 +327,9 @@ function register_cpt_mith_person() {
         'taxonomies' => array( 'post_tag', 'mith_staff_group' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
         'menu_position' => 5,
+		'menu_icon' => 'dashicons-groups',
         
         'show_in_nav_menus' => false,
         'publicly_queryable' => true,
@@ -500,7 +497,7 @@ add_filter('manage_edit-header_text_sortable_columns','order_column_register_sor
 function add_mith_person_taxonomy_filters() {
 	global $typenow;
  
-	// an array of all the taxonomyies you want to display. Use the taxonomy name or slug
+	// an array of all the taxonomies you want to display. Use the taxonomy name or slug
 	$taxonomies = array('mith_staff_group');
  
 	// must set this to the post type you want the filter(s) displayed on
@@ -553,9 +550,8 @@ function register_taxonomy_mith_dialogue_series() {
         'labels' => $pcast_tax,
         'public' => true,
         'show_in_nav_menus' => true,
-        'publicly_queryable' => true,
+		'publicly_queryable' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => false,
         'hierarchical' => false,
 		'query_var' => true,
@@ -586,14 +582,13 @@ function register_cpt_mith_dialogue() {
         'labels' => $pcast_cpt,
         'hierarchical' => false,
         
-        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields' ),
+        'supports' => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'custom-fields','excerpt' ),
         'taxonomies' => array( 'mith_dialogue_categories', 'mith_dialogue_tags' ),
         'public' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_in_menu' => true,
-		'menu_icon' => get_stylesheet_directory_uri() . '/admin/images/icon-dialogues.png',
         'menu_position' => 5,
+		'menu_icon' => 'dashicons-format-chat',
         
         'show_in_nav_menus' => false,
         'publicly_queryable' => true,
@@ -625,6 +620,7 @@ function register_mith_dialogue_columns( $columns ) {
 		'dd_series' => __('Series'),
 		'title' => __('Title'),
 		'dd_speaker' => __('Speaker'),
+		'dd_speaker_aff' => __('Affiliation'),
 		'dd_file_url' => __('Files')
 	);
 	return $columns;
@@ -636,11 +632,19 @@ function manage_mith_dialogue_columns( $column, $post_id ) {
 		case 'dd_speaker' :
 			/* Get the post meta. */
 			$speaker = get_post_meta( $post_id, 'dialogue_speakers_0_dialogue_speaker_name', true );
+			$speaker_title = get_post_meta( $post_id, 'dialogue_speakers_0_dialogue_speaker_title', true );
+			$speaker_affiliation = get_post_meta( $post_id, 'dialogue_speakers_0_dialogue_speaker_affiliation', true );
 			/* If no title is found, output a default message. */
 			if ( empty( $speaker ) )
 				echo __( 'n/a' );
-			else printf( $speaker );
+			else printf( $speaker . ', ' . $speaker_title );
 			break;
+		case 'dd_speaker_aff' :
+			$speaker_affiliation = get_post_meta( $post_id, 'dialogue_speakers_0_dialogue_speaker_affiliation', true );
+			if ( empty ( $speaker_affiliation ) )
+				echo __( 'n/a' );
+			else printf( $speaker_affiliation );
+			break; 
 		case 'dd_file_url' :
 			/* Get the post meta. */
 			$file_url = get_post_meta( $post_id, 'dialogue_files_0_dialogue_file_url', true );
@@ -882,7 +886,6 @@ function register_taxonomy_mith_topic() {
         'public' => true,
         'show_in_nav_menus' => true,
         'show_ui' => true,
-        'show_in_rest' => true,
         'show_tagcloud' => true,
         'show_admin_column' => true,
         'hierarchical' => true,

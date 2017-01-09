@@ -7,11 +7,12 @@ $current_cat_count = $current_cat_posts->count;
 <h2 class="post-title dialogues-series-title dialogues-header"><?php single_cat_title(); _e( ' Digital Dialogues Schedule', 'Avada' ); ?></h2>
     
 <form id="dialogue_series_form" action="<?php esc_url( home_url( '/' ) ); ?>/" method="get">
-<div class="dialogue-series-form">
-<?php restrict_dialogues_by_series(); ?>
-<input type="submit" name="submit" value="view" />
-</div></form>
-              
+    <div class="dialogue-series-form">
+        <?php restrict_dialogues_by_series(); ?>
+        <input type="submit" name="submit" value="view" />
+    </div>
+</form>
+
 <?php if ( have_posts() ) : 
 echo do_shortcode('[separator style_type="double" top_margin="20" bottom_margin="20" sep_color="#BBBBBB" border_size="" width="" alignment="" class="" id=""]'); ?>
 <div class="dialogue-series">
@@ -24,7 +25,7 @@ echo do_shortcode('[separator style_type="double" top_margin="20" bottom_margin=
     else { $dialogue_date = the_date( 'F j, Y' ); }
     $dialogue_time = get_post_meta( get_the_ID(), 'dialogue_time', TRUE);
     $dialogue_location = get_post_meta( get_the_ID(), 'dialogue_location', TRUE); 
-    if (!$location) $dialogue_location = 'MITH Conference Room';
+    if (!$dialogue_location) $dialogue_location = 'MITH Conference Room';
     $dialogue_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
     if (!$dialogue_title) $dialogue_title = the_title();
     $dialogue_sponsor = get_post_meta( get_the_ID(), 'dialogue_sponsors', TRUE );

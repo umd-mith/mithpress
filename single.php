@@ -1,14 +1,7 @@
 <?php get_header(); ?>
-	<div id="content" style="float: left;">
-		<?php if( ( ! Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) != 'no' ) ||
-				  ( Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) == 'yes' ) ): ?>
-		<div class="single-navigation clearfix" style="display:none;">
-			<?php previous_post_link('%link', __('Previous', 'Avada')); ?>
-			<?php next_post_link('%link', __('Next', 'Avada')); ?>
-		</div>
-		<?php endif; ?>
+	<div id="content" <?php Avada()->layout->add_style( 'content_style' ); ?>>
 		<?php while( have_posts() ): the_post(); ?>
-		<div id="post-<?php the_ID(); ?>" <?php post_class('post research-post'); ?>>
+		<div id="post-<?php the_ID(); ?>" <?php post_class('post'); ?>>
 			<?php
 			$full_image = '';
 			if( ! post_password_required($post->ID) ): // 1
@@ -58,23 +51,19 @@
 			<?php endif; // 3 ?>
 			<?php endif; // 2 ?>
 			<?php endif; // 1 ?>
-            <?php $disp_entry_title = get_post_meta($post->ID, 'display_entry_title', true);
-			if ( ! has_post_thumbnail($post->ID) || ( $disp_entry_title == '1' ) )  { ?>
 			<?php if(Avada()->settings->get( 'blog_post_title' )): ?>
 			<?php echo avada_render_post_title( $post->ID, FALSE, '', '2' ); ?>
-            <?php elseif( ! Avada()->settings->get( 'disable_date_rich_snippet_pages' ) ): ?>
+			<?php elseif( ! Avada()->settings->get( 'disable_date_rich_snippet_pages' ) ): ?>
 			<span class="entry-title" style="display: none;"><?php the_title(); ?></span>
 			<?php endif; ?>
-			<?php } ?>
-			<div class="post-content research-content">
+			<div class="post-content">
 				<?php the_content(); ?>
-                <?php get_template_part('templates/research', 'layout'); ?>
+				<?php avada_link_pages(); ?>
 			</div>
-  			<!-- /research-content /post-content-->
- 			<?php if( ! post_password_required($post->ID) ): ?>
-			<?php // echo avada_render_post_metadata( 'single' ); ?>
+			<?php if( ! post_password_required($post->ID) ): ?>
+			<?php echo avada_render_post_metadata( 'single' ); ?>
 			<?php avada_render_social_sharing(); ?>
-			<?php /*if( ( Avada()->settings->get( 'author_info' ) && get_post_meta($post->ID, 'pyre_author_info', true) != 'no' ) ||
+			<?php if( ( Avada()->settings->get( 'author_info' ) && get_post_meta($post->ID, 'pyre_author_info', true) != 'no' ) ||
 					  ( ! Avada()->settings->get( 'author_info' ) && get_post_meta($post->ID, 'pyre_author_info', true) == 'yes' ) ): ?>
 			<div class="about-author">
 				<?php
@@ -92,7 +81,7 @@
 					</div>
 				</div>
 			</div>
-			<?php endif; */ ?>
+			<?php endif; ?>
 
 			<?php
 			// Render Related Posts
@@ -109,10 +98,17 @@
 			<?php endif; ?>
 		</div>
 		<?php endwhile; ?>
+		<?php if( ( ! Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) != 'no' ) ||
+				  ( Avada()->settings->get( 'blog_pn_nav' ) && get_post_meta($post->ID, 'pyre_post_pagination', true) == 'yes' ) ): ?>
+		<div class="single-navigation clearfix">
+			<?php previous_post_link('%link', __('Previous', 'Avada')); ?>
+			<?php next_post_link('%link', __('Next', 'Avada')); ?>
+		</div>
+		<?php endif; ?>
+        
 		<?php wp_reset_query(); ?>
 	</div>
-	<?php //do_action( 'fusion_after_content' ); ?>
-	<?php get_template_part( 'templates/sidebar', 'research' ); ?>
+	<?php do_action( 'fusion_after_content' ); ?>
 <?php get_footer();
 
 // Omit closing PHP tag to avoid "Headers already sent" issues.

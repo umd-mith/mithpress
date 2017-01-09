@@ -1,16 +1,16 @@
 <?php 
 
 /*
-  SCRIPTS & STYLES	-----------------------------------------------------------------
+  STYLES	-----------------------------------------------------------------
 */
-add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
 function theme_enqueue_styles() {
     wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
 
 }
+add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles', 51);
 
 /*
-  UMD HEADER	---------------------------------------------------------------------
+  SCRIPTS	---------------------------------------------------------------------
 */
 if ( ! function_exists( 'load_mith_child_scripts' ) ) {
 	
@@ -20,12 +20,12 @@ if ( ! function_exists( 'load_mith_child_scripts' ) ) {
 		if ( is_singular('mith_research') ) {
 			wp_enqueue_script('jquery_ate', get_stylesheet_directory_uri() . '/js/jquery.ate-1.6.0.js', array('jquery'), '', false);		
 		}
-		//wp_enqueue_script('ajax', 'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js', '', '', false);	
-		//wp_enqueue_script('chosen_jquery', get_stylesheet_directory_uri() . '/js/chosen.jquery.js', '', '', false);
-		wp_enqueue_script('filtrify', get_stylesheet_directory_uri() . '/js/filtrify.js', array('jquery'), '', false);
+		if ( is_post_type_archive('mith_research') ) {
+		wp_enqueue_script('mith_mre_js', get_stylesheet_directory_uri() . '/js/mre.min.js', array('jquery'), '', false);		
+		}
 	}
 }
-add_action('wp_enqueue_scripts', 'load_mith_child_scripts',50);
+add_action('wp_enqueue_scripts', 'load_mith_child_scripts', 50);
 
 function load_mith_child_js() { ?>
 	<script>
@@ -65,8 +65,7 @@ get_template_part('includes/posts', 'taxonomies');
 
 /* Filter Dropdowns */
 /*-----------------------------------------------------------------------------------*/
- class MITHF_walker extends Walker_CategoryDropdown
-{
+class MITHF_walker extends Walker_CategoryDropdown {
     public $tree_type = 'category';
     public $db_fields = array(
         'parent' => 'parent',
@@ -100,33 +99,25 @@ add_action( 'plugins_loaded', array( 'MITH_Admin_PT_List_Tax_Filter', 'init' ) )
 class MITH_Admin_PT_List_Tax_Filter
 {
     private static $instance;
-
     public $post_type;
-
     public $taxonomies;
 
-    static function init()
-    {
+    static function init() {
         null === self::$instance AND self::$instance = new self;
         return self::$instance;
     }
 
-    public function __construct()
-    {
+    public function __construct() {
         add_action( 'load-edit.php', array( $this, 'setup' ) );
     }
 
-    public function setup()
-    {
+    public function setup() {
         add_action( current_filter(), array( $this, 'setup_vars' ), 20 );
-
         add_action( 'restrict_manage_posts', array( $this, 'get_select' ) );
-
         add_filter( "manage_taxonomies_for_{$this->post_type}_columns", array( $this, 'add_columns' ) );
     }
 
-    public function setup_vars()
-    {
+    public function setup_vars() {
         $this->post_type  = get_current_screen()->post_type;
         $this->taxonomies = array_diff(
             get_object_taxonomies( $this->post_type ),
@@ -134,14 +125,11 @@ class MITH_Admin_PT_List_Tax_Filter
         );
     }
 
-    public function add_columns( $taxonomies )
-    {
+    public function add_columns( $taxonomies ) {
         return array_merge( taxonomies, $this->taxonomies );
     }
 
-
-    public function get_select()
-    {
+    public function get_select() {
         $walker = new MITHF_walker;
         foreach ( $this->taxonomies as $tax )
         {
@@ -163,34 +151,65 @@ class MITH_Admin_PT_List_Tax_Filter
                 'walker'          => $walker,
             ) );
         }
-
     }
-
 } 
 
 /*
   SIDEBARS & WIDGETS	------------------------------------------------------------
-
-if ( function_exists('register_sidebars') )
-    register_sidebar(array(
-        'name' => __( 'Digital Dialogue', 'Avada' ),
-		'id' => 'digital-dialogue',
-		'description' => __( 'Sidebar displayed on individual DD posts', 'Avada' ),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-    	'after_widget'  => '</div>',
-    	'before_title'  => '<div class="heading"><h3>',
-    	'after_title'   => '</h3></div>',
-	)
-);
 */
+function mith_display_sidenav( $page_id ) {
+
+	$html = '<ul class="side-nav">';
+
+	$post_ancestors = get_ancestors( $page_id, 'page' );
+	$post_parent    = end( $post_ancestors );
+
+	$html .= ( is_page( $post_parent ) ) ? '<li class="current_page_item">' : '<li>';
+
+	if ( $post_parent ) {
+		$html .= sprintf( '<a href="%s" title="%s">%s</a></li>', get_permalink( $post_parent ), __( 'Back to Parent Page', 'Avada' ), get_the_title( $post_parent ) );
+		$children = wp_list_pages( sprintf( 'title_li=&child_of=%s&echo=0', $post_parent ) );
+	} else {
+		$html .= sprintf( '<a href="%s" title="%s">%s</a></li>', get_permalink( $page_id ), __( 'Back to Parent Page', 'Avada' ), get_the_title( $page_id ) );
+		$children = wp_list_pages( sprintf( 'title_li=&child_of=%s&echo=0', $page_id ) );
+	}
+
+	if ( $children ) {
+		$html .= $children;
+	}		
+
+	$html .= '</ul>';
+
+	return $html;
+}
 
 /*
   IMAGES	------------------------------------------------------------------------
 */
 
-add_action( 'after_setup_theme', 'mith_theme_setup' );
-function mith_theme_setup() {
+if ( function_exists( 'add_image_size' ) ) {
 	add_image_size('medium-square', 200, 200, true);
+}
+	add_filter('image_size_names_choose', 'my_image_sizes');
+	function my_image_sizes($sizes) {
+	$addsizes = array(
+		'medium-square' => __( 'Medium Square' ),
+		'blog-large' => __( 'Blog Large' ),
+		'blog-medium' => __( 'Blog Medium' ),
+		'tabs-img' => __( 'Tabs Image' ),
+		'related-img' => __( 'Related Image' ),
+		'portfolio-full' => __( 'Portfolio Full' ),
+		'portfolio-one' => __( 'Portfolio One' ),
+		'portfolio-two' => __( 'Portfolio Two' ),
+		'portfolio-three' => __( 'Portfolio Three' ),
+		'portfolio-four' => __( 'Portfolio Four' ),
+		'portfolio-five' => __( 'Portfolio Five' ),
+		'portfolio-six' => __( 'Portfolio Six' ),
+		'recent-posts' => __( 'Recent Posts' ),
+		'recent-works-thumbnail' => __( 'Recent Works Thumbnail' )
+	);
+	$newsizes = array_merge($sizes, $addsizes);
+	return $newsizes;
 }
 
 /*
@@ -213,36 +232,46 @@ function add_body_classes( $classes ){
         }
 		$classes[] = "{$post->post_type}-{$post->post_name}";
 	}
+	if ( is_singular( array('mith_person') ) ) {
+		$classes[] = 'has-sidebar';
+		$classes[] = 'double-sidebars';	
+	}
 	if ( is_singular( array('mith_research', 'project') ) ) {
 		$classes[] = 'single-post';
+		$classes[] = 'has-sidebar';
+		if (get_the_post_thumbnail($post->ID) != '') $classes[] = 'has-thumbnail';
 	}
 	if ( is_post_type_archive('mith_dialogue') ) {
+		$classes[] = 'has-sidebar';
 		$classes[] = 'double-sidebars';
+	}
+	if ( is_post_type_archive('mith_dialogue') || is_tax('mith_dialogue_series') || is_page('schedule') ) {
+		$classes[] = 'dd-archive';
 	}
 return $classes;
 }
 add_filter( 'body_class', 'add_body_classes' );
 
-
-
 /* 
   PROJECTS -------------------------------------------------------------------------
 */
 
-$all_posts = get_posts( array( 'posts_per_page'   => -1, 'post_type' => 'mith_research' ) );
-foreach ( $all_posts as $post ) : setup_postdata( $post );
+function save_research_meta( $post_id, $post, $update ) {
 
-	$research_start_mth = get_post_meta($post->ID,'research_start_mth', true);
-	$research_start_yr = get_post_meta($post->ID,'research_start_yr', true);
-	$research_end_mth = get_post_meta($post->ID,'research_end_mth', true);
-	$research_end_yr = get_post_meta($post->ID,'research_end_yr', true);
-
+	if ('mith_research' != $post->post_type) { 
+		return;
+	}
+	
+	$research_start_mth = get_post_meta($post_id,'research_start_mth', true);
+	$research_start_yr = get_post_meta($post_id,'research_start_yr', true);
+	$research_end_mth = get_post_meta($post_id,'research_end_mth', true);
+	$research_end_yr = get_post_meta($post_id,'research_end_yr', true);
 	if ( $research_start_yr ) { 
 		$research_start = $research_start_yr;
 		if ( $research_start_mth && $research_start_mth != 'null' ) { 
 			$research_start .= '-' . $research_start_mth;
-			if ( !add_post_meta( $post->ID,'research_start_yyyymm', $research_start , true) ) { 
-				update_post_meta($post->ID,'research_start_yyyymm', $research_start );
+			if ( isset( $_REQUEST['research_start_yyyymm'] ) ) {
+			update_post_meta( $post_id, 'research_start_yyyymm', sanitize_text_field( $_REQUEST[$research_start] ) );
 			}
 		}
 	}
@@ -250,14 +279,15 @@ foreach ( $all_posts as $post ) : setup_postdata( $post );
 		$research_end = $research_end_yr; 
 		if ( $research_end_mth && $research_end_mth != 'null' ) { 
 			$research_end .= '-' . $research_end_mth;
-			if ( !add_post_meta( $post->ID,'research_end_yyyymm', $research_end , true) ) { 
-			update_post_meta($post->ID,'research_end_yyyymm', $research_end );
+			if ( isset( $_REQUEST['research_end_yyyymm'] ) ) {
+			update_post_meta($post->ID,'research_end_yyyymm', sanitize_text_field( $_REQUEST[$research_end] ) );
 			}
 		}
 	}
 	
-endforeach; 
-wp_reset_postdata();
+	
+}
+add_action( 'save_post', 'save_research_meta', 10, 3 );
 
 function mith_research_event_date() { 
 	global $post;
@@ -411,74 +441,91 @@ function mith_dialogues_shortcode($atts) {
 		'order' 	=> 'DESC',
 		'orderby' 	=> 'date',
 		'size' => 'full',
-		'status' => '',
+		'term' => 'future',
+		'current' => 'no',
 	), $atts ));
 	$html  = '';
-	$post_status = $status;
+
 	$cats = get_terms('mith_dialogue_series', array(
 		'orderby'    => 'slug',
 		'order' 	 => 'DESC',
-		'hide_empty' => false
+		'hide_empty' => true
 	) );
 	$first_cat_value = reset($cats);
 	$first_cat_slug = $first_cat_value->slug;
 	$current_date = date('Ymd');
 
-	if ( $status = 'future') : $post_status = array('future');
-	elseif ( $status = 'publish') : $post_status = 'publish';
-	else : $post_status = array('future', 'publish'); endif;
-	
-	if ( $status != 'future' && $total === '-1') $total = '5';
 	$args = array( 
 		'order' 				=> $order,
 		'orderby' 			=> $orderby,
 		'post_type' 			=> $post_type,
-		'post_status' 		=> $post_status,
+		//'post_status' 		=> $post_status,
 		'posts_per_page'	=> $total,
 	);
-	if ( $status === 'future' ) :
+	if ( $term === 'recent' ) :
+		$args['post_status'] = 'publish';
 		$args['meta_query'][] = array(
 				'key'		=> 'dialogue_date',
 				'value' 		=> $current_date,
 				'compare'	=> '<=',	// posts before or equal to todays date
 				'type'		=> 'numeric' 
 		);
-		$args['tax_query'][] = array(
-				'taxonomy' 	=> 'mith_dialogue_series',
-				'field'		=> 'slug',
-				'terms'		=> $first_cat_slug, // only posts in current series
+	endif;
+	if ( $term === 'future' ) :
+		$args['post_status'] = array( 'publish', 'future');
+		$args['meta_query'][] = array(
+				'key'		=> 'dialogue_date',
+				'value' 		=> $current_date,
+				'compare'	=> '>',	// posts after todays date
+				'type'		=> 'numeric',
 		);
 	endif;
-	
+	if ( $current === 'yes' ) : // limit to show posts in current series
+	$args['tax_query'][] = array(
+			'taxonomy' 	=> 'mith_dialogue_series',
+			'field'		=> 'slug',
+			'terms'		=> $first_cat_slug, // only posts in current series
+	);
+	endif;
+			
 	$query = new WP_Query( $args );
 	
-	//print_r( $query);
 	if( $query->have_posts() ):
 	
-	if ( $post_status == 'future' ) $status_css = 'upcoming'; elseif ($post_status = 'publish') $status_css = 'recent';
+		if ( $post_status = 'future' ) : 
+			$status_css = 'upcoming'; 
+		elseif ($post_status = 'publish') : 
+			$status_css = 'recent';
+		endif;
+		
 		$html .= '<div class="dialogues-list ' . $status_css . '-dialogues layout-' . $size . '">';
 			while( $query->have_posts()) : $query->the_post();
-			$img_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
-			$img_src = sprintf( '<img alt="%s" src="%s" />', get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true), $img_url[0]);
-			$image = do_shortcode('[imageframe lightbox="no" lightbox_image="no" style_type="glow" bordercolor="#ffffff" bordersize="4px" borderradius="" stylecolor="" align="left" link="' .  get_permalink() . '" linktarget="" animation_type="" animation_direction="" animation_speed="" class="" id=""]' . $img_src . '[/imageframe]');
-			
-			$talk_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
-			if ( $talk_title ) $the_title = $talk_title;
-			else $the_title = get_the_title(); 
-			$title = sprintf( '<div class="entry-title"><a href="%1$s">%2$s</a></div>', get_permalink(), $the_title );	
-			ob_start();
-			dialogue_info_snippet($size = $size, $col = 'one_full');	
-			$info = ob_get_clean();
-			$html .= $image . $title . $info;
+				$img_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'medium-square' );
+				$img_src = sprintf( '<img alt="%s" src="%s" />', get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true), $img_url[0]);
+				$image = do_shortcode('[imageframe lightbox="no" lightbox_image="no" style_type="glow" bordercolor="#ffffff" bordersize="4px" borderradius="" stylecolor="" align="left" link="' .  get_permalink() . '" linktarget="" animation_type="" animation_direction="" animation_speed="" class="" id=""]' . $img_src . '[/imageframe]');
+				
+				/* TITLE */
+				$talk_title = get_post_meta( get_the_ID(), 'dialogue_title', TRUE );
+				if ( $talk_title ) $the_title = $talk_title;
+				else $the_title = get_the_title(); 
+				$title = sprintf( '<div class="entry-title"><a href="%1$s">%2$s</a></div>', get_permalink(), $the_title );	
+				
+				/* INFO */
+				ob_start();
+				dialogue_info_snippet($size = $size, $col = 'one_full' );
+				$info = ob_get_clean();
+				
+				$html .= $image . $title . $info;
 			endwhile;
 		$html .= '</div>';
-		else : 
+	else : 
 	$archive = sprintf( '<a href="%s" title="%s">%s</a>', esc_url( home_url('digital-dialogues') ), __('Dialogues Archive Page', 'Avada'), __('Dialogues Archive', 'Avada') );
 	$html .= '<div class="no-upcoming-dialogues">' . __('The current semester of Digital Dialogues has ended. We will add information on the upcoming semester as it becomes available. In the meantime, please check out our recent dialogues by visiting our ' . $archive . ' page.', 'Avada') . '</div>';
 	endif;
 	return $html;
 }
 add_shortcode( 'mith_dialogues', 'mith_dialogues_shortcode' );
+
 
 /* Dialogue Series Dropdown */
 /*-----------------------------------------------------------------------------------*/
@@ -502,7 +549,8 @@ class SH_Walker_DialogueTaxDropdown extends Walker_CategoryDropdown {
 		if ( $args['show_count'] )
 			$output .= '&nbsp;&nbsp;('. $category->count .')';
 	
-		$output .= "</option>\n";
+		$output .= '</option><i class="fa fa-sort sort-asc" aria-hidden="true"></i>';
+		$output .= "\n";
 	}
 }
 
@@ -515,7 +563,8 @@ function restrict_dialogues_by_series() {
 		'orderby' => 'slug',
 		'order' => 'ASC',
 	);
-    $terms = get_categories($tax_args);
+    $terms_first = get_categories($tax_args);
+	$terms = array_reverse($terms_first, true);
 	$newest_tax = end($terms);
 	$selected_tax = $wp_query->query[$taxonomy];
 	
@@ -539,11 +588,63 @@ function restrict_dialogues_by_series() {
 }
 
 
+
+/* Change post_per_page for Dialogue Series Page */
+/*-----------------------------------------------------------------------------------*/
+add_action( 'pre_get_posts', 'mith_change_dd_posts_query' );
+
+function mith_change_dd_posts_query( $query ) {
+	
+	if( $query->is_main_query() && !is_admin() && is_tax( 'mith_dialogue_series' ) ) {
+		$meta_query = array(
+                    array( 
+                        'key' => 'dialogue_date',
+                        'value' =>  date('Ymd'),
+                        'compare' => '<=',
+                        'type' => 'numeric' 
+                    )
+                );
+		$query->set( 'meta_query', $meta_query );
+		$query->set( 'orderby', 'meta_value_num' );
+		$query->set( 'meta_key', 'dialogue_date' );
+		$query->set( 'order', 'DESC' );
+		$query->set( 'posts_per_page', '-1' );
+	}
+}
 /*
   PEOPLE    ---------------------------------------------------------------------
 */
 get_template_part('includes/person', 'info-snippet');
 
+function mith_people_shortcode() {
+	$html = '';
+	$args = array(
+		'post_type'			=> 'mith_person',
+		'meta_key'			=> 'last_name',
+		'orderby'			=> 'meta_value',
+		'order'				=> 'ASC',
+		'posts_per_page'	=> -1,
+		'tax_query' => array(
+			array(
+				'taxonomy'	=> 'mith_staff_group',
+				'field'		=> 'slug',
+				'terms'		=> array( 'people-past' ),
+				'operator'	=> 'NOT IN'
+			)
+		)
+	);
+	$query = new WP_Query( $args );
+	if( $query->have_posts() ) :
+	$html .= '<div id="img-links" class="recent-works-items clearfix">';
+		while( $query->have_posts()) : $query->the_post();
+			$html .= '<a href="' . get_permalink() . '" rel="alternate" title="Profile of ' . the_title_attribute( array('echo' => 0) ) . '">' . get_the_post_thumbnail( get_the_ID(), 'recent-works-thumbnail' ) . '</a>';
+		endwhile;
+	$html .= '</div>';
+	endif; 
+	wp_reset_query(); 
+	return $html;
+}
+add_shortcode( 'mith_people', 'mith_people_shortcode' );
 
 /* Display tagged posts in sidebar */
 /*-----------------------------------------------------------------------------------*/
@@ -553,8 +654,11 @@ function mith_display_blog_posts() {
 	$post_slug = $post->post_name;
 	$person_username = str_replace('-', '', $post_slug);
 	
+	if ( is_singular('mith_person') ) $number = '5';
+	else ( $number = '10');
+	
 	$args = array( 
-		'posts_per_page' => 5,
+		'posts_per_page' => $number,
 		'author_name' => $person_username,
 	);
 	
@@ -562,12 +666,92 @@ function mith_display_blog_posts() {
 		if ( $post_query->have_posts() ) : ?>
 		<div id="person_posts" class="widget mith_recent_posts-widget widget_recent_entries person-<?php echo $post_slug; ?>">
 			<div class="heading"><h4><?php _e('Blog Posts', 'Avada'); ?></h4></div>
-				<ul>
-				<?php while ( $post_query->have_posts() ) : $post_query->the_post(); ?>
-					<li><a href="<?php echo get_permalink(); ?>" title="<?php echo get_the_title(); ?>"><?php echo get_the_title(); ?></a><span class="post-date" style="display: none;"><?php the_time(__('M j, Y')) ?></span></li>
-				<?php endwhile; ?>
-
-				</ul>
+            <ul>
+            <?php while ( $post_query->have_posts() ) : $post_query->the_post(); ?>
+                <li><a href="<?php echo get_permalink(); ?>" title="<?php echo get_the_title(); ?>"><?php echo get_the_title(); ?></a><span class="post-date" style="display: none;"><?php the_time(__('M j, Y')) ?></span></li>
+            <?php endwhile; ?>
+            </ul>
 		</div>   
 		<?php endif; wp_reset_query();
 }
+
+/*
+  BLOG    ---------------------------------------------------------------------
+*/
+
+function validate_gravatar($email) {
+	// Craft a potential url and test its headers
+	$hash = md5(strtolower(trim($email)));
+	$uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+	$headers = @get_headers($uri);
+	if (!preg_match("|200|", $headers[0])) {
+		$has_valid_avatar = FALSE;
+	} else {
+		$has_valid_avatar = TRUE;
+	}
+	return $has_valid_avatar;
+}
+
+if ( ! function_exists( 'avada_render_blog_post_gravatar' ) ) {
+	function avada_render_blog_post_gravatar() { 
+	?>
+		<div class="fusion-gravatar-box">
+        	<?php 
+			$author             = get_user_by( 'id', get_query_var( 'author' ) );
+			$author_id          = $author->ID;
+			$author_name        = get_the_author_meta( 'display_name', $author_id );
+			$author_avatar      = get_avatar( get_the_author_meta( 'email', $author_id ), '82' );
+			$author_email 		= get_the_author_email(); 
+            $author_imgid		= get_field('user_photo', 'user_'. $author_id ); // image field, return type = "ID" 
+            $author_img			= wp_get_attachment_image_src( $author_imgid, 'thumbnail' );
+            $author_show_img 	= get_field('show_user_photo', 'user_'. $author_id );
+			
+			if ( function_exists('get_avatar') ) {
+                if ( validate_gravatar( $author_email ) ) {
+                    echo $author_avatar;
+                } elseif ( $author_imgid > 0 ) { ?>
+                <img src="<?php echo $author_img['0']; ?>" alt="<?php echo $author_name; ?>" width="82" height="82" />
+                <?php } else { 
+                //echo get_avatar( $author_email, 82, get_template_directory_uri() .'/images/no-avatar.png' ); 
+                }
+            }
+		?>
+		</div>
+		<?php
+	}
+}
+add_action( 'avada_blog_post_date_and_format', 'avada_render_blog_post_gravatar', 20 );
+
+/* ADJUST BLOG QUERIES */
+/*-----------------------------------------------------------------------------------*/
+function mith_post_queries( $query ) {
+  // not an admin page and is the main query
+  if (!is_admin() && $query->is_main_query()){
+    // query the home page
+    if(is_home() ) {
+      $query->set('post_type', array('post','mith_dialogue'));
+    }
+  }
+}
+add_action( 'pre_get_posts', 'mith_post_queries' );
+
+
+if ( ! function_exists( 'avada_render_dialogue_post_content' ) ) {
+	function avada_render_dialogue_post_content() {
+		global $post;
+		if ( is_home() && $post->post_type == 'mith_dialogue' ) : 		
+		echo dialogue_info_snippet('excerpt', 'one_full', 'show');
+		endif;
+	}
+}
+add_action( 'avada_blog_post_content', 'avada_render_dialogue_post_content', 5 );
+
+/* RSS Feeds */
+/*-----------------------------------------------------------------------------------*/
+
+function mith_feed_request($qv) {
+	if (isset($qv['feed']) && !isset($qv['post_type']))
+		$qv['post_type'] = array('post', 'mith_dialogue');
+	return $qv;
+}
+add_filter('request', 'mith_feed_request');
